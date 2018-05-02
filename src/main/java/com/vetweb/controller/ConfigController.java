@@ -19,36 +19,39 @@ import org.springframework.web.servlet.ModelAndView;
 public class ConfigController {
     @Autowired
     ConfigDAO configDAO;
+    
     private static final Logger LOGGER = Logger.getLogger(ConfigController.class);
     @RequestMapping(value = "/cadastroClinica", method = RequestMethod.GET)//URL para o método. Composto por caminho base junto a este RequestMapping
     public ModelAndView cadClinica(@ModelAttribute("clinica") Clinica c){//Atributo de modelo a ser recebido no formulário
         ModelAndView modelAndView = new ModelAndView("config/cadastroClinica");//Caminho para a visão (Página)
         return modelAndView;
     }
+    
     @RequestMapping(value = "/atualizarClinica/{cnpj}", method = RequestMethod.GET)//URL para o método. Composto por caminho base junto a este RequestMapping
     public ModelAndView cadClinica(@PathVariable("cnpj") String cnpj){//Atributo de modelo a ser recebido no formulário
         ModelAndView modelAndView = new ModelAndView("config/cadastroClinica");//Caminho para a visão (Página)
         modelAndView.addObject("clinica", configDAO.clinicaPorCnpj(cnpj));
         return modelAndView;
     }
+    
     @RequestMapping(value = "/addClinica", method = RequestMethod.POST)
     public ModelAndView addClinica(@ModelAttribute("clinica") Clinica clinica){
-//        ModelAndView modelAndView = new ModelAndView("config/cadastroClinica");//Caminho para a visão (Página)        
         ModelAndView modelAndView = new ModelAndView("redirect:detalhesClinica/" + clinica.getCnpj());
         configDAO.salvarClinica(clinica);
         LOGGER.info((clinica.getCnpj() + " inserida na base de dados com sucesso. ").toUpperCase());
         return modelAndView;
     }
+    
     @RequestMapping(value = "/detalhesClinica/{cnpj}", method = RequestMethod.GET)
     public ModelAndView detalhesClinica(@PathVariable("cnpj") String cnpj){
         ModelAndView modelAndView = new ModelAndView("config/clinica");
         modelAndView.addObject("clinica", configDAO.clinicaPorCnpj(cnpj));
         return modelAndView;
     }
+    
     @ExceptionHandler//Tratamento de exceções da Controller Spring
     @ResponseStatus(HttpStatus.BAD_REQUEST)//Responde p/ resposta Http BAD REQUEST
     public void handle(Exception exception) {
-//        exception.printStackTrace();//Imprime pilha de exceção no console do servidor
         LOGGER.error(exception);
     }    
 }
