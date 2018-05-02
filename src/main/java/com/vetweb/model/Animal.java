@@ -1,0 +1,156 @@
+package com.vetweb.model;
+ //@author renanrodrigues
+import java.io.Serializable;
+import java.time.LocalDate;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.Table;
+import javax.persistence.Transient;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Positive;
+import org.springframework.format.annotation.DateTimeFormat;
+@Entity
+@Table(name = "animais")
+@NamedQueries({@NamedQuery(name = "animalPorNome", query = "SELECT a FROM Animal a WHERE a.nome = :nomeAnimal"),
+                @NamedQuery(name = "quantidadeAnimais", query = "SELECT COUNT(a) FROM Animal a"),
+                @NamedQuery(name = "consultaGetId", query = "SELECT a FROM Animal a WHERE a.nome = :nomeAnimal"
+                        + " AND a.proprietario.nome = :nomeDono "
+                        + "AND a.dtNascimento = :nascimentoAnimal")})
+public class Animal implements Serializable {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long animalId;
+    @NotBlank//Validações Hibernate 
+    private String nome;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate dtNascimento;
+    private boolean esteril;
+    private boolean status;
+    @Positive
+    private double peso;
+    @ManyToOne
+    private Pelagem pelagem;
+    @ManyToOne
+    private Raca raca;
+    @ManyToOne
+    private Proprietario proprietario;
+    @Transient
+    private Prontuario prontuario;
+//    @OneToOne//Indica relacionamento de um p/ um no banco
+
+    public Animal() {
+    }
+
+    @Override
+    public String toString() {
+        return "Animal{" + "animalId=" + animalId + ", nome=" + nome + ", dtNascimento=" + dtNascimento + ", esteril=" + esteril + ", status=" + status + ", peso=" + peso + ", pelagem=" + pelagem + ", raca=" + raca + ", proprietario=" + proprietario + ", prontuario=" + prontuario + '}';
+    }
+
+    public Animal(String nome, LocalDate dtNascimento, boolean esteril, boolean status, double peso, Pelagem pelagem, Raca raca, Proprietario proprietario) {
+        this.nome = nome;
+        this.dtNascimento = dtNascimento;
+        this.esteril = esteril;
+        this.status = status;
+        this.peso = peso;
+        this.pelagem = pelagem;
+        this.raca = raca;
+        this.proprietario = proprietario;
+    }
+
+    public Animal(Long animalId, String nome, LocalDate dtNascimento, boolean esteril, boolean status, double peso, Pelagem pelagem, Raca raca, Proprietario proprietario, Prontuario prontuario) {
+        this.animalId = animalId;
+        this.nome = nome;
+        this.dtNascimento = dtNascimento;
+        this.esteril = esteril;
+        this.status = status;
+        this.peso = peso;
+        this.pelagem = pelagem;
+        this.raca = raca;
+        this.proprietario = proprietario;
+        this.prontuario = prontuario;
+    }
+
+    public Long getAnimalId() {
+        return animalId;
+    }
+
+    public void setAnimalId(Long animalId) {
+        this.animalId = animalId;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public LocalDate getDtNascimento() {
+        return dtNascimento;
+    }
+
+    public void setDtNascimento(LocalDate dtNascimento) {
+        this.dtNascimento = dtNascimento;
+    }
+
+    public boolean isEsteril() {
+        return esteril;
+    }
+
+    public void setEsteril(boolean esteril) {
+        this.esteril = esteril;
+    }
+
+    public boolean isStatus() {
+        return status;
+    }
+
+    public void setStatus(boolean status) {
+        this.status = status;
+    }
+
+    public double getPeso() {
+        return peso;
+    }
+
+    public void setPeso(double peso) {
+        this.peso = peso;
+    }
+
+    public Pelagem getPelagem() {
+        return pelagem;
+    }
+
+    public void setPelagem(Pelagem pelagem) {
+        this.pelagem = pelagem;
+    }
+
+    public Raca getRaca() {
+        return raca;
+    }
+
+    public void setRaca(Raca raca) {
+        this.raca = raca;
+    }
+
+    public Proprietario getProprietario() {
+        return proprietario;
+    }
+
+    public void setProprietario(Proprietario proprietario) {
+        this.proprietario = proprietario;
+    }
+
+    public Prontuario getProntuario() {
+        return prontuario;
+    }
+    public void setProntuario(Prontuario prontuario) {
+        this.prontuario = prontuario;
+    }
+}
