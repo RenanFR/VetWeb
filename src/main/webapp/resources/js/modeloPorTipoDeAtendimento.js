@@ -14,6 +14,3 @@ var modeloPorTipoDeAtendimento =
                 }
             });
         };
-//$(document).ready(modeloPorTipoDeAtendimento);
-//$(window).load(modeloPorTipoDeAtendimento);
-//$('#tipoDeAtendimento').change(modeloPorTipoDeAtendimento);

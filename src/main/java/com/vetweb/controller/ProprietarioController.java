@@ -58,10 +58,10 @@ public class ProprietarioController {
     {
 //        File json = new File("C:\\Users\\renan\\Desktop\\VetWeb\\src\\main\\webapp\\resources\\paises.json");
         try{
-            Path paisesJson = Paths.get(System.getenv("catalina.base"), "vetwebFiles", "paises.json");
-            Path profissoesJson = Paths.get(System.getenv("catalina.base"), "vetwebFiles", "profissoes.json");
-//            Path paisesJson = Paths.get(System.getenv("catalina_base"), "vetwebFiles", "paises.json");
-//            Path profissoesJson = Paths.get(System.getenv("catalina_base"), "vetwebFiles", "profissoes.json");
+//            Path paisesJson = Paths.get(System.getenv("catalina.base"), "vetwebFiles", "paises.json");
+//            Path profissoesJson = Paths.get(System.getenv("catalina.base"), "vetwebFiles", "profissoes.json");
+            Path paisesJson = Paths.get(System.getenv("catalina_base"), "vetwebFiles", "paises.json");
+            Path profissoesJson = Paths.get(System.getenv("catalina_base"), "vetwebFiles", "profissoes.json");
             ObjectMapper objectMapper = new ObjectMapper();
             paises = objectMapper.readValue(Files.newInputStream(paisesJson, StandardOpenOption.READ), new TypeReference<List<Pais>>() {});
             profissao = objectMapper.readValue(Files.newInputStream(profissoesJson, StandardOpenOption.READ), Profissao.class);
@@ -108,6 +108,7 @@ public class ProprietarioController {
         Proprietario p = proprietarioDAO.consultarPorId(pessoaId);
         try{
             p.getAnimais().stream().forEach(a -> {
+            	
                 prontuarioDAO.remover(prontuarioDAO.prontuarioPorAnimal(a.getAnimalId()));
             });
             LOGGER.info(("Prontuários dos animais do " + p.getNome() + " eliminados.").toUpperCase());

@@ -23,8 +23,7 @@ public class AtendimentoDAO implements IDAO<Atendimento> {
 
     @Override
     public Atendimento consultarPorId(long id) {
-//        return entityManager.createQuery("SELECT t FROM TipoDeAtendimento t WHERE t.tipoDeAtendimentoId")
-        return null;
+    	return entityManager.find(Atendimento.class, id);
     }
 
     @Override

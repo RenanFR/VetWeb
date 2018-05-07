@@ -11,10 +11,12 @@ import javax.persistence.JoinColumn;
 import org.springframework.format.annotation.DateTimeFormat;
 @Entity
 public class ProntuarioVacina implements Serializable {
+	
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	
 	@Id @GeneratedValue
 	private Long prontuarioVacinaId;
 	

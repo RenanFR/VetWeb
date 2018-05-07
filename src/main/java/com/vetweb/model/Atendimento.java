@@ -12,24 +12,26 @@ import javax.persistence.Table;
 import org.springframework.format.annotation.DateTimeFormat;
 @Entity
 @Table(name = "atendimento")
-public class Atendimento implements Serializable {
-    /**
-	 * 
-	 */
+public class Atendimento implements Serializable, ElementoProntuario {
+	
 	private static final long serialVersionUID = 1L;
+	
 	@Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer atendimentoId;
+    private Long atendimentoId;
+	
     private TipoDeAtendimento tipoDeAtendimento;
+    
     private StringBuilder preenchimentoModeloAtendimento;
+    
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate dataAtendimento;
     
-    public Integer getAtendimentoId() {
+    public Long getAtendimentoId() {
         return atendimentoId;
     }
 
-    public void setAtendimentoId(Integer atendimentoId) {
+    public void setAtendimentoId(Long atendimentoId) {
         this.atendimentoId = atendimentoId;
     }
 
@@ -60,13 +62,22 @@ public class Atendimento implements Serializable {
 	public Atendimento() {
     }
 
-    public Atendimento(Integer atendimentoId, TipoDeAtendimento tipoDeAtendimento, StringBuilder preenchimentoModeloAtendimento) {
+    public Atendimento(Long atendimentoId, TipoDeAtendimento tipoDeAtendimento, StringBuilder preenchimentoModeloAtendimento) {
         this.atendimentoId = atendimentoId;
         this.tipoDeAtendimento = tipoDeAtendimento;
         this.preenchimentoModeloAtendimento = preenchimentoModeloAtendimento;
     }
+    
     @Override
-    public String toString() {
-    	return "Atendimento";
+    public boolean equals(Object obj) {
+    	if(!(obj instanceof Atendimento)) return false;
+    	Atendimento atendimentoComparar = (Atendimento)obj;
+    	return this.getAtendimentoId().equals(atendimentoComparar.getAtendimentoId());
     }
+    
+    @Override
+    public int hashCode() {
+    	return this.atendimentoId.intValue();
+    }
+    
 }

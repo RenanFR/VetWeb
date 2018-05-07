@@ -15,27 +15,35 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "prontuarios")
 public class Prontuario implements Serializable {
+	
     /**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	
 	@Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long prontuarioId;
+	
     @OneToMany(fetch = FetchType.LAZY)
     private List<Atendimento> atendimentos;
+    
     @OneToMany(fetch = FetchType.LAZY)
     private List<ProntuarioVacina> vacinas;
+    
     @OneToMany
     private List<Documento> documentos;
+    
     @OneToMany
     private List<Exame> exames;
+    
     @OneToMany
     private List<Prescricao> prescricoes;
+    
     @OneToMany(fetch = FetchType.LAZY)
     private List<ProntuarioPatologia> patologias;
+    
     @OneToOne
-//        (mappedBy = "prontuario")
     private Animal animal;
 
     public Prontuario() {

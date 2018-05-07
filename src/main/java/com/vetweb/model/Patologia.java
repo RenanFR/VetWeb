@@ -6,10 +6,10 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 @Entity
 @Table(name = "patologias")
-public class Patologia implements Serializable {
-    /**
-	 * 
-	 */
+public class Patologia implements Serializable, ElementoProntuario {
+	
+	private static final long serialVersionUID = 1L;
+	
 	@Id
     private String nome;
     private boolean ativo;
