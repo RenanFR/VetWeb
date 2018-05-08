@@ -8,7 +8,7 @@ import javax.persistence.Table;
 @Table(name = "patologias")
 public class Patologia implements Serializable, ElementoProntuario {
 	
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = -5607289540887122702L;
 	
 	@Id
     private String nome;

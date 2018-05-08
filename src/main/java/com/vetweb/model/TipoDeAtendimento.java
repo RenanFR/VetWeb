@@ -16,19 +16,23 @@ import javax.persistence.Table;
 @NamedQueries({@NamedQuery(name = "tiposDeAtendimentoQuery", query = "SELECT t FROM TipoDeAtendimento t"),
                 @NamedQuery(name = "tipoDeAtendimentoPorNomeQuery", query = "SELECT t FROM TipoDeAtendimento t WHERE t.nome = :nomeTipoAtendimento")})
 public class TipoDeAtendimento implements Serializable {
-	/**
-	 * 
-	 */
+	
 	private static final long serialVersionUID = -686226545519235798L;
 	
 	@Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long tipoDeAtendimentoId;
+	
     private String nome;
+    
     private Duration duracao;
+    
     private Period frequencia;
+    
     private boolean status;
+    
     private StringBuilder modeloAtendimento;
+    
     private BigDecimal custo;
 
     public TipoDeAtendimento() {

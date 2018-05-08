@@ -22,7 +22,7 @@
             <caption><spring:message code="prontuario" arguments="${prontuario.animal.nome}"></spring:message></caption>
             <thead>
                 <tr>
-                    <th><spring:message code="atendimentoMedico"></spring:message>  <button id="btnEditarAtendimento" data-toggle="modal" data-target="#modalAtendimento" onclick="modeloPorTipoDeAtendimento()"><i class="fa fa-caret-right"></i></button> </th>
+                    <th><spring:message code="atendimentoMedico"></spring:message>  <button data-toggle="modal" data-target="#modalAtendimento" onclick="modeloPorTipoDeAtendimento()"><i class="fa fa-caret-right"></i></button> </th>
                     <th><spring:message code="patologias"></spring:message> <button data-toggle="modal" data-target="#modalPatologia"><i class="fa fa-caret-right"></i></button></th>
                     <th><spring:message code="vacina"></spring:message> <button data-toggle="modal" data-target="#modalVacina"><i class="fa fa-caret-right" aria-hidden="true"></i></button></th>
                 </tr>
@@ -35,7 +35,8 @@
 		                    	<li>
 			                        ${atendimento.preenchimentoModeloAtendimento} ${atendimento.dataAtendimento}	${atendimento.tipoDeAtendimento.custo}
 		                        	<a href="<c:url value="/prontuario/removerAtendimentoDoProntuario/${prontuario.prontuarioId}/${atendimento.atendimentoId}"></c:url>"><i class="fa fa-arrow-circle-o-down fa-2x"></i></a>
-									<button onclick="btnEditaAtendimento()">
+									<button data-toggle="modal" data-target="#modalAtendimento" onclick="abreEdicaoAtendimento(${atendimento.atendimentoId})">
+										ABRIR JANELA DE ATENDIMENTO
 									</button>
 		                    	</li>
 		                    </c:forEach>
@@ -83,7 +84,8 @@
                         <tr>
                             <th><spring:message code="tipoDeAtendimento"></spring:message>: </th>
                             <td>
-                                <form:select id="tipoDeAtendimento" path="tipoDeAtendimento" items="${tiposDeAtendimento}" onchange="modeloPorTipoDeAtendimento()"></form:select>
+                                <form:select id="tipoDeAtendimento" path="tipoDeAtendimento" items="${tiposDeAtendimento}" onchange="modeloPorTipoDeAtendimento()">
+                                </form:select>
                             </td>
                         </tr>
                         <br>

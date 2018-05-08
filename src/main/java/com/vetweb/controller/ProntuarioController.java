@@ -238,6 +238,13 @@ public class ProntuarioController {
 		return modelAndView;
     }
     
+    @ResponseBody
+    @RequestMapping(value = "/editarAtendimento/{atendimentoId}", method = RequestMethod.GET)
+    public Atendimento atendimentoParaEdicao(@PathVariable("atendimentoId") Long atendimentoId) {
+    	Atendimento atendimento = atendimentoDAO.consultarPorId(atendimentoId);
+    	return atendimento;
+    }
+    
     private void adicionarListasAoProntuario(ModelAndView viewProntuario) {
     	Map<String, List> listasProntuario = new HashMap<>();
     	listasProntuario.put("tiposDeAtendimento", prontuarioDAO.tiposDeAtendimento());
