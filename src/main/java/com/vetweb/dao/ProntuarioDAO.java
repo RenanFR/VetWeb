@@ -100,15 +100,32 @@ public class ProntuarioDAO implements IDAO<Prontuario>{
     
     public void adicionarPatologia(ProntuarioPatologia patologia, Long prontuarioId) {
     	Prontuario prontuario = consultarPorId(prontuarioId);
-    	entityManager.persist(patologia);
-    	prontuario.getPatologias().add(patologia);
+    	if (patologia.getProntuarioPatologiaId() == null) {
+    		entityManager.persist(patologia);
+    	}
+    	else {
+    		entityManager.merge(patologia);
+    	}
+    	if (!prontuario.getPatologias().contains(patologia)) {
+    		prontuario.getPatologias().add(patologia);
+    	} else {
+    		prontuario.getPatologias()
+    			.set(prontuario.getPatologias().indexOf(patologia), patologia);
+    	}
     	salvar(prontuario);
     }
     
     public void adicionarVacina(ProntuarioVacina vacina, Long prontuarioId) {
     	Prontuario prontuario = consultarPorId(prontuarioId);
-    	entityManager.persist(vacina);
-    	prontuario.getVacinas().add(vacina);
+    	if (vacina.getProntuarioVacinaId() == null)
+    		entityManager.persist(vacina);
+    	else
+    		entityManager.merge(vacina);
+    	if (!prontuario.getVacinas().contains(vacina))
+    		prontuario.getVacinas().add(vacina);
+    	else
+    		prontuario.getVacinas()
+    			.set(prontuario.getVacinas().indexOf(vacina), vacina);
     	salvar(prontuario);
     }
     

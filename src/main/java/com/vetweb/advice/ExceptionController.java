@@ -24,17 +24,16 @@ public class ExceptionController {
     @ExceptionHandler(DataIntegrityViolationException.class)//Irá cair nesse método de tratamento de exceção sempre que der DataIntegrityViolationException
     public ModelAndView handleViolationException(HttpServletRequest request, ConstraintViolationException violationException){
         ModelAndView modelAndView = null;
-        if(modelDML.equals("Especie")){            
+        if(modelDML.equals("Especie")){
             modelAndView = new ModelAndView("animal/especies");//Caminho da página de erro para esse tipo de exceção
             modelAndView.addObject("especies", animalDAO.especies());
         } else if(modelDML.equals("Raca")) {
             modelAndView = new ModelAndView("animal/racas");//Caminho da página de erro para esse tipo de exceção
             modelAndView.addObject("racas", animalDAO.racas());
-        } else if(modelDML.equals("")){
+        } else if(modelDML.equals("Pelagem")){
             modelAndView = new ModelAndView("animal/pelagens");//Caminho da página de erro para esse tipo de exceção
             modelAndView.addObject("pelagens", animalDAO.pelagens());
-        }
-        else{
+        } else {
             modelAndView = new ModelAndView("index");
         }
         modelAndView.addObject("mensagemErro", violationException.getSQLException().getMessage());//Adiciona mais detalhes sobre erro para exibir na página p/ usuário

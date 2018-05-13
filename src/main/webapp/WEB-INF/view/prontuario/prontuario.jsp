@@ -16,6 +16,8 @@
         <script>tinymce.init({ selector:'#preenchimentoModeloAtendimento' });</script>        
         <script src="<c:url value="/resources/js/modeloPorTipoDeAtendimento.js"></c:url>" type="text/javascript"></script>
         <script src="<c:url value="/resources/js/abreEdicaoAtendimento.js"></c:url>" type="text/javascript"></script>
+        <script src="<c:url value="/resources/js/abreEdicaoPatologia.js"></c:url>" type="text/javascript"></script>
+        <script src="<c:url value="/resources/js/abreEdicaoVacina.js"></c:url>" type="text/javascript"></script>
     </jsp:attribute>
     <jsp:body>
         <table id="prontuario" class="table table-responsive">
@@ -34,9 +36,9 @@
 		                    <c:forEach items="${prontuario.atendimentos}" var="atendimento">
 		                    	<li>
 			                        ${atendimento.preenchimentoModeloAtendimento} ${atendimento.dataAtendimento}	${atendimento.tipoDeAtendimento.custo}
-		                        	<a href="<c:url value="/prontuario/removerAtendimentoDoProntuario/${prontuario.prontuarioId}/${atendimento.atendimentoId}"></c:url>"><i class="fa fa-arrow-circle-o-down fa-2x"></i></a>
+		                        	<a href="<c:url value="/prontuario/removerAtendimentoDoProntuario/${prontuario.prontuarioId}/${atendimento.atendimentoId}"></c:url>"><i class="fa fa-trash-o fa-2x"></i></a>
 									<button data-toggle="modal" data-target="#modalAtendimento" onclick="abreEdicaoAtendimento(${atendimento.atendimentoId})">
-										ABRIR JANELA DE ATENDIMENTO
+										<i class="fa fa-file-text-o"></i>
 									</button>
 		                    	</li>
 		                    </c:forEach>
@@ -46,8 +48,11 @@
                     	<ul>
 	                        <c:forEach items="${prontuario.patologias}" var="prontuarioPatologia">
 		                    	<li>
-		                            ${prontuarioPatologia.patologia.nome}	${prontuarioPatologia.inclusaoPatologia}
-		                            <a href="<c:url value="/prontuario/removerPatologiaDoProntuario/${prontuario.prontuarioId}/${prontuarioPatologia.prontuarioPatologiaId}"></c:url>"><i class="fa fa-arrow-circle-o-down fa-2x"></i></a>
+		                            ${prontuarioPatologia.patologia.nome}	
+		                            <a href="<c:url value="/prontuario/removerPatologiaDoProntuario/${prontuario.prontuarioId}/${prontuarioPatologia.prontuarioPatologiaId}"></c:url>"><i class="fa fa-trash-o fa-2x"></i></a>
+									<button data-toggle="modal" data-target="#modalPatologia" onclick="abreEdicaoPatologia(${prontuarioPatologia.prontuarioPatologiaId})">
+										<i class="fa fa-file-text-o"></i>
+									</button>
 		                    	</li>
 	                        </c:forEach>
                     	</ul>
@@ -57,7 +62,10 @@
 	                        <c:forEach items="${prontuario.vacinas}" var="prontuarioVacina">
 		                    	<li>
 		                            ${prontuarioVacina.vacina.nome}	${prontuarioVacina.inclusaoVacina}	${prontuarioVacina.vacina.preco}
-		                            <a href="<c:url value="/prontuario/removerVacinaDoProntuario/${prontuario.prontuarioId}/${prontuarioVacina.prontuarioVacinaId}?inclusaoOcorrenciaVacina=${prontuarioVacina.inclusaoVacina}"></c:url>"><i class="fa fa-arrow-circle-o-down fa-2x"></i></a>
+		                            <a href="<c:url value="/prontuario/removerVacinaDoProntuario/${prontuario.prontuarioId}/${prontuarioVacina.prontuarioVacinaId}?inclusaoOcorrenciaVacina=${prontuarioVacina.inclusaoVacina}"></c:url>"><i class="fa fa-trash-o fa-2x"></i></a>
+									<button data-toggle="modal" data-target="#modalVacina" onclick="abreEdicaoVacina(${prontuarioVacina.prontuarioVacinaId})">
+										<i class="fa fa-file-text-o"></i>
+									</button>
 		                    	</li>
 	                        </c:forEach>
 	                    </ul>
@@ -76,7 +84,8 @@
                 </button>
               </div>
               <div class="modal-body">
-              <form:form servletRelativeAction="/prontuario/adicionarAtendimento?prontuarioId=${prontuario.prontuarioId}" method="POST" modelAttribute="atendimento">
+              <form:form servletRelativeAction="/prontuario/adicionarAtendimento?prontuarioId=${prontuario.prontuarioId}"
+				method="POST" modelAttribute="atendimento" id="formAtendimento">
                     <caption><spring:message code="adcAtendimento" arguments="${prontuario.animal.nome}"></spring:message></caption>
                     <tbody>
                     	<input type="text" name="atendimentoId" id="atendimentoId" hidden="hidden"  />
@@ -95,7 +104,7 @@
                         </tr>
                         <tr>
                         	<th><spring:message code="dataAtendimento"></spring:message>:	</th>
-                        	<td><form:input type="date" name="dataAtendimento" id="dataAtendimento" path="dataAtendimento"></form:input></td>
+                        	<td id="campoDataAtendimento"><input type="date" name="dataAtendimento" id="dataAtendimento"></input></td>
                         </tr>
                     </tbody>
                     
@@ -123,11 +132,12 @@
                     <caption><spring:message code="adcAtendimento" arguments="${prontuario.animal.nome}"></spring:message></caption>
                     <tbody>
                         <input type="text" name="prontuarioId" id="prontuarioId" hidden="hidden"  />
+                        <input type="text" name="prontuarioPatologiaId" id="prontuarioPatologiaId" hidden="hidden"  />
                         <br>
                         <tr>
                             <th><spring:message code="patologia"></spring:message>: </th>
                             <td>
-                            	<select name="patologia" id="patologia">
+                            	<select name="patologia" id="patologias">
 	                                <c:forEach items="${patologias}" var="patologia">
 	                                	<option value="${patologia}">${patologia}</option>
 	                                </c:forEach>
@@ -165,11 +175,12 @@
                     <caption><spring:message code="adcVacina" arguments="${prontuario.animal.nome}"></spring:message></caption>
                     <tbody>
                         <input type="text" name="prontuarioId" id="prontuarioId" hidden="hidden"  />
+                        <input type="text" name="prontuarioVacinaId" id="prontuarioVacinaId" hidden="hidden"  />
                         <br>
                         <tr>
                             <th><spring:message code="vacina"></spring:message>: </th>
                             <td>
-                            	<select name="vacina" id="vacina">
+                            	<select name="vacina" id="vacinas">
 	                            	<c:forEach items="${vacinas}" var="vacina">
 	                            		<option value="${vacina}">${vacina}</option>	                            	
 	                            	</c:forEach>

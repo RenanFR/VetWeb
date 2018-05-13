@@ -2,6 +2,7 @@ package com.vetweb.model;
  //@author renanrodrigues
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -51,12 +52,18 @@ public class Atendimento implements Serializable, ElementoProntuario {
         this.preenchimentoModeloAtendimento = preenchimentoModeloAtendimento;
     }
     
-    public LocalDate getDataAtendimento() {
-		return dataAtendimento;
+    public String getDataAtendimento() {
+		return dataAtendimento.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
 	}
 
-	public void setDataAtendimento(LocalDate dataAtendimento) {
-		this.dataAtendimento = dataAtendimento;
+	public void setDataAtendimento(String dataAtendimento) {
+		if (dataAtendimento.contains("-")) {
+			this.dataAtendimento = LocalDate.parse(dataAtendimento, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+		} else if (dataAtendimento.contains("/")) {
+			this.dataAtendimento = LocalDate.parse(dataAtendimento, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+		} else {
+			throw new RuntimeException("FORMATO DESCONHECIDO DE DATA. ");
+		}
 	}
 
 	public Atendimento() {

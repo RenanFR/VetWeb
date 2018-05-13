@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -52,12 +53,12 @@ public class AnimalController {
     }
     
     @RequestMapping(value = "/cadastro", method = RequestMethod.GET)
-    public ModelAndView formCadastro(Animal animal) {//Envia o modelAttribute ao form
+    public ModelAndView formCadastro(Animal animal, @RequestParam("desabilitaTrocaProprietario") final boolean desabilitaTrocaProprietario) {//Envia o modelAttribute ao form
         ModelAndView modelAndView = new ModelAndView("animal/cadastroAnimal");
         modelAndView.addObject("proprietarios", proprietarioDAO.listar());
         modelAndView.addObject("especies", animalDAO.especies());
         modelAndView.addObject("pelagens", animalDAO.pelagens());
-        modelAndView.addObject("desabilitaTrocaProprietario", false);
+        modelAndView.addObject("desabilitaTrocaProprietario", desabilitaTrocaProprietario);
         return modelAndView;
     }
     
@@ -71,7 +72,7 @@ public class AnimalController {
         ModelAndView modelAndView = new ModelAndView("forward:/prontuario/gerarProntuario");//Redireciona c/ novo request p/ outra ação na Controller
         if (bindingResult.hasErrors()) {//Se houverem erros envia objeto BindingResult p/ a JSP
             System.out.println(bindingResult.getAllErrors());
-            return formCadastro(animal);//Forward caso haja erros de validação
+            return formCadastro(animal, true);//Forward caso haja erros de validação
         }
         try {
             Proprietario proprietario = proprietarioDAO.consultarPorNome(animal.getProprietario().getNome());
