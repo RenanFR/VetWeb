@@ -13,7 +13,11 @@ public class AtendimentoDAO implements IDAO<Atendimento> {
     EntityManager entityManager;
     
     @Override
-    public void salvar(Atendimento e) {
+    public void salvar(Atendimento atendimento) {
+    	if(atendimento.getAtendimentoId() == null)
+    		entityManager.persist(atendimento);
+    	else 
+    		entityManager.merge(atendimento);
     }
 
     @Override

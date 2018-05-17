@@ -1,6 +1,7 @@
 package com.vetweb.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -13,6 +14,7 @@ import com.vetweb.model.ProntuarioPatologia;
 import com.vetweb.model.ProntuarioVacina;
 
 @RestController
+@Transactional
 @RequestMapping("/prontuario")
 public class ProntuarioRestController {//Provê os serviços Rest p/ o prontuário
 	
@@ -40,4 +42,12 @@ public class ProntuarioRestController {//Provê os serviços Rest p/ o prontuár
     	return prontuarioVacina;
     }
     
+    @RequestMapping(value = "/atualizaStatusPagoAtendimento/{atendimentoId}", method = RequestMethod.GET)
+    public boolean atualizaStatusPagamento(@PathVariable("atendimentoId") final Long atendimentoId) {
+    	Atendimento atendimento = atendimentoDAO.consultarPorId(atendimentoId);
+    	System.out.println(atendimento.isPago());
+    	atendimento.setPago(!atendimento.isPago());
+    	atendimentoDAO.salvar(atendimento);
+    	return atendimento.isPago();
+    }
 }

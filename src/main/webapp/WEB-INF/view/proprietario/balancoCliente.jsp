@@ -7,9 +7,10 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %><!--    Importação JSTL -->
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%><!--  tags úteis do spring framework   -->
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring" %>
-
+atualizaPagamentoAtendimento
 <vetweb:layout title="proprietarios">
     <jsp:attribute name="js">
+		<script src="<c:url value="/resources/js/atualizaPagamentoAtendimento.js"></c:url>" type="text/javascript"></script>
         <script>
             $(document).ready(function(){
                $('#balancoFinanceiro').dataTable();
@@ -17,10 +18,6 @@
         </script>                 
     </jsp:attribute>
     <jsp:body>
-        <button class="btn btn-primary">
-            <i class="fa fa-save"></i>
-            <a href="<c:url value="/clientes/cadastro"></c:url>" style="color: white">   <spring:message code="cadastrar"></spring:message></a>
-        </button>
         <table class="table table-striped table-bordered table-hover" id="balancoFinanceiro">
             <thead>
                 <tr>
@@ -43,7 +40,9 @@
 	                        		<tr>
 	                        			<td>${atendimento.tipoDeAtendimento.nome}</td>
 	                        			<td>${atendimento.tipoDeAtendimento.custo}</td>
-	                        			<td>${atendimento.pago}</td>
+	                        			<td>
+	                        				<input type="checkbox" class="flagPago" ${atendimento.pago? 'checked' : ''} onclick="atualizaPagamentoAtendimento(${atendimento.atendimentoId})"	/>
+	                        			</td>
 	                        			<td>${atendimento.dataAtendimento}</td>
 	                        			<td>${atendimento.preenchimentoModeloAtendimento}</td>
 	                        		</tr>
