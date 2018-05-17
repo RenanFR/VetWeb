@@ -28,6 +28,8 @@ public class Atendimento implements Serializable, ElementoProntuario {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate dataAtendimento;
     
+    public boolean pago;
+    
     public Long getAtendimentoId() {
         return atendimentoId;
     }
@@ -64,6 +66,14 @@ public class Atendimento implements Serializable, ElementoProntuario {
 		} else {
 			throw new RuntimeException("FORMATO DESCONHECIDO DE DATA. ");
 		}
+	}
+
+	public boolean isPago() {
+		return pago;
+	}
+
+	public void setPago(boolean pago) {
+		this.pago = pago;
 	}
 
 	public Atendimento() {

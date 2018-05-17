@@ -38,6 +38,9 @@
                             <a href="<c:url value="/clientes/remover/${proprietario.pessoaId}"></c:url>">
                                 <i class="fa fa-trash-o fa-2x"></i>
                             </a>     
+                            <a href="<c:url value="/clientes/financeiro/${proprietario.pessoaId}"></c:url>">
+                                <i class="fa fa-money  fa-2x"></i>
+                            </a>     
                         </td>
                         <td>
                             <vetweb:animaisDoCliente proprietario="${proprietario}"></vetweb:animaisDoCliente>

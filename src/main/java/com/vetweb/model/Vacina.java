@@ -18,13 +18,19 @@ public class Vacina implements Serializable, ElementoProntuario {
 	@Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long vacinaId;
+	
 //    @Column(insertable = false, updatable = false)
     private String nome;
+    
     private String grupo;
+    
     private boolean status;
+    
     private String laboratorio;
+    
     @Transient
     private Protocolo protocolo;
+    
     private BigDecimal preco;
 
     public Vacina(String text) {

@@ -32,6 +32,8 @@ public class ProntuarioVacina implements Serializable {
 	
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private LocalDate inclusaoVacina;
+	
+	private boolean pago;
 
 	public Long getProntuarioVacinaId() {
 		return prontuarioVacinaId;
@@ -69,6 +71,14 @@ public class ProntuarioVacina implements Serializable {
 		} else {
 			throw new RuntimeException("FORMATO DESCONHECIDO DE DATA. ");
 		}
+	}
+
+	public boolean isPago() {
+		return pago;
+	}
+
+	public void setPago(boolean pago) {
+		this.pago = pago;
 	}
 
 	@Override

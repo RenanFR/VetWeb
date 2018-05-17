@@ -12,16 +12,26 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "proprietarios")
 @NamedQueries({@NamedQuery(name = "quantidadeClientes", query = "SELECT COUNT(p) FROM Proprietario p"),
+	@NamedQuery(name = "despesasCliente", query = "SELECT p FROM Prontuario p "
+                + "JOIN FETCH p.animal a JOIN FETCH a.proprietario prop WHERE prop.pessoaId = :Id"),
     @NamedQuery(name = "proprietarioPorNome", query = "SELECT p FROM Proprietario p WHERE p.nome = :nomeProprietario")})
 public class Proprietario extends Pessoa {
-    private boolean aceitaNotificacoes;
+	
+	private static final long serialVersionUID = 1L;
+	
+	private boolean aceitaNotificacoes;
+	
     @Column(columnDefinition = "TEXT")
     private String profissao;
+    
     @Column(columnDefinition = "TEXT")
     private String observacoes;
+    
     private String comoNosConheceu;
+    
     @OneToMany(mappedBy = "proprietario", fetch = FetchType.EAGER)
     private List<Animal> animais;
+    
     @Column(columnDefinition = "TEXT")
     private String nacionalidade;
 

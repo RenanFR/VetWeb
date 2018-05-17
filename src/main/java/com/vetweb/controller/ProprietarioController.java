@@ -1,26 +1,18 @@
 package com.vetweb.controller;
- // @author 11151504898
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.vetweb.dao.AnimalDAO;
-import com.vetweb.dao.ProntuarioDAO;
-import com.vetweb.dao.ProprietarioDAO;
-import com.vetweb.model.Animal;
-import com.vetweb.model.pojo.Pais;
-import com.vetweb.model.pojo.Profissao;
-import com.vetweb.model.Proprietario;
-import com.vetweb.model.validators.ProprietarioValidator;
-import java.beans.PropertyEditorSupport;
+ import java.beans.PropertyEditorSupport;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
-import java.nio.file.Path;
-import java.nio.file.StandardOpenOption;
+import java.util.stream.Collectors;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -35,6 +27,21 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+// @author 11151504898
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.vetweb.dao.AnimalDAO;
+import com.vetweb.dao.ProntuarioDAO;
+import com.vetweb.dao.ProprietarioDAO;
+import com.vetweb.model.Animal;
+import com.vetweb.model.Atendimento;
+import com.vetweb.model.Prontuario;
+import com.vetweb.model.ProntuarioVacina;
+import com.vetweb.model.Proprietario;
+import com.vetweb.model.pojo.Pais;
+import com.vetweb.model.pojo.Profissao;
+import com.vetweb.model.validators.ProprietarioValidator;
 
 @Controller
 @Transactional//Indica que os métodos da Controller necessitam de transação
@@ -136,6 +143,19 @@ public class ProprietarioController {
         Proprietario p = proprietarioDAO.consultarPorId(pessoaId);
         attributes.addAttribute("proprietario", p.getNome());
         return modelAndView;
+    }
+    
+    @RequestMapping(value = "/financeiro/{pessoaId}", method = RequestMethod.GET)
+    public ModelAndView financeiroCliente(@PathVariable("pessoaId") Long clienteId) {
+    	ModelAndView modelAndView = new ModelAndView("proprietario/balancoCliente");
+    	List<Prontuario> prontuariosCliente = proprietarioDAO.getBalancoFinanceiro(clienteId);
+    	List<Atendimento> atendimentosAnimaisCliente = prontuariosCliente.stream()
+    			.flatMap(p -> p.getAtendimentos().stream()).collect(Collectors.toList());
+    	List<ProntuarioVacina> vacinasAnimaisCliente = prontuariosCliente.stream()
+    			.flatMap(p -> p.getVacinas().stream()).collect(Collectors.toList());
+    	modelAndView.addObject("atendimentosFeitos", atendimentosAnimaisCliente);
+    	modelAndView.addObject("vacinasAplicadas", vacinasAnimaisCliente);
+    	return modelAndView;
     }
     
     @RequestMapping(value = "/detalhesCliente/{pessoaId}", method = RequestMethod.GET)
