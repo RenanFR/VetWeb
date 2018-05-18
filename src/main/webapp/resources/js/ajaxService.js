@@ -165,7 +165,7 @@ var ajaxService = {
                         $('#cep').val(data.cep);
                     },
                     error: function (jqXHR, textStatus, errorThrown) {//CallBack p/ erro no Web service
-                        alert("Erro ao consultar o viacep! Verifique sua conexão.   ".toUpperCase());
+                        alert("ERRO AO CONSULTAR O VIACEP! VERIFIQUE SUA CONEXÃO.   ".toUpperCase());
                     }
                });
            }
