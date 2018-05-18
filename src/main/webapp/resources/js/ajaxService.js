@@ -90,10 +90,10 @@ var ajaxService = {
 		    url: '/VetWeb/prontuario/atualizaStatusPagoAtendimento/' + atendimentoId,
 		    contentType: 'text/html',
 		    success: function (data, textStatus, jqXHR) {
-		    	alert('Status de pagamento do atendimento alterado.	');
+		    	alert('STATUS DE PAGAMENTO DO ATENDIMENTO ALTERADO.	');
 		    },
 		    error: function (jqXHR, textStatus, errorThrown) {
-		    	alert('Erro ao alterar o status de pagamento do atendimento.	');
+		    	alert('ERRO AO ALTERAR O STATUS DE PAGAMENTO DO ATENDIMENTO.	');
 		    }
 		});
 		
