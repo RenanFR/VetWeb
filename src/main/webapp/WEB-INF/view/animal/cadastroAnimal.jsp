@@ -10,7 +10,7 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%><!--  tags úteis do spring framework   -->
 <vetweb:layout title="cadastroAnimal">
     <jsp:attribute name="script">
-        <script src="<c:url value="/resources/js/racasPorEspecie.js"></c:url>" type="text/javascript"></script>
+        <script src="<c:url value="/resources/js/ajaxService.js"></c:url>" type="text/javascript"></script>
     </jsp:attribute>
     <jsp:body>
         <c:if test="${animal.animalId == null}">
@@ -62,7 +62,7 @@
                             <tr>
                                 <th><label for="especie">Espécie</label></th>
                                 <td>
-                                    <select id="especies">
+                                    <select id="especies" onchange="ajaxService.buscaRacasPorEspecie()" onload="ajaxService.buscaRacasPorEspecie()">
                                         <c:forEach items="${especies}" var="especie">
                                             <option>${especie}</option>
                                         </c:forEach>

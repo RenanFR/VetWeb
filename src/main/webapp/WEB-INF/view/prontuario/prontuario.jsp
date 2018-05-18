@@ -14,17 +14,14 @@
     <jsp:attribute name="js">
         <script src="https://cloud.tinymce.com/stable/tinymce.min.js?apiKey=2i80p03koooieys6i5h5yz1n9d4uaxrwt1iaoy9938bmcahs"></script>          
         <script>tinymce.init({ selector:'#preenchimentoModeloAtendimento' });</script>        
-        <script src="<c:url value="/resources/js/modeloPorTipoDeAtendimento.js"></c:url>" type="text/javascript"></script>
-        <script src="<c:url value="/resources/js/abreEdicaoAtendimento.js"></c:url>" type="text/javascript"></script>
-        <script src="<c:url value="/resources/js/abreEdicaoPatologia.js"></c:url>" type="text/javascript"></script>
-        <script src="<c:url value="/resources/js/abreEdicaoVacina.js"></c:url>" type="text/javascript"></script>
+        <script src="<c:url value="/resources/js/ajaxService.js"></c:url>" type="text/javascript"></script>
     </jsp:attribute>
     <jsp:body>
         <table id="prontuario" class="table table-responsive">
             <caption><spring:message code="prontuario" arguments="${prontuario.animal.nome}"></spring:message></caption>
             <thead>
                 <tr>
-                    <th><spring:message code="atendimentoMedico"></spring:message>  <button data-toggle="modal" data-target="#modalAtendimento" onclick="modeloPorTipoDeAtendimento()"><i class="fa fa-caret-right"></i></button> </th>
+                    <th><spring:message code="atendimentoMedico"></spring:message>  <button data-toggle="modal" data-target="#modalAtendimento" onclick="ajaxService.buscaModeloPorTipoDeAtendimento()"><i class="fa fa-caret-right"></i></button> </th>
                     <th><spring:message code="patologias"></spring:message> <button data-toggle="modal" data-target="#modalPatologia"><i class="fa fa-caret-right"></i></button></th>
                     <th><spring:message code="vacina"></spring:message> <button data-toggle="modal" data-target="#modalVacina"><i class="fa fa-caret-right" aria-hidden="true"></i></button></th>
                 </tr>
@@ -37,7 +34,7 @@
 		                    	<li>
 			                        ${atendimento.preenchimentoModeloAtendimento} ${atendimento.dataAtendimento}	${atendimento.tipoDeAtendimento.custo}
 		                        	<a href="<c:url value="/prontuario/removerAtendimentoDoProntuario/${prontuario.prontuarioId}/${atendimento.atendimentoId}"></c:url>"><i class="fa fa-trash-o fa-2x"></i></a>
-									<button data-toggle="modal" data-target="#modalAtendimento" onclick="abreEdicaoAtendimento(${atendimento.atendimentoId})">
+									<button data-toggle="modal" data-target="#modalAtendimento" onclick="ajaxService.editarAtendimento(${atendimento.atendimentoId})">
 										<i class="fa fa-file-text-o"></i>
 									</button>
 		                    	</li>
@@ -50,7 +47,7 @@
 		                    	<li>
 		                            ${prontuarioPatologia.patologia.nome}	
 		                            <a href="<c:url value="/prontuario/removerPatologiaDoProntuario/${prontuario.prontuarioId}/${prontuarioPatologia.prontuarioPatologiaId}"></c:url>"><i class="fa fa-trash-o fa-2x"></i></a>
-									<button data-toggle="modal" data-target="#modalPatologia" onclick="abreEdicaoPatologia(${prontuarioPatologia.prontuarioPatologiaId})">
+									<button data-toggle="modal" data-target="#modalPatologia" onclick="ajaxService.editarPatologia(${prontuarioPatologia.prontuarioPatologiaId})">
 										<i class="fa fa-file-text-o"></i>
 									</button>
 		                    	</li>
@@ -63,7 +60,7 @@
 		                    	<li>
 		                            ${prontuarioVacina.vacina.nome}	${prontuarioVacina.inclusaoVacina}	${prontuarioVacina.vacina.preco}
 		                            <a href="<c:url value="/prontuario/removerVacinaDoProntuario/${prontuario.prontuarioId}/${prontuarioVacina.prontuarioVacinaId}?inclusaoOcorrenciaVacina=${prontuarioVacina.inclusaoVacina}"></c:url>"><i class="fa fa-trash-o fa-2x"></i></a>
-									<button data-toggle="modal" data-target="#modalVacina" onclick="abreEdicaoVacina(${prontuarioVacina.prontuarioVacinaId})">
+									<button data-toggle="modal" data-target="#modalVacina" onclick="ajaxService.editarVacina(${prontuarioVacina.prontuarioVacinaId})">
 										<i class="fa fa-file-text-o"></i>
 									</button>
 		                    	</li>
@@ -93,7 +90,7 @@
                         <tr>
                             <th><spring:message code="tipoDeAtendimento"></spring:message>: </th>
                             <td>
-                                <form:select id="tipoDeAtendimento" path="tipoDeAtendimento" items="${tiposDeAtendimento}" onchange="modeloPorTipoDeAtendimento()">
+                                <form:select id="tipoDeAtendimento" path="tipoDeAtendimento" items="${tiposDeAtendimento}" onchange="ajaxService.buscaModeloPorTipoDeAtendimento()">
                                 </form:select>
                             </td>
                         </tr>

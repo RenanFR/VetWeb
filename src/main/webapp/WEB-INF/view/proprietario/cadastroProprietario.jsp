@@ -7,8 +7,8 @@
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%><!--   Form c/ utilidades do spring    -->
 <%@ taglib uri="http://www.springframework.org/security/tags" prefix="security" %><!--   Adc. token p/ proteção contra csrf -->
 <vetweb:layout title="Cadastro de Cliente">
-    <jsp:attribute name="script">
-        <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/viacep.js"></script>
+    <jsp:attribute name="js">
+        <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/ajaxService.js"></script>
     </jsp:attribute>
     <jsp:attribute name="mascaras">   
         <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/mascaras.js"></script>
@@ -72,7 +72,7 @@
                 <tbody>
                     <tr>
                         <th><label for="endereco.cep">Cep:  </label></th>
-                        <td><form:input path="endereco.cep" id="cep"></form:input></td>
+                        <td><form:input path="endereco.cep" id="cep" onblur="ajaxService.carregaEnderecoPeloCEP()"></form:input></td>
                         <td><form:errors path="endereco.cep" cssClass="errors"></form:errors></td>
                     </tr>
                     <tr>

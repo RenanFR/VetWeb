@@ -41,7 +41,7 @@ atualizaPagamentoAtendimento
 	                        			<td>${atendimento.tipoDeAtendimento.nome}</td>
 	                        			<td>${atendimento.tipoDeAtendimento.custo}</td>
 	                        			<td>
-	                        				<input type="checkbox" class="flagPago" ${atendimento.pago? 'checked' : ''} onclick="atualizaPagamentoAtendimento(${atendimento.atendimentoId})"	/>
+	                        				<input type="checkbox" class="flagPago" ${atendimento.pago? 'checked' : ''} onclick="ajaxService.alteraStatusPagamentoAtendimento(${atendimento.atendimentoId})"	/>
 	                        			</td>
 	                        			<td>${atendimento.dataAtendimento}</td>
 	                        			<td>${atendimento.preenchimentoModeloAtendimento}</td>
