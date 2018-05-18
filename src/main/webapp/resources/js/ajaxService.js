@@ -99,6 +99,22 @@ var ajaxService = {
 		
 	},
 	
+	alteraStatusPagamentoVacina: function(prontuarioVacinaId) {
+		
+		$.ajax({
+		    type: 'GET',
+		    url: '/VetWeb/prontuario/atualizaStatusPagoVacina/' + prontuarioVacinaId,
+		    contentType: 'text/html',
+		    success: function (data, textStatus, jqXHR) {
+		    	alert('STATUS DE PAGAMENTO DA VACINA ALTERADO.	');
+		    },
+		    error: function (jqXHR, textStatus, errorThrown) {
+		    	alert('ERRO AO ALTERAR O STATUS DE PAGAMENTO DA VACINA.	');
+		    }
+		});
+		
+	},
+	
 	buscaModeloPorTipoDeAtendimento: function() {
 		
 	    var ta = $('#tipoDeAtendimento').val();

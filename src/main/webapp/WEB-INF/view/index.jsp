@@ -17,6 +17,7 @@
                 </a>
             </div>
         </div>
+        
         <div class="col-lg-2 col-md-2 col-sm-2 col-xs-6">
             <div class="div-square">
                 <a href="#">                    
@@ -24,6 +25,16 @@
                     <h4>${quantidadeAnimais} animal(s)</h4>
                 </a>
             </div>
-        </div>                
+        </div>
+                        
+        <div class="col-lg-2 col-md-2 col-sm-2 col-xs-6">
+            <div class="div-square">
+                <a href="#">                    
+                    <i class="fa fa-credit-card fa-5x"></i>
+                    <h4>R$ ${totalPendente}<spring:message code="debitos"></spring:message></h4>
+                </a>
+            </div>
+        </div>
+                        
     </div>
 </vetweb:layout>

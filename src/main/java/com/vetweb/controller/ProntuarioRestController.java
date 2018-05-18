@@ -12,6 +12,7 @@ import com.vetweb.dao.ProntuarioDAO;
 import com.vetweb.model.Atendimento;
 import com.vetweb.model.ProntuarioPatologia;
 import com.vetweb.model.ProntuarioVacina;
+import com.vetweb.model.Vacina;
 
 @RestController
 @Transactional
@@ -45,9 +46,16 @@ public class ProntuarioRestController {//Provê os serviços Rest p/ o prontuár
     @RequestMapping(value = "/atualizaStatusPagoAtendimento/{atendimentoId}", method = RequestMethod.GET)
     public boolean atualizaStatusPagamento(@PathVariable("atendimentoId") final Long atendimentoId) {
     	Atendimento atendimento = atendimentoDAO.consultarPorId(atendimentoId);
-    	System.out.println(atendimento.isPago());
     	atendimento.setPago(!atendimento.isPago());
     	atendimentoDAO.salvar(atendimento);
     	return atendimento.isPago();
     }
+    
+    @RequestMapping(value = "/atualizaStatusPagoVacina/{prontuarioVacinaId}", method = RequestMethod.GET)
+    public boolean atualizaStatusPagamentoVacina(@PathVariable("prontuarioVacinaId") final Long prontuarioVacinaId) {
+    	ProntuarioVacina vacina = prontuarioDAO.buscarOcorrenciaVacinaProntuarioPorId(prontuarioVacinaId);
+    	vacina.setPago(!vacina.isPago());
+    	return vacina.isPago();    	
+    }
+    
 }

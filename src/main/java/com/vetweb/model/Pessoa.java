@@ -17,24 +17,38 @@ import org.springframework.format.annotation.DateTimeFormat;
 @Table(name = "pessoas")//Permite personalizar nome da tabela dentre outros parametros. Por padrão nomeia c/ classe
 @Inheritance(strategy = InheritanceType.JOINED)
 public class Pessoa implements Serializable {//Tabelas com relacionamentos devem implementar Serializable
+	
+	private static final long serialVersionUID = 1L;
+	
     public enum TipoPessoa { FISICA, JURIDICA }
+    
     @Id//Informa que o atributo é a chave primária da tabela
     @GeneratedValue(strategy = GenerationType.AUTO)//Informa que a geração do valor será via auto-incremento
     private Long pessoaId;
+    
     @NotBlank
     private String nome;
+    
     @NotBlank
     private String rg;
+    
     @NotBlank @CPF
     private String cpf;
+    
     private char sexo;
+    
     private TipoPessoa tipoPessoa;
+    
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate inclusao;
+    
     private String nacionalidade;//@DateTimeFormat(pattern = "dd-MM-yyyy")
+    
     @Past @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate nascimento; 
+    
     private Endereco endereco;
+    
     private Contato contato;
 
     @Override

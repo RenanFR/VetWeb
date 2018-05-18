@@ -7,7 +7,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %><!--    Importação JSTL -->
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%><!--  tags úteis do spring framework   -->
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring" %>
-<vetweb:layout title="proprietarios">
+<vetweb:layout title="proprietario ${proprietario}">
     <jsp:attribute name="js">
 		<script src="<c:url value="/resources/js/ajaxService.js"></c:url>" type="text/javascript"></script>
         <script>
@@ -18,6 +18,11 @@
     </jsp:attribute>
     <jsp:body>
         <table class="table table-striped table-bordered table-hover" id="balancoFinanceiro">
+        <caption>
+        	<h3>
+        		<spring:message code="totalPendente"></spring:message> ${totalPendente}
+        	</h3>
+        </caption>
             <thead>
                 <tr>
                     <th><spring:message code="atendimentoMedico"></spring:message></th>
@@ -29,11 +34,18 @@
                         <td>
                         	<table>
                         		<tr>
-                        			<th>tipoDeAtendimento</th>
-                        			<th>custo</th>
-                        			<th>pago</th>
-                        			<th>dataAtendimento</th>
-                        			<th>preenchimentoModeloAtendimento</th>
+                        			<th>
+                        				<spring:message code="tipoDeAtendimento"></spring:message>
+                        			</th>
+                        			<th>
+                        				<spring:message code="custo"></spring:message>
+                        			</th>
+                        			<th>
+                        				<spring:message code="pago"></spring:message>
+                        			</th>
+                        			<th>
+                        				<spring:message code="dataAtendimento"></spring:message>
+                        			</th>
                         		</tr>
 				                <c:forEach items="${atendimentosFeitos}" var="atendimento">
 	                        		<tr>
@@ -43,7 +55,6 @@
 	                        				<input type="checkbox" class="flagPago" ${atendimento.pago? 'checked' : ''} onclick="ajaxService.alteraStatusPagamentoAtendimento(${atendimento.atendimentoId})"	/>
 	                        			</td>
 	                        			<td>${atendimento.dataAtendimento}</td>
-	                        			<td>${atendimento.preenchimentoModeloAtendimento}</td>
 	                        		</tr>
 				                </c:forEach>
                         	</table>
@@ -51,17 +62,27 @@
                         <td>
                         	<table>
                         		<tr>
-                        			<th>nome</th>
-                        			<th>preco</th>
-                        			<th>inclusaoVacina</th>
-                        			<th>pago</th>
+                        			<th>
+                        				<spring:message code="nome"></spring:message>
+                        			</th>
+                        			<th>
+                        				<spring:message code="preco"></spring:message>
+                        			</th>
+                        			<th>
+                        				<spring:message code="inclusaoVacina"></spring:message>
+                        			</th>
+                        			<th>
+                        				<spring:message code="pago"></spring:message>
+                        			</th>
                         		</tr>
 				                <c:forEach items="${vacinasAplicadas}" var="vacina">
 	                        		<tr>
 	                        			<td>${vacina.vacina.nome}</td>
 	                        			<td>${vacina.vacina.preco}</td>
 	                        			<td>${vacina.inclusaoVacina}</td>
-	                        			<td>${vacina.pago}</td>
+	                        			<td>
+	                        				<input type="checkbox" class="flagPago" ${vacina.pago? 'checked' : ''} onclick="ajaxService.alteraStatusPagamentoVacina(${vacina.prontuarioVacinaId})"	/>
+	                        			</td>
 	                        		</tr>
 				                </c:forEach>
                         	</table>                        

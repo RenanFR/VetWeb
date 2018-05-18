@@ -1,6 +1,7 @@
 package com.vetweb.controller;
  import java.beans.PropertyEditorSupport;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -148,13 +149,26 @@ public class ProprietarioController {
     @RequestMapping(value = "/financeiro/{pessoaId}", method = RequestMethod.GET)
     public ModelAndView financeiroCliente(@PathVariable("pessoaId") Long clienteId) {
     	ModelAndView modelAndView = new ModelAndView("proprietario/balancoCliente");
-    	List<Prontuario> prontuariosCliente = proprietarioDAO.getBalancoFinanceiro(clienteId);
+    	Proprietario proprietario = proprietarioDAO.consultarPorId(clienteId);
+    	List<Prontuario> prontuariosCliente = proprietarioDAO.getBalancoFinanceiro(proprietario.getPessoaId());
     	List<Atendimento> atendimentosAnimaisCliente = prontuariosCliente.stream()
     			.flatMap(p -> p.getAtendimentos().stream()).collect(Collectors.toList());
     	List<ProntuarioVacina> vacinasAnimaisCliente = prontuariosCliente.stream()
     			.flatMap(p -> p.getVacinas().stream()).collect(Collectors.toList());
     	modelAndView.addObject("atendimentosFeitos", atendimentosAnimaisCliente);
     	modelAndView.addObject("vacinasAplicadas", vacinasAnimaisCliente);
+    	modelAndView.addObject("proprietario", proprietario.getNome());
+    	BigDecimal totalPendente;
+    	double totalPendenteAtendimentos = atendimentosAnimaisCliente.stream()
+    			.filter(at -> !at.isPago())
+    			.mapToDouble(a -> a.getTipoDeAtendimento().getCusto().doubleValue())
+    			.sum();
+    	double totalPendenteVacinas = vacinasAnimaisCliente.stream()
+    			.filter(vac -> !vac.isPago())
+    			.mapToDouble(v -> v.getVacina().getPreco().doubleValue())
+    			.sum();
+    	totalPendente = new BigDecimal(totalPendenteAtendimentos + totalPendenteVacinas);
+    	modelAndView.addObject("totalPendente", totalPendente);
     	return modelAndView;
     }
     
