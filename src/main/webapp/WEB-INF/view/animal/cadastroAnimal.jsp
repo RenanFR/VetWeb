@@ -12,6 +12,9 @@
 <vetweb:layout title="cadastroAnimal">
     <jsp:attribute name="script">
         <script src="<c:url value="/resources/js/ajaxService.js"></c:url>" type="text/javascript"></script>
+        <script>
+        	$(document).ready(ajaxService.buscaRacasPorEspecie());
+        </script>
     </jsp:attribute>
     <jsp:body>
         <c:if test="${animal.animalId == null}">
@@ -61,7 +64,7 @@
                             <tr>
                                 <th><label for="especie"><spring:message code="especie"></spring:message></label></th>
                                 <td>
-                                    <select id="especies" onchange="ajaxService.buscaRacasPorEspecie()" onload="ajaxService.buscaRacasPorEspecie()">
+                                    <select id="especies" onchange="ajaxService.buscaRacasPorEspecie()">
                                         <c:forEach items="${especies}" var="especie">
                                             <option>${especie}</option>
                                         </c:forEach>

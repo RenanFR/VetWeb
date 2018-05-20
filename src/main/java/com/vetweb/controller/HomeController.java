@@ -32,7 +32,7 @@ public class HomeController {//Respeita o sufixo Controller
         ModelAndView modelAndView = new ModelAndView("index");
         modelAndView.addObject("quantidadeClientes", proprietarioDAO.quantidadeRegistros());
         modelAndView.addObject("quantidadeAnimais", animalDAO.quantidadeRegistros());
-        modelAndView.addObject("clinica", configDAO.clinica());
+        modelAndView.addObject("urlClinica", !configDAO.clinica().isPresent()? "/config/cadastroClinica" : "/config/detalhesClinica/" + configDAO.clinica().get().getRazaoSocial());
         modelAndView.addObject("totalPendente", relatorioDAO.contasAReceber());
         return modelAndView;//Retorna a página buscando-a de acordo com as configurações no AppWebConfiguration
     }

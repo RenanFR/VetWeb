@@ -12,15 +12,17 @@
 <vetweb:layout title="cadastroRaca">
     <form:form servletRelativeAction="/animais/addRaca" method="POST" modelAttribute="raca">
         <table class="table table-responsive">
-            <caption>Nova Raça</caption>
+            <caption>
+            	<spring:message code="novaRaca"></spring:message>
+            </caption>
             <tbody>
                 <form:hidden path="racaId" id="racaId"></form:hidden>
                 <tr>
-                    <th><label for="descricao">Raça</label></th>
+                    <th><label for="descricao"><spring:message code="raca"></spring:message></label></th>
                     <td><form:input path="descricao" id="descricao"></form:input></td>                    
                 </tr>
                 <tr>
-                    <th><label for="especie">Espécie</label></th>
+                    <th><label for="especie"><spring:message code="especie"></spring:message></label></th>
                     <td><form:select path="especie" items="${especies}"></form:select></td>
                 </tr>
             </tbody>

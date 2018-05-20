@@ -10,6 +10,7 @@
 <%@ taglib uri="http://www.springframework.org/security/tags" prefix="security" %><!--   Adc. token p/ proteção contra csrf -->
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%><!--   Form c/ utilidades do spring    -->
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %><!--    Importação JSTL -->
+<%@ taglib uri="http://www.springframework.org/tags" prefix="spring" %>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -97,7 +98,7 @@
                 }
             </style>
             <script src="<c:url value="/resources/js/jquery/jquery.js"></c:url>" type="text/javascript"></script>
-        <script src="<c:url value="/resources/js/bootstrap/bootstrap.min.js"></c:url>" type="text/javascript"></script>
+        	<script src="<c:url value="/resources/js/bootstrap/bootstrap.min.js"></c:url>" type="text/javascript"></script>
         </head>
         <body>
             <div class="container">
@@ -110,9 +111,9 @@
                         <form:form servletRelativeAction="login" role="login"><!--  POST. Dispara ação p/ login do filtro   -->
                             <img src="<c:url value="/resources/images/pawprint.png"></c:url>" class="img-responsive" alt=""/>
                                 <fieldset>
-                                    <label for="username"></label>Username
+                                    <label for="username"></label><spring:message code="username"></spring:message>
                                     <input type="text" name="username" id="username" class="form-control input-lg" placeholder="renanfr1047@gmail.com"  />
-                                    <label for="password"></label>Password
+                                    <label for="password"></label><spring:message code="password"></spring:message>
                                     <input type="password" name="password" id="password" class="form-control input-lg" placeholder="password"  />
                                 </fieldset>
                                 <input type="submit" name="submit" value="login" class="btn btn-lg btn-primary btn-block"    />

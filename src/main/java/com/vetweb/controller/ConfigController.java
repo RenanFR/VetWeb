@@ -2,6 +2,7 @@ package com.vetweb.controller;
 // @author Maria Jéssica
 
 import com.vetweb.dao.ConfigDAO;
+
 import com.vetweb.model.Clinica;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,10 +16,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.ModelAndView;
+
 @Controller @Transactional  @RequestMapping("/config")//Caminho base da Controller
 public class ConfigController {
+	
     @Autowired
-    ConfigDAO configDAO;
+    private ConfigDAO configDAO;
     
     private static final Logger LOGGER = Logger.getLogger(ConfigController.class);
     @RequestMapping(value = "/cadastroClinica", method = RequestMethod.GET)//URL para o método. Composto por caminho base junto a este RequestMapping

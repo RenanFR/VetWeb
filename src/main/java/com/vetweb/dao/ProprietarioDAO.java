@@ -62,6 +62,10 @@ public class ProprietarioDAO implements IDAO<Proprietario> {
         return p;
     }
 
+    public void detachProprietario(Proprietario proprietario) {
+    	entityManager.detach(proprietario);
+    }
+    
     @Override
     public long quantidadeRegistros() {
         return entityManager.createNamedQuery("quantidadeClientes", Long.class).getSingleResult();

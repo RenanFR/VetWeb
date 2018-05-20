@@ -18,7 +18,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 @Inheritance(strategy = InheritanceType.JOINED)
 public class Pessoa implements Serializable {//Tabelas com relacionamentos devem implementar Serializable
 	
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 6060276588160861739L;
 	
     public enum TipoPessoa { FISICA, JURIDICA }
     

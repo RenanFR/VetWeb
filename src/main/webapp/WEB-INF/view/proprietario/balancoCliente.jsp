@@ -7,6 +7,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %><!--    Importação JSTL -->
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%><!--  tags úteis do spring framework   -->
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring" %>
+
 <vetweb:layout title="proprietario ${proprietario}">
     <jsp:attribute name="js">
 		<script src="<c:url value="/resources/js/ajaxService.js"></c:url>" type="text/javascript"></script>

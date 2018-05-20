@@ -8,14 +8,17 @@
 <%@ taglib uri="http://www.springframework.org/security/tags" prefix="security" %><!--   Adc. token p/ proteção contra csrf -->
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%><!--  tags úteis do spring framework   -->
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<vetweb:layout title="">
+
+<vetweb:layout title="cadastroEspecie">
     <form:form servletRelativeAction="/animais/addEspecie" method="POST" modelAttribute="especie">
         <table class="table table-responsive">
-            <caption>Nova Espécie</caption>
+            <caption>
+            	<spring:message code="novaEspecie"></spring:message>
+            </caption>
             <tbody>
                 <form:hidden path="especieId" id="especieId"></form:hidden>
                 <tr>
-                    <th><label for="descricao">Espécie</label></th>
+                    <th><label for="descricao"><spring:message code="especie"></spring:message></label></th>
                     <td><form:input path="descricao" id="descricao" htmlEscape="true"></form:input></td>
                 </tr>
             </tbody>

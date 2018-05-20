@@ -81,7 +81,7 @@
 	                    <a href="#"><i class="fa fa-table "></i>My Link Four</a>
 	                </li>
 	                <li>
-	                    <a href="<c:url value="/config/detalhesClinica/${clinica.cnpj}"></c:url>"><i class="fa fa-building "></i> <spring:message code="clinica" text="text"></spring:message>  </a>
+	                    <a href="<c:url value="${urlClinica}"></c:url>"><i class="fa fa-building "></i> <spring:message code="clinica" text="text"></spring:message>  </a>
 	                </li>
 	            </ul>
 	        </div>

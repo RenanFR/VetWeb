@@ -9,11 +9,15 @@ import javax.persistence.Table;
 import org.springframework.format.annotation.DateTimeFormat;
 @Entity @Table(name = "estabelecimento")
 public class Clinica implements Serializable {
+	
     private String razaoSocial;
+    
     @DateTimeFormat(pattern = "yyyy-MM-dd")    
     private LocalDate fundadaEm;
+    
     @Id
     private String cnpj;
+    
     private String proprietario;
 
     public String getRazaoSocial() {
@@ -55,6 +59,7 @@ public class Clinica implements Serializable {
 		this.cnpj = cnpj;
 		this.proprietario = proprietario;
 	}
+	
     public Clinica() {
 	}
     

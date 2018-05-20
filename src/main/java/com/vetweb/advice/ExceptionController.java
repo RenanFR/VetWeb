@@ -18,9 +18,12 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @ControllerAdvice
     //Controladora genérica com parâmetros de inicialização, tratamento de exceções, etc. compartilhadas por todas as controladoras
 public class ExceptionController {
+	
     @Autowired
-    AnimalDAO animalDAO;
-    private static final Logger LOGGER = Logger.getLogger(ExceptionController.class);    
+    private AnimalDAO animalDAO;
+    
+    private static final Logger LOGGER = Logger.getLogger(ExceptionController.class);
+    
     @ExceptionHandler(DataIntegrityViolationException.class)//Irá cair nesse método de tratamento de exceção sempre que der DataIntegrityViolationException
     public ModelAndView handleViolationException(HttpServletRequest request, ConstraintViolationException violationException){
         ModelAndView modelAndView = null;
@@ -39,14 +42,17 @@ public class ExceptionController {
         modelAndView.addObject("mensagemErro", violationException.getSQLException().getMessage());//Adiciona mais detalhes sobre erro para exibir na página p/ usuário
         return modelAndView;
     }
-    @ExceptionHandler @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public String handle(Exception exception) {
-        LOGGER.error(exception);
-        return "index";
-    }
+    
+//    @ExceptionHandler @ResponseStatus(HttpStatus.BAD_REQUEST)
+//    public String handle(Exception exception) {
+//        LOGGER.error(exception);
+//        return "index";
+//    }
+    
     @ExceptionHandler(NullPointerException.class)
     public void handleNullPointer(NullPointerException npe) {
         LOGGER.error(npe);
         npe.printStackTrace();
     }
+    
 }

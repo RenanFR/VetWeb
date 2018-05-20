@@ -53,7 +53,7 @@ public class AnimalController {
     }
     
     @RequestMapping(value = "/cadastro", method = RequestMethod.GET)
-    public ModelAndView formCadastro(Animal animal, @RequestParam("desabilitaTrocaProprietario") final boolean desabilitaTrocaProprietario) {//Envia o modelAttribute ao form
+    public synchronized ModelAndView formCadastro(Animal animal, @RequestParam("desabilitaTrocaProprietario") final boolean desabilitaTrocaProprietario) {//Envia o modelAttribute ao form
         ModelAndView modelAndView = new ModelAndView("animal/cadastroAnimal");
         modelAndView.addObject("proprietarios", proprietarioDAO.listar());
         modelAndView.addObject("especies", animalDAO.especies());
@@ -68,15 +68,17 @@ public class AnimalController {
     }
     
     @RequestMapping(value = "/cadastrar", method = RequestMethod.POST)
-    public ModelAndView cadastrar(@Valid @ModelAttribute("animal") Animal animal, BindingResult bindingResult, RedirectAttributes attributes) {//BindingResult: Verifica se há erros de validação, pode adc. erros
+    public synchronized ModelAndView cadastrar(@Valid @ModelAttribute("animal") Animal animal,
+    		BindingResult bindingResult,
+    		RedirectAttributes attributes) {//BindingResult: Verifica se há erros de validação, pode adc. erros
         ModelAndView modelAndView = new ModelAndView("forward:/prontuario/gerarProntuario");//Redireciona c/ novo request p/ outra ação na Controller
         if (bindingResult.hasErrors()) {//Se houverem erros envia objeto BindingResult p/ a JSP
             System.out.println(bindingResult.getAllErrors());
             return formCadastro(animal, true);//Forward caso haja erros de validação
         }
         try {
-            Proprietario proprietario = proprietarioDAO.consultarPorNome(animal.getProprietario().getNome());
-            animal.setProprietario(proprietario);
+            Proprietario prop = proprietarioDAO.consultarPorId(animal.getProprietario().getPessoaId());
+            animal.setProprietario(prop);
             animalDAO.salvar(animal);
             LOGGER.info(("Animal " + animal.getNome() + " inserido com sucesso na base.").toUpperCase());
         } catch (Exception exception) {

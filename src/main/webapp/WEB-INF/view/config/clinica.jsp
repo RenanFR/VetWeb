@@ -9,7 +9,7 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%><!--  tags úteis do spring framework   -->
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %><!--    Importação JSTL -->
 
-<vetweb:layout title="">
+<vetweb:layout title="clinica">
     ${clinica.razaoSocial}
     ${clinica.fundadaEm}
     ${clinica.cnpj}
