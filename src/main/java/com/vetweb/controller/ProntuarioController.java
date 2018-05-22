@@ -27,12 +27,14 @@ import com.vetweb.dao.ProntuarioDAO;
 import com.vetweb.dao.VacinaDAO;
 import com.vetweb.model.Animal;
 import com.vetweb.model.Atendimento;
+import com.vetweb.model.ElementoProntuario;
 import com.vetweb.model.Patologia;
 import com.vetweb.model.Prontuario;
 import com.vetweb.model.ProntuarioPatologia;
 import com.vetweb.model.ProntuarioVacina;
 import com.vetweb.model.TipoDeAtendimento;
 import com.vetweb.model.Vacina;
+import com.vetweb.service.EmailService;
 
 @Controller//Indica que a classe trata requisições
 @Transactional
@@ -50,6 +52,9 @@ public class ProntuarioController {
     
     @Autowired
     private VacinaDAO vacinaDAO;
+    
+    @Autowired
+    private EmailService emailService;
     
     private static final Logger LOGGER = Logger.getLogger(ProntuarioController.class);
     
@@ -161,10 +166,19 @@ public class ProntuarioController {
     public ModelAndView adcAtendimento(@ModelAttribute("atendimento") Atendimento atendimento,
     		@RequestParam("dataAtendimento") final String dataAtendimento,
     		@RequestParam("prontuarioId") final Long prontuarioId) {
+    	Prontuario prontuario = prontuarioDAO.consultarPorId(prontuarioId);
         prontuarioDAO.salvarAtendimento(atendimento);
         prontuarioDAO.adicionarAtendimento(atendimento, prontuarioId);
-        return new ModelAndView("redirect:prontuarioDoAnimal/" + prontuarioDAO.consultarPorId(prontuarioId).getAnimal().getAnimalId());
+        notificaCliente(atendimento, prontuario);
+        return new ModelAndView("redirect:prontuarioDoAnimal/" + prontuario.getAnimal().getAnimalId());
     }
+
+	private void notificaCliente(ElementoProntuario elementoProntuario, Prontuario prontuario) {
+		emailService.enviar(prontuario.getAnimal().getProprietario(),
+        		"Foi feita uma nova inclusao de " + elementoProntuario
+        		+ " ao prontuario do seu animal " + prontuario.getAnimal().getNome() + "",
+        		"Inclusão de " + elementoProntuario + "");
+	}
     
     @RequestMapping(value = "/modeloPorTipoDeAtendimento/{tipoDeAtendimento}", method = RequestMethod.GET)
     public @ResponseBody String modeloDoTipoDeAtendimento(@PathVariable("tipoDeAtendimento") String nomeTipoAtendimento) {
@@ -188,6 +202,7 @@ public class ProntuarioController {
 		prontuarioPatologia.setProntuario(prontuario);
 		prontuarioPatologia.setInclusaoPatologia(inclusaoPatologia);
     	prontuarioDAO.adicionarPatologia(prontuarioPatologia, prontuarioId);
+    	notificaCliente(prontuarioPatologia, prontuario);
     	return new ModelAndView("redirect:prontuarioDoAnimal/" + prontuario.getAnimal().getAnimalId());
     }
     
@@ -207,6 +222,7 @@ public class ProntuarioController {
 		prontuarioVacina.setProntuario(prontuario);
 		prontuarioVacina.setInclusaoVacina(inclusaoVacina);
     	prontuarioDAO.adicionarVacina(prontuarioVacina, prontuarioId);
+    	notificaCliente(prontuarioVacina, prontuario);
     	return new ModelAndView("redirect:prontuarioDoAnimal/" + prontuarioDAO.consultarPorId(prontuarioId).getAnimal().getAnimalId());
     }
     

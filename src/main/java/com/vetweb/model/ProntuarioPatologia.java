@@ -14,7 +14,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
-public class ProntuarioPatologia implements Serializable {
+public class ProntuarioPatologia implements Serializable, ElementoProntuario {
 
 	private static final long serialVersionUID = 1L;
 
@@ -57,6 +57,11 @@ public class ProntuarioPatologia implements Serializable {
 
 	public String getInclusaoPatologia() {
 		return inclusaoPatologia.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+	}
+	
+	@Override
+	public String toString() {
+		return patologia.getNome();
 	}
 
 	public void setInclusaoPatologia(String inclusaoPatologia) {

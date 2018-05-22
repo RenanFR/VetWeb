@@ -86,6 +86,11 @@ public class Atendimento implements Serializable, ElementoProntuario {
     }
     
     @Override
+    public String toString() {
+    	return this.getTipoDeAtendimento().getNome();
+    }
+    
+    @Override
     public boolean equals(Object obj) {
     	if(!(obj instanceof Atendimento)) return false;
     	Atendimento atendimentoComparar = (Atendimento)obj;

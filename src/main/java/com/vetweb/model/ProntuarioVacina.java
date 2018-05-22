@@ -13,11 +13,8 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 @Entity
-public class ProntuarioVacina implements Serializable {
+public class ProntuarioVacina implements Serializable, ElementoProntuario {
 	
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	
 	@Id @GeneratedValue
@@ -79,6 +76,11 @@ public class ProntuarioVacina implements Serializable {
 
 	public void setPago(boolean pago) {
 		this.pago = pago;
+	}
+	
+	@Override
+	public String toString() {
+		return vacina.getNome();
 	}
 
 	@Override

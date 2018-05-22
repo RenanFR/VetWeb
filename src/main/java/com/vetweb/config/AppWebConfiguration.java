@@ -35,7 +35,7 @@ import com.vetweb.model.Clinica;
 @Configuration
 @ComponentScan(basePackages = {"com.vetweb.controller", "com.vetweb.dao", 
     "com.vetweb.model", "com.vetweb.dao.auth", "com.vetweb.model.auth", "com.vetweb.advice",
-    "com.vetweb.model.error", "com.vetweb.model.pojo"})
+    "com.vetweb.model.error", "com.vetweb.model.pojo", "com.vetweb.service"})
 //Informa ao Spring os pacotes cujas classes devem ser lidas e carregadas
 public class AppWebConfiguration extends WebMvcConfigurerAdapter implements WebApplicationInitializer {//Classe de configurações
 	

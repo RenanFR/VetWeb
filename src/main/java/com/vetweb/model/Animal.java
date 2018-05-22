@@ -25,7 +25,7 @@ import org.springframework.format.annotation.DateTimeFormat;
                         + " AND a.dtNascimento = :nascimentoAnimal")})
 public class Animal implements Serializable {
 	
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 5772156689530639119L;
 
 	@Id
     @GeneratedValue(strategy = GenerationType.AUTO)

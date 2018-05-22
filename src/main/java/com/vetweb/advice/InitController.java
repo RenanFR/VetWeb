@@ -44,8 +44,8 @@ public class InitController {
     private ConfigDAO configDAO;
     @Autowired
     private ServletContext servletContext;
+    
     private static final Logger LOGGER = Logger.getLogger(InitController.class);
-//    public static PolicyFactory policyFactory;//Biblioteca owasp de segurança 
     
     @InitBinder//Método invocado a cada request neste Controller
     public void initBinder(HttpServletRequest request, ServletRequestDataBinder binder) {//Para parametrização de requisições p/ a Controller
@@ -53,8 +53,7 @@ public class InitController {
         configDAO.salvarClinica(new Clinica(servletContext.getInitParameter("razaoSocial"),
                 LocalDate.parse(servletContext.getInitParameter("fundadaEm"), DateTimeFormatter.ofPattern("dd/MM/yyyy")),
                 servletContext.getInitParameter("cnpj"), servletContext.getInitParameter("proprietario")));
-//        policyFactory = new HtmlPolicyBuilder().allowElements("b").toFactory();
-//        LOGGER.info(("Inicializando policyFactory = HtmlPolicyBuilder.").toUpperCase());
+        
         binder.registerCustomEditor(Proprietario.class, "proprietario", new PropertyEditorSupport(){
             @Override//Estratégia de conversão do formulário (Vem como texto) para objeto
             public void setAsText(String text) throws IllegalArgumentException {
@@ -70,6 +69,7 @@ public class InitController {
                     return "Proprietario";
             }
         });
+        
         binder.registerCustomEditor(Animal.class, "animal", new PropertyEditorSupport(){
             @Override
             public void setAsText(String text) throws IllegalArgumentException {
@@ -85,6 +85,7 @@ public class InitController {
                     return "Animal";
             }
         });
+        
         binder.registerCustomEditor(Especie.class, "especie", new PropertyEditorSupport(){
             @Override
             public void setAsText(String text) throws IllegalArgumentException {
@@ -99,6 +100,7 @@ public class InitController {
                 else return "especie";
             }
         });
+        
         binder.registerCustomEditor(Raca.class, "raca", new PropertyEditorSupport(){
             @Override
             public void setAsText(String text) throws IllegalArgumentException {
@@ -113,6 +115,7 @@ public class InitController {
                 else return "raca";
             }
         });
+        
         binder.registerCustomEditor(Pelagem.class, "pelagem", new PropertyEditorSupport(){
             @Override
             public void setAsText(String text) throws IllegalArgumentException {
@@ -127,6 +130,7 @@ public class InitController {
                 else return "pelagem";
             }
         });
+        
         binder.registerCustomEditor(Prontuario.class, "prontuario", new PropertyEditorSupport(){
             @Override
             public void setAsText(String text) throws IllegalArgumentException {
@@ -141,10 +145,10 @@ public class InitController {
                 else return "prontuario";
             }
         });
+        
         binder.registerCustomEditor(TipoDeAtendimento.class, "tipoDeAtendimento", new PropertyEditorSupport(){
             @Override
             public void setAsText(String text) throws IllegalArgumentException {
-//                Prontuario prontuario = prontuarioDAO.prontuarioPorAnimal(animalDAO.consultarPorNome(text).getAnimalId());
                 TipoDeAtendimento tipoDeAtendimento = prontuarioDAO.tipoDeAtendimentoPorNome(text);
                 this.setValue(tipoDeAtendimento);
             }
@@ -156,6 +160,7 @@ public class InitController {
                 else return "tipoDeAtendimento";
             }
         });
+        
         binder.registerCustomEditor(Vacina.class, "vacina", new PropertyEditorSupport(){
             @Override
             public void setAsText(String text) throws IllegalArgumentException {
@@ -170,6 +175,7 @@ public class InitController {
                 else return "vacina";
             }
         });
+        
         binder.registerCustomEditor(Patologia.class, "patologia", new PropertyEditorSupport(){
         	@Override
         	public void setAsText(String text) throws IllegalArgumentException {
@@ -184,6 +190,7 @@ public class InitController {
         		else return "patologia";
         	}
         });
+        
         binder.registerCustomEditor(Patologia.class, "patologia", new PropertyEditorSupport(){
             @Override
             public void setAsText(String text) throws IllegalArgumentException {
@@ -198,5 +205,6 @@ public class InitController {
                 else return "atendimento";
             }
         });
+        
     }
 }
