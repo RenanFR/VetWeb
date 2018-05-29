@@ -9,10 +9,12 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.ColumnDefault;
+
 @Entity
 @Table(name = "proprietarios")
 @NamedQueries({@NamedQuery(name = "quantidadeClientes", query = "SELECT COUNT(p) FROM Proprietario p"),
-	@NamedQuery(name = "despesasCliente", query = "SELECT p FROM Prontuario p "
+	@NamedQuery(name = "prontuariosAnimaisDoCliente", query = "SELECT p FROM Prontuario p "
                 + "JOIN FETCH p.animal a JOIN FETCH a.proprietario prop WHERE prop.pessoaId = :Id"),
     @NamedQuery(name = "proprietarioPorNome", query = "SELECT p FROM Proprietario p WHERE p.nome = :nomeProprietario")})
 public class Proprietario extends Pessoa {
@@ -28,6 +30,9 @@ public class Proprietario extends Pessoa {
     private String observacoes;
     
     private String comoNosConheceu;
+    
+    @ColumnDefault("true")
+    private boolean ativo;
     
     @OneToMany(mappedBy = "proprietario", fetch = FetchType.EAGER)
     private List<Animal> animais;
@@ -86,8 +91,20 @@ public class Proprietario extends Pessoa {
         this.observacoes = observacoes;
     }
 
-    @Override
-    public String toString() {
-        return super.toString();
-    }
+    public boolean isAtivo() {
+		return ativo;
+	}
+
+	public void setAtivo(boolean ativo) {
+		this.ativo = ativo;
+	}
+
+	public String getNacionalidade() {
+		return nacionalidade;
+	}
+
+	public void setNacionalidade(String nacionalidade) {
+		this.nacionalidade = nacionalidade;
+	}
+	
 }

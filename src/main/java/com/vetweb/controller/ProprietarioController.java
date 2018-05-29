@@ -9,7 +9,6 @@ import java.nio.file.StandardOpenOption;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -36,9 +35,6 @@ import com.vetweb.dao.AnimalDAO;
 import com.vetweb.dao.ProntuarioDAO;
 import com.vetweb.dao.ProprietarioDAO;
 import com.vetweb.model.Animal;
-import com.vetweb.model.Atendimento;
-import com.vetweb.model.Prontuario;
-import com.vetweb.model.ProntuarioVacina;
 import com.vetweb.model.Proprietario;
 import com.vetweb.model.pojo.Pais;
 import com.vetweb.model.pojo.Profissao;
@@ -64,7 +60,6 @@ public class ProprietarioController {
     
     static Profissao profissao;
     {
-//        File json = new File("C:\\Users\\renan\\Desktop\\VetWeb\\src\\main\\webapp\\resources\\paises.json");
         try{
 //            Path paisesJson = Paths.get(System.getenv("catalina.base"), "vetwebFiles", "paises.json");
 //            Path profissoesJson = Paths.get(System.getenv("catalina.base"), "vetwebFiles", "profissoes.json");
@@ -150,24 +145,9 @@ public class ProprietarioController {
     public ModelAndView financeiroCliente(@PathVariable("pessoaId") Long clienteId) {
     	ModelAndView modelAndView = new ModelAndView("proprietario/balancoCliente");
     	Proprietario proprietario = proprietarioDAO.consultarPorId(clienteId);
-    	List<Prontuario> prontuariosCliente = proprietarioDAO.getBalancoFinanceiro(proprietario.getPessoaId());
-    	List<Atendimento> atendimentosAnimaisCliente = prontuariosCliente.stream()
-    			.flatMap(p -> p.getAtendimentos().stream()).collect(Collectors.toList());
-    	List<ProntuarioVacina> vacinasAnimaisCliente = prontuariosCliente.stream()
-    			.flatMap(p -> p.getVacinas().stream()).collect(Collectors.toList());
-    	modelAndView.addObject("atendimentosFeitos", atendimentosAnimaisCliente);
-    	modelAndView.addObject("vacinasAplicadas", vacinasAnimaisCliente);
-    	modelAndView.addObject("proprietario", proprietario.getNome());
-    	BigDecimal totalPendente;
-    	double totalPendenteAtendimentos = atendimentosAnimaisCliente.stream()
-    			.filter(at -> !at.isPago())
-    			.mapToDouble(a -> a.getTipoDeAtendimento().getCusto().doubleValue())
-    			.sum();
-    	double totalPendenteVacinas = vacinasAnimaisCliente.stream()
-    			.filter(vac -> !vac.isPago())
-    			.mapToDouble(v -> v.getVacina().getPreco().doubleValue())
-    			.sum();
-    	totalPendente = new BigDecimal(totalPendenteAtendimentos + totalPendenteVacinas);
+    	BigDecimal totalPendente = proprietarioDAO.getValoresPendentesDoCliente(proprietario);
+    	modelAndView.addObject("atendimentosFeitos", proprietarioDAO.getAtendimentosRealizadosPorCliente(proprietario.getPessoaId()));
+    	modelAndView.addObject("vacinasAplicadas", proprietarioDAO.getVacinasAplicadasPorCliente(proprietario.getPessoaId()));
     	modelAndView.addObject("totalPendente", totalPendente);
     	return modelAndView;
     }

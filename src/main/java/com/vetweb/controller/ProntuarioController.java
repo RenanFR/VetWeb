@@ -145,6 +145,7 @@ public class ProntuarioController {
         LOGGER.info(("Sendo criado prontuário do animal " + animal1).toUpperCase());
         Prontuario prontuario = new Prontuario(animal1);
         prontuarioDAO.salvar(prontuario);
+        animal1.setProntuario(prontuario);
         ModelAndView modelAndView = new ModelAndView("redirect:/prontuario/prontuarioDoAnimal/" + animal1.getAnimalId());
         return modelAndView;
     }

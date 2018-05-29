@@ -1,4 +1,4 @@
-package com.vetweb.advice;
+package com.vetweb.controller.advice;
 // @author Maria Jéssica
 
 import static com.vetweb.controller.AnimalController.modelDML;

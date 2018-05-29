@@ -1,14 +1,15 @@
 package com.vetweb.controller;
  //@author est.renanfr
-import com.vetweb.dao.AnimalDAO;
-import com.vetweb.dao.ConfigDAO;
-import com.vetweb.dao.ProprietarioDAO;
-import com.vetweb.dao.RelatorioDAO;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
+
+import com.vetweb.dao.AnimalDAO;
+import com.vetweb.dao.ConfigDAO;
+import com.vetweb.dao.ProprietarioDAO;
+import com.vetweb.dao.RelatorioDAO;
 
 @Controller//Indica que a classe e uma Controller. Atende requisições
 //@RequestMapping("/home")
@@ -24,9 +25,8 @@ public class HomeController {//Respeita o sufixo Controller
     private ConfigDAO configDAO;
     
     @Autowired
-    private RelatorioDAO relatorioDAO; 
+    private RelatorioDAO relatorioDAO;
     
-//    @RequestMapping("/index")//Indica a rota/URL pela qual o metodo e responsavel (binding)
     @RequestMapping("/")//Indica a rota/URL pela qual o metodo e responsavel (binding)
     public ModelAndView index (){
         ModelAndView modelAndView = new ModelAndView("index");
@@ -34,10 +34,8 @@ public class HomeController {//Respeita o sufixo Controller
         modelAndView.addObject("quantidadeAnimais", animalDAO.quantidadeRegistros());
         modelAndView.addObject("urlClinica", !configDAO.clinica().isPresent()? "/config/cadastroClinica" : "/config/detalhesClinica/" + configDAO.clinica().get().getRazaoSocial());
         modelAndView.addObject("totalPendente", relatorioDAO.contasAReceber());
+        modelAndView.addObject("clientesDevedores", proprietarioDAO.getClientesEmDebito().stream().count());
         return modelAndView;//Retorna a página buscando-a de acordo com as configurações no AppWebConfiguration
     }
-//    @RequestMapping("/forbidden")
-//    public String forbidden(){
-//        return "/login/403";
-//    }
+    
 }

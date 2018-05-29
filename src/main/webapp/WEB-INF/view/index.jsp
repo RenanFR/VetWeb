@@ -7,7 +7,8 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@page import="java.time.LocalDate"%>
 <%@ taglib prefix="vetweb" tagdir="/WEB-INF/tags"%>
-<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%><!--  tags úteis do spring framework   -->
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
 <vetweb:layout title="Vetweb">
     <div class="row text-center pad-top">
@@ -34,6 +35,17 @@
                 <a href="#">                    
                     <i class="fa fa-credit-card fa-5x"></i>
                     <h4>R$ ${totalPendente} <spring:message code="debitos"></spring:message></h4>
+                </a>
+            </div>
+        </div>
+        
+        <div class="col-lg-2 col-md-2 col-sm-2 col-xs-6">
+            <div class="div-square">
+                <a href="#">                    
+                    <i class="fa fa-ban fa-5x"></i>
+                    <ul>
+                    	<h4>${clientesDevedores} <spring:message code="usuarioBloqueado"></spring:message></h4>
+                    </ul>
                 </a>
             </div>
         </div>

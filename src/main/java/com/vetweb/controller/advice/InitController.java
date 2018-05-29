@@ -1,5 +1,19 @@
-package com.vetweb.advice;
+package com.vetweb.controller.advice;
 // @author Maria Jéssica
+
+import java.beans.PropertyEditorSupport;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.ServletRequestDataBinder;
+import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.InitBinder;
 
 import com.vetweb.dao.AnimalDAO;
 import com.vetweb.dao.ConfigDAO;
@@ -17,31 +31,26 @@ import com.vetweb.model.Proprietario;
 import com.vetweb.model.Raca;
 import com.vetweb.model.TipoDeAtendimento;
 import com.vetweb.model.Vacina;
-import java.beans.PropertyEditorSupport;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletRequest;
-import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.ServletRequestDataBinder;
-import org.springframework.web.bind.annotation.ControllerAdvice;
-import org.springframework.web.bind.annotation.InitBinder;
 
 @ControllerAdvice
 @Transactional
 public class InitController {
+	
     @Autowired
-    private AnimalDAO animalDAO;    
+    private AnimalDAO animalDAO;
+    
     @Autowired
     private ProprietarioDAO proprietarioDAO;
+    
     @Autowired
     private ProntuarioDAO prontuarioDAO;
+    
     @Autowired
     private VacinaDAO vacinaDAO;
+    
     @Autowired 
     private ConfigDAO configDAO;
+    
     @Autowired
     private ServletContext servletContext;
     

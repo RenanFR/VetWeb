@@ -7,6 +7,7 @@
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%><!--   Form c/ utilidades do spring    -->
 <%@ taglib uri="http://www.springframework.org/security/tags" prefix="security" %><!--   Adc. token p/ proteção contra csrf -->
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%><!--  tags úteis do spring framework   -->
+
 <vetweb:layout title="Cadastro Proprietario">
     <jsp:attribute name="js">
         <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/ajaxService.js"></script>

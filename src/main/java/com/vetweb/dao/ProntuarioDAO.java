@@ -6,12 +6,14 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.vetweb.model.Atendimento;
 import com.vetweb.model.Prontuario;
 import com.vetweb.model.ProntuarioPatologia;
 import com.vetweb.model.ProntuarioVacina;
+import com.vetweb.model.Proprietario;
 import com.vetweb.model.TipoDeAtendimento;
 import com.vetweb.model.Vacina;
 
@@ -21,6 +23,9 @@ public class ProntuarioDAO implements IDAO<Prontuario>{
     @PersistenceContext
     private EntityManager entityManager;
 
+    @Autowired
+    private ProprietarioDAO proprietarioDAO;
+    
     @Override
     public void salvar(Prontuario prontuario) {
         if (prontuario.getProntuarioId() == null) {
@@ -32,7 +37,11 @@ public class ProntuarioDAO implements IDAO<Prontuario>{
 
     @Override
     public List<Prontuario> listar() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return entityManager.createQuery("SELECT p FROM Prontuario p "
+        		+ "LEFT OUTER JOIN p.patologias pat "
+                + "LEFT OUTER JOIN p.atendimentos at "
+                + "LEFT OUTER JOIN p.vacinas vac ", Prontuario.class)
+                .getResultList();
     }
 
     @Override
@@ -175,5 +184,25 @@ public class ProntuarioDAO implements IDAO<Prontuario>{
     	return entityManager.createQuery("SELECT at FROM Atendimento at WHERE at.preenchimentoModeloAtendimento = :preenchimento", Atendimento.class)
     			.setParameter("preenchimento", preenchimentoAtendimento).getSingleResult();
     }
+    
+    public Proprietario proprietarioQueRecebeuAtendimento(Atendimento atendimento) {
+    	Object pessoaid = entityManager.createNativeQuery("SELECT cli.pessoaid FROM proprietarios cli\n" + 
+    			"JOIN animais a ON cli.pessoaid = a.proprietario_pessoaid\n" + 
+    			"JOIN prontuarios p ON a.prontuario_prontuarioid = p.prontuarioid\n" + 
+    			"JOIN prontuarios_atendimento ate ON ate.prontuario_prontuarioid = p.prontuarioid\n" + 
+    			"WHERE ate.atendimentos_atendimentoid = :id LIMIT 1;")
+    			.setParameter(1, atendimento.getAtendimentoId()).getSingleResult();
+    	return proprietarioDAO.consultarPorId(Long.parseLong(pessoaid.toString()));
+    }
+
+	public Proprietario proprietarioQueRecebeuVacina(ProntuarioVacina vacina) {
+    	Object pessoaid = entityManager.createNativeQuery("SELECT cli.pessoaid FROM proprietarios cli\n" + 
+    			"JOIN animais a ON cli.pessoaid = a.proprietario_pessoaid\n" + 
+    			"JOIN prontuarios p ON a.prontuario_prontuarioid = p.prontuarioid\n" + 
+    			"JOIN prontuarios_prontuariovacina vac ON vac.prontuario_prontuarioid = p.prontuarioid\n" + 
+    			"WHERE vac.vacinas_prontuariovacinaid = 15 LIMIT 1;")
+    			.setParameter(1, vacina.getProntuarioVacinaId()).getSingleResult();
+    	return proprietarioDAO.consultarPorId(Long.parseLong(pessoaid.toString()));
+	}
     
 }

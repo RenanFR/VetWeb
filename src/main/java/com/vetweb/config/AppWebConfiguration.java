@@ -7,7 +7,6 @@ import java.time.format.DateTimeFormatter;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -28,19 +27,13 @@ import org.springframework.web.servlet.i18n.CookieLocaleResolver;
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
-import com.vetweb.dao.ConfigDAO;
-import com.vetweb.model.Clinica;
-
 @EnableWebMvc//Habilita funcionalidades do Spring (Serialização, validações, etc.)
 @Configuration
-@ComponentScan(basePackages = {"com.vetweb.controller", "com.vetweb.dao", 
-    "com.vetweb.model", "com.vetweb.dao.auth", "com.vetweb.model.auth", "com.vetweb.advice",
-    "com.vetweb.model.error", "com.vetweb.model.pojo", "com.vetweb.service"})
+@ComponentScan(basePackages = {"com.vetweb.controller", "com.vetweb.dao", "com.vetweb.scheduled",
+    "com.vetweb.model", "com.vetweb.dao.auth", "com.vetweb.model.auth", "com.vetweb.controller.advice",
+    "com.vetweb.model.error", "com.vetweb.model.pojo", "com.vetweb.service", "com.vetweb.controller.rest"})
 //Informa ao Spring os pacotes cujas classes devem ser lidas e carregadas
 public class AppWebConfiguration extends WebMvcConfigurerAdapter implements WebApplicationInitializer {//Classe de configurações
-	
-	@Autowired
-	private ConfigDAO configDAO;
 	
     @Bean//Retorna objeto gerenciado pelo container
     public InternalResourceViewResolver internalResourceViewResolver() {//Config. um tipo de View p/ a aplicação
@@ -75,18 +68,13 @@ public class AppWebConfiguration extends WebMvcConfigurerAdapter implements WebA
 
     @Override//o	Permite mapear páginas para determinada URL sem a necessidade de criar uma controller somente para realizar esse mapeamento
     public void addViewControllers(ViewControllerRegistry registry) {
-//        registry.addViewController("/").setViewName("index");//O caminho / redireciona para a página index com as configurações do internalResourceViewResolver
         registry.addViewController("/forbidden").setViewName("/login/403");
         registry.addViewController("/table").setViewName("/proprietario/table");
         registry.addViewController("/").setStatusCode(HttpStatus.NOT_FOUND).setViewName("/exception/404");
-//        registry.addViewController("/cadastroEspecie").setViewName("/animal/cadastroEspecie");
-//        registry.addViewController("/cadastroPelagem").setViewName("/animal/cadastroPelagem");
     }
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {//Filtros aplicados antes/depois de requisições
-//        LocaleChangeInterceptor interceptor = new LocaleChangeInterceptor();//Busca na URL o parâmetro de localização selecionado pelo usuário
-//        interceptor.setParamName("local");//Nome do parâmetro na URL que irá engatilhar o filtro de localização
         registry.addInterceptor(new LocaleChangeInterceptor());//Para observar mudança de idioma
     }
     

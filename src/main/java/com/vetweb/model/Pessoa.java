@@ -51,12 +51,7 @@ public class Pessoa implements Serializable {//Tabelas com relacionamentos devem
     
     private Contato contato;
 
-    @Override
-    public String toString() {
-        return nome;
-    }
-
-    public Pessoa() {
+	public Pessoa() {
         this.inclusao = LocalDate.now();
     }
 
@@ -163,5 +158,35 @@ public class Pessoa implements Serializable {//Tabelas com relacionamentos devem
     public void setPessoaId(Long pessoaId) {
         this.pessoaId = pessoaId;
     }
+    
+    @Override
+    public String toString() {
+        return nome;
+    }
+
+    @Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((pessoaId == null) ? 0 : pessoaId.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Pessoa other = (Pessoa) obj;
+		if (pessoaId == null) {
+			if (other.pessoaId != null)
+				return false;
+		} else if (!pessoaId.equals(other.pessoaId))
+			return false;
+		return true;
+	}    
     
 }

@@ -16,9 +16,6 @@ import javax.persistence.Table;
 @Table(name = "prontuarios")
 public class Prontuario implements Serializable {
 	
-    /**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	
 	@Id

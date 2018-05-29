@@ -1,4 +1,4 @@
-package com.vetweb.controller;
+package com.vetweb.controller.rest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,7 +12,6 @@ import com.vetweb.dao.ProntuarioDAO;
 import com.vetweb.model.Atendimento;
 import com.vetweb.model.ProntuarioPatologia;
 import com.vetweb.model.ProntuarioVacina;
-import com.vetweb.model.Vacina;
 
 @RestController
 @Transactional

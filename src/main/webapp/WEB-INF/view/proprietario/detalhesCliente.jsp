@@ -7,37 +7,38 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib prefix="vetweb" tagdir="/WEB-INF/tags"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %><!--    Importação JSTL -->
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 
 <vetweb:layout title="Cliente ${proprietario.nome}">
     <table class="table table-responsive" id="detalhesProprietario">
-        <caption>Cliente ${proprietario.nome}   /   Dados pessoais</caption>
+        <caption><spring:message code="cliente"></spring:message> ${proprietario.nome}   /   <spring:message code="dadosPessoais"></spring:message></caption>
         <tbody>
             <tr>
-                <th>Nome</th>
+                <th><spring:message code="nome"></spring:message></th>
                 <td>${proprietario.nome}</td>
             </tr>
             <tr>
-                <th>RG</th>
+                <th><spring:message code="RG"></spring:message></th>
                 <td>${proprietario.rg}</td>
             </tr>
             <tr>
-                <th>CPF</th>
+                <th><spring:message code="CPF"></spring:message></th>
                 <td>${proprietario.cpf}</td>
             </tr>
             <tr>
-                <th>Sexo</th>
+                <th><spring:message code="sexo"></spring:message></th>
                 <td>${proprietario.sexo}</td>
             </tr>
             <tr>
-                <th>Tipo de pessoa</th>
+                <th><spring:message code="tipoPessoa"></spring:message></th>
                 <td>${proprietario.tipoPessoa}</td>
             </tr>
             <tr>
-                <th>Data do cadastro</th>
+                <th><spring:message code="inclusao"></spring:message></th>
                 <td>${proprietario.inclusao}</td>
             </tr>
             <tr>
-                <th>Data de nascimento</th>
+                <th><spring:message code="nascimento"></spring:message></th>
                 <td>${proprietario.nascimento}</td>
             </tr>
             <tr>
@@ -47,72 +48,76 @@
         </tbody>
     </table>
     <table class="table table-responsive" id="enderecoProprietario">
-        <caption>Cliente ${proprietario.nome}   /   Dados de endereço</caption>
+        <caption><spring:message code="cliente"></spring:message> ${proprietario.nome}   /   <spring:message code="dadosEndereco"></spring:message></caption>
         <tbody>
             <tr>
-                <th>CEP</th>
+                <th><spring:message code="endereco.cep"></spring:message></th>
                 <td>${proprietario.endereco.cep}</td>
             </tr>
             <tr>
-                <th>Logradouro</th>
+                <th><spring:message code="endereco.rua"></spring:message></th>
                 <td>${proprietario.endereco.rua}</td>
             </tr>
             <tr>
-                <th>Bairro</th>
+                <th><spring:message code="endereco.bairro"></spring:message></th>
                 <td>${proprietario.endereco.bairro}</td>
             </tr>
             <tr>
-                <th>Cidade</th>
+                <th><spring:message code="endereco.cidade"></spring:message></th>
                 <td>${proprietario.endereco.cidade}</td>
             </tr>
             <tr>
-                <th>Estado</th>
+                <th><spring:message code="endereco.estado"></spring:message></th>
                 <td>${proprietario.endereco.estado}</td>
             </tr>
             <tr>
-                <th>Número</th>
+                <th><spring:message code="endereco.numero"></spring:message></th>
                 <td>${proprietario.endereco.numero}</td>
             </tr>
             <tr>
-                <th>Complemento</th>
+                <th><spring:message code="endereco.complemento"></spring:message></th>
                 <td>${proprietario.endereco.complemento}</td>
             </tr>
         </tbody>
     </table>
     <table class="table table-responsive" id="contatoProprietario">
-        <caption>Cliente ${proprietario.nome}   /   Dados de contato</caption>
+        <caption><spring:message code="cliente"></spring:message> ${proprietario.nome}   /   <spring:message code="dadosContato"></spring:message></caption>
         <tbody>
             <tr>
-                <th>Tel. Fixo</th>
+                <th><spring:message code="contato.telefone"></spring:message></th>
                 <td>${proprietario.contato.telefone}</td>
             </tr>
             <tr>
-                <th>Tel. Celular</th>
+                <th><spring:message code="contato.celular"></spring:message></th>
                 <td>${proprietario.contato.celular}</td>
             </tr>
             <tr>
-                <th>E-mail</th>
+                <th><spring:message code="contato.email"></spring:message></th>
                 <td>${proprietario.contato.email}</td>
             </tr>
         </tbody>
     </table>
     <table class="table table-responsive" id="adicionalProprietario">
-        <caption>Cliente ${proprietario.nome}   /   Dados adicionais</caption>
+        <caption><spring:message code="cliente"></spring:message> ${proprietario.nome}   /   <spring:message code="dadosAdicionais"></spring:message></caption>
         <tbody>
             <tr>
-                <th>Profissão</th>
+                <th><spring:message code="profissao"></spring:message></th>
                 <td>${proprietario.profissao}</td>
             </tr>
             <tr>
-                <th>Como nos conheceu</th>
+                <th><spring:message code="comoNosConheceu"></spring:message></th>
                 <td>${proprietario.comoNosConheceu}</td>
             </tr>
             <tr>
-                <th>Aceita notificações?</th>
+                <th><spring:message code="aceitaNotificacoes"></spring:message></th>
                 <td>${proprietario.aceitaNotificacoes}</td>
             </tr>
             <tr>
-                <th>Observações</th>
+                <th><spring:message code="ativo"></spring:message></th>
+                <td>${proprietario.ativo}</td>
+            </tr>
+            <tr>
+                <th><spring:message code="observacoes"></spring:message></th>
                 <td>${proprietario.observacoes}</td>
             </tr>
         </tbody>

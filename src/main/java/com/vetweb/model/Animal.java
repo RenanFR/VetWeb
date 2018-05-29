@@ -10,6 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotBlank;
@@ -53,7 +54,8 @@ public class Animal implements Serializable {
     @ManyToOne
     private Proprietario proprietario;
     
-    @Transient
+//    @Transient
+    @OneToOne
     private Prontuario prontuario;
 //    @OneToOne//Indica relacionamento de um p/ um no banco
 
