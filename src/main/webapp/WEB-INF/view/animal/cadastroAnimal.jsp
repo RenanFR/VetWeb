@@ -23,12 +23,16 @@
         <c:if test="${animal.animalId != null}">
             <c:url var="action" value="/animais/atualizar/${animal.animalId}"></c:url>
         </c:if>
-        <form:form servletRelativeAction="/animais/cadastrar" method="POST" modelAttribute="animal"><!--   modelAttribute:    Tipo recebido no Valid  -->
+        <form:form servletRelativeAction="/animais/cadastrar" method="POST" modelAttribute="animal" enctype="multipart/form-data"><!--   modelAttribute:    Tipo recebido no Valid  -->
             <fieldset>
                 <table class="table table-responsive" id="detalhesAnimal">
                     <caption>Animal ${animal.nome}</caption>
                     <form:hidden path="animalId" id="animalId"></form:hidden>
                         <tbody>
+                        	<tr>
+                        		<td><label for="imagem"><spring:message code="imagem"></spring:message></label></td>
+                        		<td><input type="file" name="imagemFile"	/></td>
+                        	</tr>
                             <tr>
                                 <th><label for="nome"><spring:message code="nome"></spring:message></label></th>
                                 <td><form:input path="nome" id="nome" htmlEscape="true"></form:input></td>

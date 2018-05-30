@@ -1,17 +1,10 @@
 package com.vetweb.controller;
 // @author 11151504898
 
-import com.vetweb.dao.AnimalDAO;
-import com.vetweb.dao.ProntuarioDAO;
-import com.vetweb.dao.ProprietarioDAO;
-import com.vetweb.model.Animal;
-import com.vetweb.model.Especie;
-import com.vetweb.model.Patologia;
-import com.vetweb.model.Pelagem;
-import com.vetweb.model.Proprietario;
-import com.vetweb.model.Raca;
 import java.util.List;
+
 import javax.validation.Valid;
+
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -24,8 +17,20 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import com.vetweb.dao.AnimalDAO;
+import com.vetweb.dao.ProntuarioDAO;
+import com.vetweb.dao.ProprietarioDAO;
+import com.vetweb.model.Animal;
+import com.vetweb.model.Especie;
+import com.vetweb.model.Patologia;
+import com.vetweb.model.Pelagem;
+import com.vetweb.model.Proprietario;
+import com.vetweb.model.Raca;
+import com.vetweb.service.ArquivoService;
 
 @Controller
 @Transactional
@@ -36,10 +41,13 @@ public class AnimalController {
     AnimalDAO animalDAO;
     
     @Autowired
-    ProprietarioDAO proprietarioDAO;
+    private ProprietarioDAO proprietarioDAO;
     
     @Autowired
-    ProntuarioDAO prontuarioDAO;
+    private ProntuarioDAO prontuarioDAO;
+    
+    @Autowired
+    private ArquivoService arquivoService;
     
     private static final Logger LOGGER = Logger.getLogger(AnimalController.class);
     
@@ -70,15 +78,18 @@ public class AnimalController {
     @RequestMapping(value = "/cadastrar", method = RequestMethod.POST)
     public synchronized ModelAndView cadastrar(@Valid @ModelAttribute("animal") Animal animal,
     		BindingResult bindingResult,
+    		MultipartFile imagemFile,
     		RedirectAttributes attributes) {//BindingResult: Verifica se há erros de validação, pode adc. erros
         ModelAndView modelAndView = new ModelAndView("forward:/prontuario/gerarProntuario");//Redireciona c/ novo request p/ outra ação na Controller
         if (bindingResult.hasErrors()) {//Se houverem erros envia objeto BindingResult p/ a JSP
-            System.out.println(bindingResult.getAllErrors());
+            LOGGER.info(bindingResult.getAllErrors());
             return formCadastro(animal, true);//Forward caso haja erros de validação
         }
         try {
             Proprietario prop = proprietarioDAO.consultarPorId(animal.getProprietario().getPessoaId());
             animal.setProprietario(prop);
+            String caminhoImagem = arquivoService.escreverArquivo("vetwebFiles/imagens", imagemFile); 
+            animal.setImagem(caminhoImagem);
             animalDAO.salvar(animal);
             LOGGER.info(("Animal " + animal.getNome() + " inserido com sucesso na base.").toUpperCase());
         } catch (Exception exception) {

@@ -15,6 +15,7 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Positive;
 
+import org.hibernate.annotations.ColumnDefault;
 import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
@@ -56,6 +57,8 @@ public class Animal implements Serializable {
     
     @OneToOne
     private Prontuario prontuario;
+    
+    private String imagem;
 
     public Animal() {
     }
@@ -168,4 +171,12 @@ public class Animal implements Serializable {
     public void setProntuario(Prontuario prontuario) {
         this.prontuario = prontuario;
     }
+
+	public String getImagem() {
+		return imagem;
+	}
+
+	public void setImagem(String imagem) {
+		this.imagem = imagem;
+	}
 }

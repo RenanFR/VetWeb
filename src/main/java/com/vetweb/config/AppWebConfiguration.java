@@ -17,6 +17,8 @@ import org.springframework.format.support.DefaultFormattingConversionService;
 import org.springframework.format.support.FormattingConversionService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.WebApplicationInitializer;
+import org.springframework.web.multipart.MultipartResolver;
+import org.springframework.web.multipart.support.StandardServletMultipartResolver;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
@@ -81,6 +83,11 @@ public class AppWebConfiguration extends WebMvcConfigurerAdapter implements WebA
     @Bean
     public LocaleResolver localeResolver(){
         return new CookieLocaleResolver();//Armazena a localização selecionada em Cookie em função do parâmetro recebido pelo LocaleChangeInterceptor
+    }
+    
+    @Bean
+    public MultipartResolver multipartResolver() {//Para reconhecer envio de campos multipart
+    	return new StandardServletMultipartResolver();
     }
     
 	@Override
