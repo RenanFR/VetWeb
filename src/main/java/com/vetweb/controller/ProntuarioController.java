@@ -63,7 +63,7 @@ public class ProntuarioController {
         ModelAndView modelAndView = new ModelAndView("prontuario/cadastroTipoAtendimento");
         Set<Duration> duracoesValidas = Stream.of(Duration.ofMinutes(30), Duration.ofHours(1), Duration.ofHours(3), Duration.ofHours(5))
                 .collect(Collectors.toSet());//Cria sequência de itens em forma de Stream e converte para coleção
-        Set<Period> frequenciasValidas = Stream.of(Period.ofDays(15), Period.ofMonths(1), Period.ofYears(1), Period.ofWeeks(2))
+        Set<Period> frequenciasValidas = Stream.of(Period.ofDays(1), Period.ofDays(15), Period.ofMonths(1), Period.ofYears(1), Period.ofWeeks(2))
                 .collect(Collectors.toSet());
         modelAndView.addObject("duracoesValidas", duracoesValidas);
         modelAndView.addObject("frequenciasValidas", frequenciasValidas);

@@ -25,7 +25,13 @@
                     </tr>
                     <tr>
                         <th><label for="duracao"><spring:message code="duracao"></spring:message></label></th>
-                        <td><form:select path="duracao" items="${duracoesValidas}" id="duracao"></form:select></td>
+                        <td>
+                        	<select name="duracao">
+	                        	<c:forEach items="${duracoesValidas}" var="duracao">
+	                        		<option>${duracao}</option>
+	                        	</c:forEach>
+                        	</select>
+                        </td>
                     </tr>
                     <tr>
                         <th><label for="frequencia"><spring:message code="frequencia"></spring:message></label></th>

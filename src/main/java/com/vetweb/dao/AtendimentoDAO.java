@@ -22,7 +22,9 @@ public class AtendimentoDAO implements IDAO<Atendimento> {
 
     @Override
     public List<Atendimento> listar() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return entityManager
+        		.createQuery("SELECT a FROM Atendimento a", Atendimento.class)
+        		.getResultList();
     }
 
     @Override

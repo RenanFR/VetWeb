@@ -1,8 +1,8 @@
 package com.vetweb.model;
  //@author renanrodrigues
 import java.io.Serializable;
-
 import java.time.LocalDate;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -12,9 +12,9 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Positive;
+
 import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
@@ -54,10 +54,8 @@ public class Animal implements Serializable {
     @ManyToOne
     private Proprietario proprietario;
     
-//    @Transient
     @OneToOne
     private Prontuario prontuario;
-//    @OneToOne//Indica relacionamento de um p/ um no banco
 
     public Animal() {
     }
