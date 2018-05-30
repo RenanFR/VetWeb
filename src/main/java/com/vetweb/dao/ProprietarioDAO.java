@@ -2,6 +2,7 @@ package com.vetweb.dao;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -11,6 +12,7 @@ import java.util.stream.Collectors;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -32,6 +34,8 @@ public class ProprietarioDAO implements IDAO<Proprietario> {
     
     @Autowired
     private ProntuarioDAO prontuarioDAO;
+    
+    private static final Logger LOGGER = Logger.getLogger(ProprietarioDAO.class);
     
     @Override
     public void salvar(Proprietario proprietario) {
@@ -126,58 +130,51 @@ public class ProprietarioDAO implements IDAO<Proprietario> {
     }
 
 	public List<BigInteger> idsClientesComDebitoAtendimento() {
-		List<BigInteger> idsProprietariosComDebitoAtendimento = (List<BigInteger>) entityManager.createNativeQuery("SELECT cli.pessoaid FROM proprietarios cli\n" + 
-    			"JOIN animais a ON cli.pessoaid = a.proprietario_pessoaid\n" + 
-    			"JOIN prontuarios p ON a.prontuario_prontuarioid = p.prontuarioid\n" + 
-    			"JOIN prontuarios_atendimento ate ON ate.prontuario_prontuarioid = p.prontuarioid\n" + 
-    			"JOIN atendimento atend ON atend.atendimentoid = ate.atendimentos_atendimentoid\n" + 
-    			"WHERE atend.pago = FALSE;").getResultList();
+		List<Object> resultList = (List<Object>) entityManager.createNativeQuery("select cli.pessoaid from proprietarios cli\n" + 
+    			"join animais a on cli.pessoaid = a.proprietario_pessoaid\n" + 
+    			"join prontuarios p on a.prontuario_prontuarioid = p.prontuarioid\n" + 
+    			"join prontuarios_atendimento ate on ate.prontuario_prontuarioid = p.prontuarioid\n" + 
+    			"join atendimento atend on atend.atendimentoid = ate.atendimentos_atendimentoid\n" + 
+    			"where atend.pago = false;").getResultList();
+		List<BigInteger> idsProprietariosComDebitoAtendimento = new ArrayList<>();
+		for(Object result : resultList) idsProprietariosComDebitoAtendimento.add(new BigInteger(result.toString()));
 		return idsProprietariosComDebitoAtendimento;
 	}
 
 	public List<BigInteger> idsClientesComDebitoVacina() {
-		List<BigInteger> idsProprietariosComDebitoVacina = (List<BigInteger>) entityManager.createNativeQuery("SELECT cli.pessoaid FROM proprietarios cli\n" + 
-    			"JOIN animais a ON cli.pessoaid = a.proprietario_pessoaid\n" + 
-    			"JOIN prontuarios p ON a.prontuario_prontuarioid = p.prontuarioid\n" + 
-    			"JOIN prontuarios_prontuariovacina vac ON vac.prontuario_prontuarioid = p.prontuarioid\n" + 
-    			"JOIN prontuariovacina prvac ON prvac.prontuariovacinaid = vac.vacinas_prontuariovacinaid\n" + 
-    			"WHERE prvac.pago = FALSE;").getResultList();
+		List<Object> resultList = (List<Object>) entityManager.createNativeQuery("select cli.pessoaid from proprietarios cli\n" + 
+    			"join animais a on cli.pessoaid = a.proprietario_pessoaid\n" + 
+    			"join prontuarios p on a.prontuario_prontuarioid = p.prontuarioid\n" + 
+    			"join prontuarios_prontuariovacina vac on vac.prontuario_prontuarioid = p.prontuarioid\n" + 
+    			"join prontuariovacina prvac on prvac.prontuariovacinaid = vac.vacinas_prontuariovacinaid\n" + 
+    			"where prvac.pago = false;").getResultList();
+		List<BigInteger> idsProprietariosComDebitoVacina = new ArrayList<>();
+		for(Object result : resultList) idsProprietariosComDebitoVacina.add(new BigInteger(result.toString()));		
 		return idsProprietariosComDebitoVacina;
 	}
 	
-	public List<BigInteger> idsClientesInativosComPagamentoAtendimento() {
-		List<BigInteger> clientesInativosComPagamento = (List<BigInteger>) entityManager.createNativeQuery("SELECT cli.pessoaid FROM Proprietarios cli\n" + 
-				"JOIN Animais a ON a.proprietario_pessoaid = cli.pessoaid\n" + 
-				"JOIN Prontuarios p ON p.prontuarioid = a.prontuario_prontuarioid\n" + 
-				"JOIN Prontuarios_Atendimento reg_at ON reg_at.prontuario_prontuarioid = p.prontuarioid\n" + 
-				"JOIN Atendimento ate ON ate.atendimentoid = reg_at.atendimentos_atendimentoid\n" + 
-				"WHERE cli.ativo = FALSE AND ate.pago = TRUE;").getResultList();
-		return clientesInativosComPagamento; 
-	}
-	
-	public List<BigInteger> idsClientesInativosComPagamentoVacina() {
-		List<BigInteger> clientesInativosComPagamento = (List<BigInteger>) entityManager.createNativeQuery("SELECT cli.pessoaid FROM Proprietarios cli\n" + 
-				"JOIN Animais a ON a.proprietario_pessoaid = cli.pessoaid\n" + 
-				"JOIN Prontuarios p ON p.prontuarioid = a.prontuario_prontuarioid\n" + 
-				"JOIN prontuarios_prontuariovacina reg_vac ON reg_vac.prontuario_prontuarioid = p.prontuarioid\n" + 
-				"JOIN prontuariovacina vac ON vac.prontuariovacinaid = reg_vac.vacinas_prontuariovacinaid\n" + 
-				"WHERE cli.ativo = FALSE AND vac.pago = TRUE;").getResultList();
-		return clientesInativosComPagamento; 
-	}
-	
 	public Set<Proprietario> getClientesInativosAdimplentes() {
-		List<BigInteger> idsClientesInativosComPagamentoAtendimento = idsClientesInativosComPagamentoAtendimento();
-		List<BigInteger> idsClientesInativosComPagamentoVacina = idsClientesInativosComPagamentoVacina();
+		List<Prontuario> prontuariosDeClientesInativos = entityManager
+				.createQuery("SELECT p FROM Prontuario p JOIN p.animal a JOIN a.proprietario cli WHERE cli.ativo = FALSE", Prontuario.class)
+				.getResultList();
 		Set<Proprietario> clientesInativosAdimplentes = new HashSet<>();
-		if(idsClientesInativosComPagamentoAtendimento.size() > 0) {
-			idsClientesInativosComPagamentoAtendimento.stream()
-			.forEach(prop -> clientesInativosAdimplentes.add(consultarPorId(Long.valueOf(prop.toString()))));
-		}
-		if (idsClientesInativosComPagamentoVacina.size() > 0) {
-			idsClientesInativosComPagamentoVacina.stream()
-			.forEach(prop -> clientesInativosAdimplentes.add(consultarPorId(Long.valueOf(prop.toString()))));
+		for (Proprietario proprietario : prontuariosDeClientesInativos.stream().map(p -> p.getAnimal().getProprietario()).collect(Collectors.toList())) {
+			boolean todasAsVacinasPagas = prontuariosDeClientesInativos
+					.stream()
+					.flatMap(p -> p.getVacinas().stream())
+					.filter(vac -> vac.getProntuario().getAnimal().getProprietario().equals(proprietario))
+					.allMatch(vac -> vac.isPago());
+			boolean todosOsAtendimentosPagos =	prontuariosDeClientesInativos
+					.stream()
+					.flatMap(p -> p.getAtendimentos().stream())
+					.filter(ate -> prontuarioDAO.buscarProntuarioDoAtendimento(ate).getAnimal().getProprietario().equals(proprietario))
+					.allMatch(ate -> ate.isPago());
+			if (todasAsVacinasPagas && todosOsAtendimentosPagos) {
+				clientesInativosAdimplentes.add(proprietario);				
+			}
+			return clientesInativosAdimplentes;
 		}
 		return clientesInativosAdimplentes;
 	}
-
+	
 }

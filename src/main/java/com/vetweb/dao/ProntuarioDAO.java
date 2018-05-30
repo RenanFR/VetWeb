@@ -204,5 +204,12 @@ public class ProntuarioDAO implements IDAO<Prontuario>{
     			.setParameter(1, vacina.getProntuarioVacinaId()).getSingleResult();
     	return proprietarioDAO.consultarPorId(Long.parseLong(pessoaid.toString()));
 	}
+	
+	public Prontuario buscarProntuarioDoAtendimento(Atendimento atendimento) {
+		return entityManager
+				.createQuery("SELECT p FROM Prontuario p WHERE :at MEMBER OF p.atendimentos", Prontuario.class)
+				.setParameter("at", atendimento)
+				.getSingleResult();
+	}
     
 }
