@@ -1,16 +1,21 @@
 package com.vetweb.dao;
-// @author Maria Jéssica
+//	@author renan.rodrigues@metasix.com.br
 
-import com.vetweb.model.Atendimento;
 import com.vetweb.model.TipoDeAtendimento;
+import com.vetweb.model.Atendimento;
+
 import java.util.List;
+
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+
 import org.springframework.stereotype.Repository;
+
 @Repository
 public class AtendimentoDAO implements IDAO<Atendimento> {
+	
     @PersistenceContext
-    EntityManager entityManager;
+    private EntityManager entityManager;
     
     @Override
     public void salvar(Atendimento atendimento) {
@@ -54,13 +59,17 @@ public class AtendimentoDAO implements IDAO<Atendimento> {
             entityManager.merge(tipoDeAtendimento);
         }
     }
+    
     public List<TipoDeAtendimento> tiposDeAtendimento(){
         return entityManager.createQuery("SELECT ta FROM TipoDeAtendimento ta", TipoDeAtendimento.class).getResultList();
     }
+    
     public TipoDeAtendimento tipoDeAtendimentoPorId(Long tipoDeAtendimentoId) {
         return entityManager.find(TipoDeAtendimento.class, tipoDeAtendimentoId);
     }
+    
     public void removerTipoDeAtendimento(TipoDeAtendimento tipoDeAtendimento) {
         entityManager.remove(tipoDeAtendimento);
     }
+    
 }

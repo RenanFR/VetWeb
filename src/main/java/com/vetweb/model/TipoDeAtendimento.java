@@ -1,7 +1,9 @@
 package com.vetweb.model;
- //@author renanrodrigues
-import java.io.Serializable;
+
+//@author renan.rodrigues@metasix.com.br
+
 import java.math.BigDecimal;
+import java.io.Serializable;
 import java.time.Duration;
 import java.time.Period;
 import javax.persistence.Entity;
@@ -11,6 +13,7 @@ import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+
 @Entity
 @Table(name = "tiposDeAtendimento")
 @NamedQueries({@NamedQuery(name = "tiposDeAtendimentoQuery", query = "SELECT t FROM TipoDeAtendimento t"),

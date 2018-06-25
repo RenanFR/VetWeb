@@ -1,6 +1,7 @@
 package com.vetweb.config.security;
- //@author est.renanfr
+//@author renan.rodrigues@metasix.com.br
+
 import org.springframework.security.web.context.AbstractSecurityWebApplicationInitializer;
 
-public class SecurityFilterInterceptor extends AbstractSecurityWebApplicationInitializer {//Filtro de segurança, especificação Servlets
+public class SecurityFilterInterceptor extends AbstractSecurityWebApplicationInitializer {
 }

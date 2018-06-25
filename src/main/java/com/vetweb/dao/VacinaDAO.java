@@ -1,15 +1,18 @@
 package com.vetweb.dao;
-// @author Maria Jéssica
+//@author renan.rodrigues@metasix.com.br
 
-import com.vetweb.model.ProntuarioVacina;
-import com.vetweb.model.Vacina;
 import java.util.List;
+
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+
 import org.springframework.stereotype.Repository;
+
+import com.vetweb.model.Vacina;
 
 @Repository
 public class VacinaDAO implements IDAO<Vacina>{
+	
     @PersistenceContext
     private EntityManager entityManager;
     

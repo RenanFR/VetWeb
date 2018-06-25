@@ -1,6 +1,8 @@
 package com.vetweb.controller;
-import java.time.Duration;
+//@author renan.rodrigues@metasix.com.br
+
 import java.time.Period;
+import java.time.Duration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,7 +22,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-// @author Maria Jéssica
 import com.vetweb.dao.AnimalDAO;
 import com.vetweb.dao.AtendimentoDAO;
 import com.vetweb.dao.ProntuarioDAO;
@@ -36,9 +37,9 @@ import com.vetweb.model.TipoDeAtendimento;
 import com.vetweb.model.Vacina;
 import com.vetweb.service.EmailService;
 
-@Controller//Indica que a classe trata requisições
+@Controller
 @Transactional
-@RequestMapping("/prontuario")//Caminho base da controladora
+@RequestMapping("/prontuario")
 public class ProntuarioController {
 	
     @Autowired
@@ -58,11 +59,11 @@ public class ProntuarioController {
     
     private static final Logger LOGGER = Logger.getLogger(ProntuarioController.class);
     
-    @RequestMapping(value = "/cadastroTipoAtendimento", method = RequestMethod.GET)//Caminho de uma requisição
+    @RequestMapping(value = "/cadastroTipoAtendimento", method = RequestMethod.GET)
     public ModelAndView formTipoAtendimento(TipoDeAtendimento tipoDeAtendimento) {
         ModelAndView modelAndView = new ModelAndView("prontuario/cadastroTipoAtendimento");
         Set<Duration> duracoesValidas = Stream.of(Duration.ofMinutes(30), Duration.ofHours(1), Duration.ofHours(3), Duration.ofHours(5))
-                .collect(Collectors.toSet());//Cria sequência de itens em forma de Stream e converte para coleção
+                .collect(Collectors.toSet());
         Set<Period> frequenciasValidas = Stream.of(Period.ofDays(1), Period.ofDays(15), Period.ofMonths(1), Period.ofYears(1), Period.ofWeeks(2))
                 .collect(Collectors.toSet());
         modelAndView.addObject("duracoesValidas", duracoesValidas);
@@ -70,7 +71,7 @@ public class ProntuarioController {
         return modelAndView;
     }
     
-    @RequestMapping(value = "/cadastroVacina", method = RequestMethod.GET)//Caminho de uma requisição
+    @RequestMapping(value = "/cadastroVacina", method = RequestMethod.GET)
     public ModelAndView formVacina(Vacina vacina) {
         ModelAndView modelAndView = new ModelAndView("prontuario/cadastroVacina");
         return modelAndView;
@@ -108,7 +109,7 @@ public class ProntuarioController {
     public ModelAndView atualizarTipoDeAtendimento(@PathVariable("tipoDeAtendimentoId")Long tipoDeAtendimentoId) {
     	ModelAndView modelAndView = new ModelAndView("prontuario/cadastroTipoAtendimento");
     	Set<Duration> duracoesValidas = Stream.of(Duration.ofMinutes(30), Duration.ofHours(1), Duration.ofHours(3), Duration.ofHours(5))
-    			.collect(Collectors.toSet());//Cria sequência de itens em forma de Stream e converte para coleção
+    			.collect(Collectors.toSet());
     	Set<Period> frequenciasValidas = Stream.of(Period.ofDays(15), Period.ofMonths(1), Period.ofYears(1), Period.ofWeeks(2))
     			.collect(Collectors.toSet());
     	modelAndView.addObject("duracoesValidas", duracoesValidas);
@@ -156,7 +157,7 @@ public class ProntuarioController {
         ModelAndView modelAndView = new ModelAndView("prontuario/prontuario");
         modelAndView.addObject("prontuario", prontuarioDAO.prontuarioPorAnimal(animalId));
 		modelAndView.addObject("tiposDeAtendimento", prontuarioDAO.tiposDeAtendimento());
-		modelAndView.addObject("vacinas", prontuarioDAO.vacinas().stream()//Para que no select da página do prontuário chegue o nome das vacinas
+		modelAndView.addObject("vacinas", prontuarioDAO.vacinas().stream()
 	    		.map(vac -> vac.getNome()).collect(Collectors.toList()));
 		modelAndView.addObject("patologias", animalDAO.patologias().stream()
 	    		.map(pat -> pat.getNome()).collect(Collectors.toList()));
@@ -268,7 +269,7 @@ public class ProntuarioController {
     	Map<String, List> listasProntuario = new HashMap<>();
     	listasProntuario.put("tiposDeAtendimento", prontuarioDAO.tiposDeAtendimento());
     	LOGGER.info("ADICIONANDO LISTA DE SERVIÇOS P/ INCLUSÃO DE ATENDIMENTOS NO PRONTUÁRIO.");
-    	listasProntuario.put("vacinas", prontuarioDAO.vacinas().stream()//Para que no select da página do prontuário chegue o nome das vacinas
+    	listasProntuario.put("vacinas", prontuarioDAO.vacinas().stream()
 	    		.map(v -> v.getNome()).collect(Collectors.toList()));
     	LOGGER.info("ADICIONANDO LISTA DE VACINAS DISPONÍVEIS PARA USO NO PRONTUÁRIO. ");
     	listasProntuario.put("patologias", animalDAO.patologias().stream()

@@ -1,7 +1,11 @@
 package com.vetweb.model;
- //@author renanrodrigues
-import java.io.Serializable;
+
+//@author renan.rodrigues@metasix.com.br
+
 import java.time.LocalDate;
+
+import java.io.Serializable;
+
 import java.time.format.DateTimeFormatter;
 
 import javax.persistence.Entity;
@@ -11,6 +15,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 import org.springframework.format.annotation.DateTimeFormat;
+
 @Entity
 @Table(name = "atendimento")
 public class Atendimento implements Serializable, ElementoProntuario {
@@ -29,6 +34,15 @@ public class Atendimento implements Serializable, ElementoProntuario {
     private LocalDate dataAtendimento;
     
     public boolean pago;
+    
+    public Atendimento() {
+    }
+    
+    public Atendimento(Long atendimentoId, TipoDeAtendimento tipoDeAtendimento, StringBuilder preenchimentoModeloAtendimento) {
+    	this.atendimentoId = atendimentoId;
+    	this.tipoDeAtendimento = tipoDeAtendimento;
+    	this.preenchimentoModeloAtendimento = preenchimentoModeloAtendimento;
+    }
     
     public Long getAtendimentoId() {
         return atendimentoId;
@@ -75,15 +89,6 @@ public class Atendimento implements Serializable, ElementoProntuario {
 	public void setPago(boolean pago) {
 		this.pago = pago;
 	}
-
-	public Atendimento() {
-    }
-
-    public Atendimento(Long atendimentoId, TipoDeAtendimento tipoDeAtendimento, StringBuilder preenchimentoModeloAtendimento) {
-        this.atendimentoId = atendimentoId;
-        this.tipoDeAtendimento = tipoDeAtendimento;
-        this.preenchimentoModeloAtendimento = preenchimentoModeloAtendimento;
-    }
     
     @Override
     public String toString() {

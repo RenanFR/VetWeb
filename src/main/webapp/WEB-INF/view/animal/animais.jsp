@@ -1,11 +1,11 @@
 <%-- 
     Document   : animais
     Created on : 16/11/2017, 17:46:28
-    Author     : 11151504898
+    Author     : renan.rodrigues
 --%>
 <%@ taglib prefix="vetweb" tagdir="/WEB-INF/tags"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %><!--    Importação JSTL -->
-<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%><!--  tags úteis do spring framework   -->
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 
 <vetweb:layout title="animais">
     <jsp:attribute name="js">

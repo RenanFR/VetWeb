@@ -1,10 +1,10 @@
 <%-- 
     Document   : pelagens
     Created on : 17/02/2018, 00:20:57
-    Author     : Maria Jéssica
+    Author     : renan.rodrigues
 --%>
 <%@ taglib prefix="vetweb" tagdir="/WEB-INF/tags"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %><!--    Importação JSTL -->
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring" %>
 
 <vetweb:layout title="pelagens">

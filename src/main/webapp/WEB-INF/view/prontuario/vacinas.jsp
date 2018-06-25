@@ -1,10 +1,10 @@
 <%-- 
     Document   : vacinas
     Created on : 22/04/2018, 22:19:51
-    Author     : Maria Jéssica
+    Author     : renan.rodrigues
 --%>
 <%@ taglib prefix="vetweb" tagdir="/WEB-INF/tags"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %><!--    Importação JSTL -->
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring" %>
 
 <vetweb:layout title="vacinas">

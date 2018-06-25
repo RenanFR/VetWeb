@@ -1,14 +1,15 @@
 package com.vetweb.dao;
-// @author Maria Jéssica
+//@author renan.rodrigues@metasix.com.br
+
 
 import java.util.Optional;
-
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 import org.springframework.stereotype.Repository;
 
 import com.vetweb.model.Clinica;
+
 @Repository
 public class ConfigDAO {
 	

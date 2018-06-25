@@ -1,8 +1,9 @@
 package com.vetweb.model.validators;
-// @author Maria Jéssica
+//@author renan.rodrigues@metasix.com.br
 
-import com.vetweb.model.Pessoa;
 import com.vetweb.model.Proprietario;
+import com.vetweb.model.Pessoa;
+
 import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
@@ -13,7 +14,6 @@ public class ProprietarioValidator implements Validator
     @Override
     public boolean supports(Class<?> type) {
         return Proprietario.class.isAssignableFrom(type);
-        
     }
 
     @Override

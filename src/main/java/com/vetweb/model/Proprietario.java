@@ -1,7 +1,10 @@
 package com.vetweb.model;
- // @author 11151504898
-import java.util.List;
+//@author renan.rodrigues@metasix.com.br
+
 import javax.persistence.Column;
+
+import java.util.List;
+
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.NamedQueries;

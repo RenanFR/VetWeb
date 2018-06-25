@@ -1,11 +1,11 @@
 <%-- 
     Document   : patologias
     Created on : 22/02/2018, 20:32:49
-    Author     : Maria Jéssica
+    Author     : renan.rodrigues
 --%>
 
 <%@ taglib prefix="vetweb" tagdir="/WEB-INF/tags"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %><!--    Importação JSTL -->
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring" %>
 
 <vetweb:layout title="patologias">

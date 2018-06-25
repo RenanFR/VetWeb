@@ -1,11 +1,13 @@
 package com.vetweb.controller;
-// @author 11151504898
+// @author renan.rodrigues@metasix.com.br
+
 
 import java.util.List;
 
 import javax.validation.Valid;
 
 import org.apache.log4j.Logger;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
@@ -79,11 +81,11 @@ public class AnimalController {
     public synchronized ModelAndView cadastrar(@Valid @ModelAttribute("animal") Animal animal,
     		BindingResult bindingResult,
     		MultipartFile imagemFile,
-    		RedirectAttributes attributes) {//BindingResult: Verifica se há erros de validação, pode adc. erros
-        ModelAndView modelAndView = new ModelAndView("forward:/prontuario/gerarProntuario");//Redireciona c/ novo request p/ outra ação na Controller
-        if (bindingResult.hasErrors()) {//Se houverem erros envia objeto BindingResult p/ a JSP
-            LOGGER.info(bindingResult.getAllErrors());
-            return formCadastro(animal, true);//Forward caso haja erros de validação
+    		RedirectAttributes attributes) {
+        ModelAndView modelAndView = new ModelAndView("forward:/prontuario/gerarProntuario");
+        if (bindingResult.hasErrors()) {
+            LOGGER.error(bindingResult.getAllErrors());
+            return formCadastro(animal, true);
         }
         try {
             Proprietario prop = proprietarioDAO.consultarPorId(animal.getProprietario().getPessoaId());

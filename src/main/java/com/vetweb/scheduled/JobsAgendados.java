@@ -1,11 +1,9 @@
-/**
- * @author renanfr
- *
- */
 package com.vetweb.scheduled;
 
-import java.time.LocalDate;
+//@author renan.rodrigues@metasix.com.br
+
 import java.time.format.DateTimeFormatter;
+import java.time.LocalDate;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
@@ -46,7 +44,7 @@ public class JobsAgendados {
 	
 	private static final long HORA = 3600000;
 	
-    @Scheduled(fixedDelay = MINUTO)
+    @Scheduled(fixedDelay = HORA)
     public void verificacaoClientesEmDebito() {
     	Set<Proprietario> proprietariosComDebito = proprietarioDAO.getClientesEmDebito(); 
     	proprietariosComDebito

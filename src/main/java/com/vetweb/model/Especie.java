@@ -1,5 +1,5 @@
 package com.vetweb.model;
-// @author Maria Jéssica
+//@author renan.rodrigues@metasix.com.br
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import java.io.Serializable;
@@ -13,13 +13,18 @@ import javax.persistence.OneToMany;
 
 @Entity
 public class Especie implements Serializable {
-    @Id @GeneratedValue(strategy = GenerationType.AUTO)
+	
+	private static final long serialVersionUID = 1L;
+
+	@Id @GeneratedValue(strategy = GenerationType.AUTO)
     private Long especieId;
+    
     private String descricao;
+    
     @JsonManagedReference
     @OneToMany(mappedBy = "especie",fetch = FetchType.EAGER)
-//    @Cascade(CascadeType.ALL)//Operações serão feitas em cascada a partir do objeto pai p/ filhos
     private Set<Raca> racas;
+    
     public String getDescricao() {
         return descricao;
     }

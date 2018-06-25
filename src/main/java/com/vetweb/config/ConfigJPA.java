@@ -1,9 +1,12 @@
 package com.vetweb.config;
-// @author 11151504898
+// @author renan.rodrigues@metasix.com.br
 
 import java.util.Properties;
+
 import javax.persistence.EntityManagerFactory;
+
 import javax.sql.DataSource;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.jpa.JpaTransactionManager;
@@ -13,43 +16,44 @@ import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-@EnableTransactionManagement//Habilita uso do controle transacional do Spring
-public class ConfigJPA {//Para configurações do ORM
-    @Bean//Ciclo de vida gerenciado pelo Spring/Permite injeção
-    public LocalContainerEntityManagerFactoryBean entityManagerFactory() {//Criação do EntityManager
-        LocalContainerEntityManagerFactoryBean entityManagerFactory = new LocalContainerEntityManagerFactoryBean();//Faz o papel do persistence.xml
-        entityManagerFactory.setDataSource(dataSource());//Atribui a fonte de dados do EntityManager
+@EnableTransactionManagement
+public class ConfigJPA {
+	
+    @Bean
+    public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
+        LocalContainerEntityManagerFactoryBean entityManagerFactory = new LocalContainerEntityManagerFactoryBean();
+        entityManagerFactory.setDataSource(dataSource());
         entityManagerFactory.setPackagesToScan(new String[]{"com.vetweb.model", 
-            "com.vetweb.model.auth"});//Array com pacotes mapeados pela JPA (Entidades mapeadas)
-        JpaVendorAdapter adapter = new HibernateJpaVendorAdapter();//Implementação JPA selecionada (Hibernate)
+            "com.vetweb.model.auth"});
+        JpaVendorAdapter adapter = new HibernateJpaVendorAdapter();
         entityManagerFactory.setJpaVendorAdapter(adapter);
-        entityManagerFactory.setJpaProperties(properties());//Configura propriedades adicionais do Hibernate
+        entityManagerFactory.setJpaProperties(properties());
         return entityManagerFactory;
     }
+    
     @Bean
-    private DataSource dataSource(){//Configura a fonte de dados. Parâmetros de conexão
+    private DataSource dataSource(){
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
-        dataSource.setDriverClassName("org.postgresql.Driver");//Biblioteca JDBC do provedor de banco de dados
-        dataSource.setUrl("jdbc:postgresql://localhost:5432/vetweb_database");//URL JDBC
-        dataSource.setUsername("postgres");//Usuário do banco
-        dataSource.setPassword("postgres");//Senha do banco
-//        dataSource.setPassword("admw2k91");//Senha do banco
+        dataSource.setDriverClassName("org.postgresql.Driver");
+        dataSource.setUrl("jdbc:postgresql://localhost:5432/vetweb_database");
+        dataSource.setUsername("postgres");
+        dataSource.setPassword("postgres");
         return dataSource;
     }
-    private Properties properties(){//Retorna objeto armazenando propriedades adicionais do banco de dados
+    
+    private Properties properties(){
         Properties properties = new Properties();
-        properties.setProperty("hibernate.hbm2ddl.auto", "update");//Estratégia de criação do banco de dados (Atualiza banco a cada alteração nas entidades)
-//        properties.setProperty("hibernate.hbm2ddl.auto", "create-drop");//Cria/Exclui o banco a cada execução. Para homologaçao
-//        properties.setProperty("hibernate.hbm2ddl.auto", "create");//Cria o banco somente caso não exista. Para homologaçao
-//        properties.setProperty("hibernate.hbm2ddl.import_files", "import.sql");//Arquivo de Seed 
-        properties.setProperty("hibernate.dialect", "org.hibernate.dialect.PostgreSQLDialect");//Dialeto de SQL p/ Postgresql (Fonte: Documentação Hibernate)
-        properties.setProperty("hibernate.show_sql", "true");//Exibe os comandos SQL sendo executados
+        properties.setProperty("hibernate.hbm2ddl.auto", "update");
+        properties.setProperty("hibernate.dialect", "org.hibernate.dialect.PostgreSQLDialect");
+        properties.setProperty("hibernate.show_sql", "true");
         return properties;
     }
-    @Bean//Responsável por criar e injetar o controle transacional da JPA no Spring
+    
+    @Bean
     public PlatformTransactionManager transactionManager(EntityManagerFactory managerFactory){
         JpaTransactionManager transactionManager = new JpaTransactionManager();
         transactionManager.setEntityManagerFactory(managerFactory);
         return transactionManager;
     }
+    
 }

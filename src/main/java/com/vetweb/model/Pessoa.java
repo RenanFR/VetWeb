@@ -1,7 +1,9 @@
 package com.vetweb.model;
- // @author 11151504898
-import java.io.Serializable;
+
+//@author renan.rodrigues@metasix.com.br
+
 import java.time.LocalDate;
+import java.io.Serializable;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -13,17 +15,18 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Past;
 import org.hibernate.validator.constraints.br.CPF;
 import org.springframework.format.annotation.DateTimeFormat;
-@Entity//Informa a implementação da JPA (Hibernate) que a classe representa uma tabela no banco de dados
-@Table(name = "pessoas")//Permite personalizar nome da tabela dentre outros parametros. Por padrão nomeia c/ classe
+
+@Entity
+@Table(name = "pessoas")
 @Inheritance(strategy = InheritanceType.JOINED)
-public class Pessoa implements Serializable {//Tabelas com relacionamentos devem implementar Serializable
+public class Pessoa implements Serializable {
 	
 	private static final long serialVersionUID = 6060276588160861739L;
 	
     public enum TipoPessoa { FISICA, JURIDICA }
     
-    @Id//Informa que o atributo é a chave primária da tabela
-    @GeneratedValue(strategy = GenerationType.AUTO)//Informa que a geração do valor será via auto-incremento
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long pessoaId;
     
     @NotBlank
@@ -42,7 +45,7 @@ public class Pessoa implements Serializable {//Tabelas com relacionamentos devem
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate inclusao;
     
-    private String nacionalidade;//@DateTimeFormat(pattern = "dd-MM-yyyy")
+    private String nacionalidade;
     
     @Past @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate nascimento; 
@@ -138,7 +141,6 @@ public class Pessoa implements Serializable {//Tabelas com relacionamentos devem
     }
 
     public void setInclusao(LocalDate inclusao) {
-//        this.inclusao = LocalDate.parse(inclusao.toString(), DateTimeFormatter.ofPattern("dd/MM/yyyy"));
         this.inclusao = inclusao;
     }
 
@@ -148,7 +150,6 @@ public class Pessoa implements Serializable {//Tabelas com relacionamentos devem
 
     public void setNascimento(LocalDate nascimento) {
         this.nascimento = nascimento;
-//        this.nascimento = LocalDate.parse(nascimento.toString(), DateTimeFormatter.ofPattern("dd/MM/yyyy"));
     }
 
     public Long getPessoaId() {

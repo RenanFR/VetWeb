@@ -1,7 +1,9 @@
 package com.vetweb.model;
 
-import java.io.Serializable;
+//@author renan.rodrigues@metasix.com.br
+
 import java.time.LocalDate;
+import java.io.Serializable;
 import java.time.format.DateTimeFormatter;
 
 import javax.persistence.Entity;

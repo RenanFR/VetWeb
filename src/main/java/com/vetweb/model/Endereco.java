@@ -1,18 +1,33 @@
 package com.vetweb.model;
- // @author 11151504898
-import java.io.Serializable;
+
+//@author renan.rodrigues@metasix.com.br
+
 import javax.persistence.Embeddable;
+
+import java.io.Serializable;
+
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
+
 @Embeddable
+
 public class Endereco implements Serializable {
-    private String rua;
+	
+	private static final long serialVersionUID = 1L;
+
+	private String rua;
+    
     private String bairro;
+    
     private String cidade;
+    
     private String estado;
+    
     @NotBlank @Pattern(regexp = "^\\d{5}-\\d{3}$")
     private String cep;
+    
     private int numero;
+    
     private String complemento;
 
     public Endereco(String rua, String bairro, String cidade, String estado, String cep, int numero, String complemento) {

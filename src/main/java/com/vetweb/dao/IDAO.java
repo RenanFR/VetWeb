@@ -1,14 +1,20 @@
 package com.vetweb.dao;
- //@author renanrodrigues
+//@author renan.rodrigues@metasix.com.br
+
 import java.util.List;
-import java.util.Optional;
 
 public interface IDAO<E> {
-    void salvar(E e);
-    List<E> listar();
-    E consultarPorId(long id);
-    void remover(E e);
-    E consultarPorNome(String nome);
-    long quantidadeRegistros();
-//    E atualizar(E e);
+	
+    public void salvar(E e);
+    
+    public List<E> listar();
+    
+    public E consultarPorId(long id);
+    
+    public void remover(E e);
+    
+    public E consultarPorNome(String nome);
+    
+    public long quantidadeRegistros();
+    
 }

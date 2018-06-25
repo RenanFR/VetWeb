@@ -1,9 +1,12 @@
 package com.vetweb.model.error;
-// @author Maria Jéssica
+
+//@author renan.rodrigues@metasix.com.br
 
 public class NotFoundException extends RuntimeException {
 
-    public NotFoundException(String message) {
+	private static final long serialVersionUID = 1L;
+
+	public NotFoundException(String message) {
         super(message);
     }
     

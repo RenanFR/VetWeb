@@ -1,14 +1,14 @@
 <%-- 
     Document   : prontuario
     Created on : 21/03/2018, 21:14:53
-    Author     : Maria Jéssica
+    Author     : renan.rodrigues
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%><!--  tags úteis do spring framework   -->
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %><!--    Importação JSTL -->
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib prefix="vetweb" tagdir="/WEB-INF/tags"%>
-<%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%><!--   Form c/ utilidades do spring    -->
+<%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 
 <vetweb:layout title="prontuario ${prontuario.animal.nome}">
     <jsp:attribute name="js">

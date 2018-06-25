@@ -1,25 +1,46 @@
 package com.vetweb.model.auth;
- // @author 11151504898
-import java.util.ArrayList;
+
+//@author renan.rodrigues@metasix.com.br
+
 import java.util.Collection;
+import java.util.ArrayList;
 import java.util.List;
+
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @Entity
 public class Usuario implements UserDetails {
-    @Id
+	
+	private static final long serialVersionUID = 1L;
+	
+	@Id
     private String username;
+	
     private String password;
+    
     private String name;
-    @ManyToMany(fetch = FetchType.EAGER)//Cria a tabela de associação (Auxiliar) entre usuários e perfis
-    private List<Perfil> authorities = new ArrayList<>();//Papéis/Perfis de acesso associados ao usuário
+    
+    @ManyToMany(fetch = FetchType.EAGER)
+    private List<Perfil> authorities = new ArrayList<>();
+    
+    public Usuario() {
+    	
+    }
+    
+    public Usuario(String username, String password, String name) {
+    	this.username = username;
+    	this.name = name;
+    	this.password = new BCryptPasswordEncoder().encode(password);
+    }
+    
     @Override
-    public Collection<Perfil> getAuthorities() {//? extends GrantedAuthority
+    public Collection<Perfil> getAuthorities() {
         return authorities;
     }
     
@@ -32,7 +53,6 @@ public class Usuario implements UserDetails {
     public String getUsername() {
         return username;
     }
-    //Métodos abaixo podem ser usados p/ renovação de senha, bloqueio por inatividade, etc.
     @Override
     public boolean isAccountNonExpired() {
         return true;
@@ -52,16 +72,6 @@ public class Usuario implements UserDetails {
     public boolean isEnabled() {
         return true;
     }    
-
-    public Usuario() {
-        
-    }
-    
-    public Usuario(String username, String password, String name) {
-        this.username = username;
-        this.name = name;
-        this.password = new BCryptPasswordEncoder().encode(password);
-    }
 
     public void setUsername(String username) {
         this.username = username;

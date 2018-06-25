@@ -1,12 +1,12 @@
 <%-- 
     Document   : detalhesAnimal
     Created on : 02/01/2018, 13:05:14
-    Author     : Maria Jéssica
+    Author     : renan.rodrigues
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib prefix="vetweb" tagdir="/WEB-INF/tags"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %><!--    Importação JSTL -->
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
 <vetweb:layout title="Animal ${animal.nome}">
     <table class="table table-responsive" id="detalhesAnimal">

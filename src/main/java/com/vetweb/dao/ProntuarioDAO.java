@@ -1,5 +1,6 @@
 package com.vetweb.dao;
-// @author Maria Jéssica
+//@author renan.rodrigues@metasix.com.br
+
 
 import java.util.List;
 

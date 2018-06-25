@@ -1,13 +1,20 @@
 package com.vetweb.model.auth;
- // @author 11151504898
-import javax.persistence.Entity;
+
+//@author renan.rodrigues@metasix.com.br
+
 import javax.persistence.Id;
+import javax.persistence.Entity;
+
 import org.springframework.security.core.GrantedAuthority;
 
 @Entity
-public class Perfil implements GrantedAuthority {//Classe p/ autorização no Security
-    @Id
+public class Perfil implements GrantedAuthority {
+	
+	private static final long serialVersionUID = 1L;
+	
+	@Id
     private String descricaoPerfil;
+    
     @Override
     public String getAuthority() {
         return descricaoPerfil;

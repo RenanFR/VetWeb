@@ -1,11 +1,11 @@
 <%-- 
     Document   : tiposDeAtendimento
     Created on : 01/03/2018, 22:06:34
-    Author     : Maria Jéssica
+    Author     : renan.rodrigues
 --%>
 <%@ taglib prefix="vetweb" tagdir="/WEB-INF/tags"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %><!--    Importação JSTL -->
-<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%><!--  tags úteis do spring framework   -->
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 
 <vetweb:layout title="tiposDeAtendimento">
     <jsp:attribute name="js">

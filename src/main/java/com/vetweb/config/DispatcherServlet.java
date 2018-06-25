@@ -1,7 +1,10 @@
 package com.vetweb.config;
- // @author 11151504898
-import com.vetweb.config.security.SecurityConfig;
+//@author renan.rodrigues@metasix.com.br
+
 import javax.servlet.Filter;
+
+import com.vetweb.config.security.SecurityConfig;
+
 import javax.servlet.MultipartConfigElement;
 import javax.servlet.ServletRegistration.Dynamic;
 
@@ -13,27 +16,25 @@ import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatche
 public class DispatcherServlet extends AbstractAnnotationConfigDispatcherServletInitializer{
 
     @Override
-    protected Class<?>[] getRootConfigClasses() {//Classes carregadas em 1° ao iniciar servidor
+    protected Class<?>[] getRootConfigClasses() {
         return new Class[]{SecurityConfig.class, AppWebConfiguration.class, ConfigJPA.class};
-        //O filtro do Security é carregado antes do que o Spring
     }
 
     @Override
-    protected Class<?>[] getServletConfigClasses() {//Demais classes de configuração a serem carregadas/lidas
+    protected Class<?>[] getServletConfigClasses() {
         return new Class[]{};
     }
 
     @Override
     protected String[] getServletMappings() {
-        return new String[] {"/"};//Informa o padrão de endereço delegado ao Spring MVC
+        return new String[] {"/"};
     }
 
     @Override
-    protected Filter[] getServletFilters() {//Filtros executados na aplicação
+    protected Filter[] getServletFilters() {
         CharacterEncodingFilter encodingFilter = new CharacterEncodingFilter();
         encodingFilter.setEncoding("UTF-8");
         OpenEntityManagerInViewFilter managerInViewFilter = new OpenEntityManagerInViewFilter();
-            //Permite que o EntityManager permaneça aberto ao fim da transação para carregar relacionamentos em LAZY
         return new Filter[]
         {
             encodingFilter, managerInViewFilter
@@ -41,7 +42,7 @@ public class DispatcherServlet extends AbstractAnnotationConfigDispatcherServlet
     }
     
     @Override
-    protected void customizeRegistration(Dynamic registration) {//Configurações relativas ao armazenamento de arquivos
+    protected void customizeRegistration(Dynamic registration) {
     	registration.setMultipartConfig(new MultipartConfigElement(""));
     }
     

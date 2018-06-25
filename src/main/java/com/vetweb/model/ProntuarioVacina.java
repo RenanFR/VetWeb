@@ -1,7 +1,8 @@
 package com.vetweb.model;
+//@author renan.rodrigues@metasix.com.br
 
-import java.io.Serializable;
 import java.time.LocalDate;
+import java.io.Serializable;
 import java.time.format.DateTimeFormatter;
 
 import javax.persistence.Entity;
@@ -12,6 +13,7 @@ import javax.persistence.JoinColumn;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 public class ProntuarioVacina implements Serializable, ElementoProntuario {
 	

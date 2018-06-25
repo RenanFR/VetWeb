@@ -1,45 +1,44 @@
 package com.vetweb.dao.auth;
+//@author renan.rodrigues@metasix.com.br
 
- //@author est.renanfr
-import com.vetweb.dao.IDAO;
 import com.vetweb.model.auth.Usuario;
+import com.vetweb.dao.IDAO;
+
 import java.util.List;
+
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Repository;
 
 
-@Repository//Classe responsável por acesso aos dados/persistência 
+@Repository 
 public class UsuarioDAO implements IDAO<Usuario>{
+	
     @PersistenceContext
-    EntityManager entityManager;
+    private EntityManager entityManager;
 
     @Override
     public void salvar(Usuario usuario) {
-        usuario.setPassword(new BCryptPasswordEncoder().encode(usuario.getPassword()));//Criptografia da senha. 
+        usuario.setPassword(new BCryptPasswordEncoder().encode(usuario.getPassword())); 
         entityManager.persist(usuario);
     }
 
     @Override
     public List<Usuario> listar() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
     public Usuario consultarPorId(long id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
     public void remover(Usuario e) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        throw new UnsupportedOperationException("Not supported yet.");
     }
-
-//    @Override
-//    public Usuario atualizar(Usuario e) {
-//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-//    }
 
     @Override
     public Usuario consultarPorNome(String nome) {
@@ -50,4 +49,5 @@ public class UsuarioDAO implements IDAO<Usuario>{
     public long quantidadeRegistros() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+    
 }

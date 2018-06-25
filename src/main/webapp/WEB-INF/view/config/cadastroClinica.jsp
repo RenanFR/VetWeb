@@ -1,12 +1,13 @@
 <%-- 
     Document   : cadastroClinica
     Created on : 24/02/2018, 08:03:01
-    Author     : Maria Jéssica
+    Author     : renan.rodrigues
 --%>
 
 <%@ taglib prefix="vetweb" tagdir="/WEB-INF/tags"%>
-<%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%><!--   Form c/ utilidades do spring    -->
-<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%><!--  tags úteis do spring framework   -->
+<%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+
 <vetweb:layout title="cadastroClinica">
     <spring:message code="cadastroClinica"></spring:message>
     <form:form servletRelativeAction="/config/addClinica" method="POST" modelAttribute="clinica">

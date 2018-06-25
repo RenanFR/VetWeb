@@ -1,13 +1,13 @@
 <%-- 
     Document   : cadastroAnimal
     Created on : 16/11/2017, 17:46:39
-    Author     : 11151504898
+    Author     : renan.rodrigues
 --%>
-<%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%><!--   Form c/ utilidades do spring    -->
+<%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="vetweb" tagdir="/WEB-INF/tags"%>
-<%@ taglib uri="http://www.springframework.org/security/tags" prefix="security" %><!--   Adc. token p/ proteção contra csrf -->
-<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%><!--  tags úteis do spring framework   -->
+<%@ taglib uri="http://www.springframework.org/security/tags" prefix="security" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 
 <vetweb:layout title="cadastroAnimal">
     <jsp:attribute name="script">
@@ -23,7 +23,7 @@
         <c:if test="${animal.animalId != null}">
             <c:url var="action" value="/animais/atualizar/${animal.animalId}"></c:url>
         </c:if>
-        <form:form servletRelativeAction="/animais/cadastrar" method="POST" modelAttribute="animal" enctype="multipart/form-data"><!--   modelAttribute:    Tipo recebido no Valid  -->
+        <form:form servletRelativeAction="/animais/cadastrar" method="POST" modelAttribute="animal" enctype="multipart/form-data">
             <fieldset>
                 <table class="table table-responsive" id="detalhesAnimal">
                     <caption>Animal ${animal.nome}</caption>
@@ -36,7 +36,7 @@
                             <tr>
                                 <th><label for="nome"><spring:message code="nome"></spring:message></label></th>
                                 <td><form:input path="nome" id="nome" htmlEscape="true"></form:input></td>
-                            <td><form:errors path="nome" cssClass="errors"></form:errors><!-- O path define o nome do campo (getter) na classe modelo que estamos utilizando   -->                        </td>
+                            <td><form:errors path="nome" cssClass="errors"></form:errors>
                             </tr>
                             <tr>
                                 <th><label for="dtNascimento"><spring:message code="nascimento"></spring:message></label></th>
@@ -89,6 +89,7 @@
             </fieldset>
             <input type="submit" value="submit"  />
             <input type="reset" value="reset"  />
-        </form:form>  
+        </form:form>
+          
     </jsp:body>
 </vetweb:layout>

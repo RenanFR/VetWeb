@@ -1,11 +1,9 @@
-/**
- * @author renanfr
- *
- */
 package com.vetweb.service;
 
-import java.io.File;
+//@author renan.rodrigues@metasix.com.br
+
 import java.io.IOException;
+import java.io.File;
 
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;

@@ -1,7 +1,10 @@
 package com.vetweb.dao;
 
+//@author renan.rodrigues@metasix.com.br
+
 import java.math.BigDecimal;
 import java.math.BigInteger;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -22,11 +25,10 @@ import com.vetweb.model.Prontuario;
 import com.vetweb.model.ProntuarioVacina;
 import com.vetweb.model.Proprietario;
 
- //@author renanrodrigues
-@Repository//Indica que a classe é gerenciada pelo container do Spring e é uma entidade de persistência
+@Repository
 public class ProprietarioDAO implements IDAO<Proprietario> {
 	
-    @PersistenceContext//Especificação da JPA para receber injeção de objeto de contexto com o banco de dados (EntityManager)
+    @PersistenceContext
     private EntityManager entityManager;
     
     @Autowired
@@ -40,7 +42,7 @@ public class ProprietarioDAO implements IDAO<Proprietario> {
     @Override
     public void salvar(Proprietario proprietario) {
         if(proprietario.getPessoaId() == null)
-            entityManager.persist(proprietario);//Spring instancia, injeta e finaliza o EntityManager
+            entityManager.persist(proprietario);
         else
             entityManager.merge(proprietario);
     }

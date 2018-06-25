@@ -1,6 +1,8 @@
 package com.vetweb.model;
- //@author renanrodrigues
+//	@author renan.rodrigues@metasix.com.br
+
 import java.io.Serializable;
+
 import java.time.LocalDate;
 
 import javax.persistence.Entity;
@@ -15,7 +17,6 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Positive;
 
-import org.hibernate.annotations.ColumnDefault;
 import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
@@ -33,7 +34,7 @@ public class Animal implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long animalId;
     
-    @NotBlank//Validações Hibernate 
+    @NotBlank 
     private String nome;
     
     @DateTimeFormat(pattern = "yyyy-MM-dd")
@@ -61,11 +62,6 @@ public class Animal implements Serializable {
     private String imagem;
 
     public Animal() {
-    }
-
-    @Override
-    public String toString() {
-        return "Animal{" + "animalId=" + animalId + ", nome=" + nome + ", dtNascimento=" + dtNascimento + ", esteril=" + esteril + ", status=" + status + ", peso=" + peso + ", pelagem=" + pelagem + ", raca=" + raca + ", proprietario=" + proprietario + ", prontuario=" + prontuario + '}';
     }
 
     public Animal(String nome, LocalDate dtNascimento, boolean esteril, boolean status, double peso, Pelagem pelagem, Raca raca, Proprietario proprietario) {
@@ -179,4 +175,10 @@ public class Animal implements Serializable {
 	public void setImagem(String imagem) {
 		this.imagem = imagem;
 	}
+	
+	@Override
+	public String toString() {
+		return "Animal{" + "animalId=" + animalId + ", nome=" + nome + ", dtNascimento=" + dtNascimento + ", esteril=" + esteril + ", status=" + status + ", peso=" + peso + ", pelagem=" + pelagem + ", raca=" + raca + ", proprietario=" + proprietario + ", prontuario=" + prontuario + '}';
+	}
+	
 }

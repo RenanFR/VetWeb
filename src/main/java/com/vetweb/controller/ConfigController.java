@@ -1,10 +1,12 @@
 package com.vetweb.controller;
-// @author Maria Jéssica
+//	@author renan.rodrigues@metasix.com.br
+
 
 import com.vetweb.dao.ConfigDAO;
-
 import com.vetweb.model.Clinica;
+
 import org.apache.log4j.Logger;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -17,22 +19,22 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.ModelAndView;
 
-@Controller @Transactional  @RequestMapping("/config")//Caminho base da Controller
+@Controller @Transactional  @RequestMapping("/config")
 public class ConfigController {
 	
     @Autowired
     private ConfigDAO configDAO;
     
     private static final Logger LOGGER = Logger.getLogger(ConfigController.class);
-    @RequestMapping(value = "/cadastroClinica", method = RequestMethod.GET)//URL para o método. Composto por caminho base junto a este RequestMapping
-    public ModelAndView cadClinica(@ModelAttribute("clinica") Clinica c){//Atributo de modelo a ser recebido no formulário
-        ModelAndView modelAndView = new ModelAndView("config/cadastroClinica");//Caminho para a visão (Página)
+    @RequestMapping(value = "/cadastroClinica", method = RequestMethod.GET)
+    public ModelAndView cadClinica(@ModelAttribute("clinica") Clinica c){
+        ModelAndView modelAndView = new ModelAndView("config/cadastroClinica");
         return modelAndView;
     }
     
-    @RequestMapping(value = "/atualizarClinica/{cnpj}", method = RequestMethod.GET)//URL para o método. Composto por caminho base junto a este RequestMapping
-    public ModelAndView cadClinica(@PathVariable("cnpj") String cnpj){//Atributo de modelo a ser recebido no formulário
-        ModelAndView modelAndView = new ModelAndView("config/cadastroClinica");//Caminho para a visão (Página)
+    @RequestMapping(value = "/atualizarClinica/{cnpj}", method = RequestMethod.GET)
+    public ModelAndView cadClinica(@PathVariable("cnpj") String cnpj){
+        ModelAndView modelAndView = new ModelAndView("config/cadastroClinica");
         modelAndView.addObject("clinica", configDAO.clinicaPorCnpj(cnpj));
         return modelAndView;
     }
@@ -52,9 +54,10 @@ public class ConfigController {
         return modelAndView;
     }
     
-    @ExceptionHandler//Tratamento de exceções da Controller Spring
-    @ResponseStatus(HttpStatus.BAD_REQUEST)//Responde p/ resposta Http BAD REQUEST
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     public void handle(Exception exception) {
         LOGGER.error(exception);
     }    
+    
 }

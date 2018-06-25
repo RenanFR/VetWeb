@@ -1,7 +1,8 @@
 package com.vetweb.model;
- //@author renanrodrigues
-import java.io.Serializable;
+//@author renan.rodrigues@metasix.com.br
+
 import java.math.BigDecimal;
+import java.io.Serializable;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -9,6 +10,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+
 @Entity
 @Table(name = "vacinas")
 public class Vacina implements Serializable, ElementoProntuario {
@@ -19,7 +21,6 @@ public class Vacina implements Serializable, ElementoProntuario {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long vacinaId;
 	
-//    @Column(insertable = false, updatable = false)
     private String nome;
     
     private String grupo;
@@ -105,4 +106,5 @@ public class Vacina implements Serializable, ElementoProntuario {
 	public void setPreco(BigDecimal preco) {
 		this.preco = preco;
 	}
+	
 }

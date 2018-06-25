@@ -1,19 +1,28 @@
 package com.vetweb.controller;
- import java.beans.PropertyEditorSupport;
+//@author renan.rodrigues@metasix.com.br
+
 import java.io.IOException;
+
+import java.beans.PropertyEditorSupport;
+
 import java.math.BigDecimal;
+
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
+
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
+
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+
 import javax.validation.Valid;
 
 import org.apache.log4j.Logger;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,12 +37,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-// @author 11151504898
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
 import com.vetweb.dao.AnimalDAO;
 import com.vetweb.dao.ProntuarioDAO;
 import com.vetweb.dao.ProprietarioDAO;
+
 import com.vetweb.model.Animal;
 import com.vetweb.model.Proprietario;
 import com.vetweb.model.pojo.Pais;
@@ -41,11 +51,11 @@ import com.vetweb.model.pojo.Profissao;
 import com.vetweb.model.validators.ProprietarioValidator;
 
 @Controller
-@Transactional//Indica que os métodos da Controller necessitam de transação
-@RequestMapping("/clientes")//Caminho base da Controller
+@Transactional
+@RequestMapping("/clientes")
 public class ProprietarioController {
 	
-    @Autowired//Faz com que Spring gerencie o recurso automaticamente (Crie o objeto/Injeção de dependência)
+    @Autowired
     ProprietarioDAO proprietarioDAO;
     
     @Autowired
@@ -61,8 +71,6 @@ public class ProprietarioController {
     static Profissao profissao;
     {
         try{
-//            Path paisesJson = Paths.get(System.getenv("catalina.base"), "vetwebFiles", "paises.json");
-//            Path profissoesJson = Paths.get(System.getenv("catalina.base"), "vetwebFiles", "profissoes.json");
             Path paisesJson = Paths.get(System.getenv("catalina_base"), "vetwebFiles", "paises.json");
             Path profissoesJson = Paths.get(System.getenv("catalina_base"), "vetwebFiles", "profissoes.json");
             ObjectMapper objectMapper = new ObjectMapper();
@@ -75,9 +83,9 @@ public class ProprietarioController {
         }
     }
     
-    @RequestMapping("/cadastro")//URL da página.    Composta por caminho base Controller + URL
-    public ModelAndView formCadastro(Proprietario proprietario){//Recebe objeto modelo como parâmetro
-        ModelAndView modelAndView = new ModelAndView("proprietario/cadastroProprietario");//A diretorio base e WEB-INF. Por isso deve informar pasta/página
+    @RequestMapping("/cadastro")
+    public ModelAndView formCadastro(Proprietario proprietario){
+        ModelAndView modelAndView = new ModelAndView("proprietario/cadastroProprietario");
         modelAndView.addObject("paises", paises);
         modelAndView.addObject("profissoes", profissao.getProfissoes());
         return modelAndView;
@@ -106,7 +114,7 @@ public class ProprietarioController {
     }
     
 	@RequestMapping(value = "/remover/{pessoaId}")
-    public ModelAndView remover(@PathVariable("pessoaId") long pessoaId){//${animal.animalId}
+    public ModelAndView remover(@PathVariable("pessoaId") long pessoaId){
         ModelAndView modelAndView = new ModelAndView("redirect:/clientes/listar");
         Proprietario p = proprietarioDAO.consultarPorId(pessoaId);
         try{
@@ -115,7 +123,7 @@ public class ProprietarioController {
                 prontuarioDAO.remover(prontuarioDAO.prontuarioPorAnimal(a.getAnimalId()));
             });
             LOGGER.info(("Prontuários dos animais do " + p.getNome() + " eliminados.").toUpperCase());
-            p.getAnimais().stream().forEach(a -> animalDAO.remover(a));//Remove os animais do clientes antes de remove-lo
+            p.getAnimais().stream().forEach(a -> animalDAO.remover(a));
             LOGGER.info(("Animais do cliente " + p.getNome() + " removidos com sucesso.").toUpperCase());
             proprietarioDAO.remover(p);
             LOGGER.info(("Proprietário " + p.getNome() + " removido com sucesso. ").toUpperCase());
@@ -125,8 +133,8 @@ public class ProprietarioController {
         return modelAndView;
     }
 	
-    @RequestMapping(value = "/atualizar/{pessoaId}")//Definindo um URI template. O valor de pessoaId é acessado c/ PathVariable
-    public ModelAndView atualizar(@PathVariable("pessoaId") long pessoaId){//PathVariable:  Permite acessar o valor passado na URI template
+    @RequestMapping(value = "/atualizar/{pessoaId}")
+    public ModelAndView atualizar(@PathVariable("pessoaId") long pessoaId){
         ModelAndView modelAndView = new ModelAndView("proprietario/cadastroProprietario");
         modelAndView.addObject("proprietario", proprietarioDAO.consultarPorId(pessoaId));
         return modelAndView;
@@ -161,16 +169,16 @@ public class ProprietarioController {
         return modelAndView;
     }
     
-    @InitBinder//Método invocado a cada request neste Controller
-    public void initBinder(WebDataBinder binder, HttpServletRequest request, ServletRequestDataBinder requestDataBinder) {//Para configuração do formato de data reconhecido na Controller
+    @InitBinder
+    public void initBinder(WebDataBinder binder, HttpServletRequest request, ServletRequestDataBinder requestDataBinder) {
         binder.setValidator(new ProprietarioValidator());
         requestDataBinder.registerCustomEditor(Proprietario.class, "proprietario", new PropertyEditorSupport(){
-            @Override//Estratégia de conversão do formulário (Vem como texto) para objeto
+            @Override
             public void setAsText(String text) throws IllegalArgumentException {
                 Proprietario proprietario = proprietarioDAO.consultarPorNome(text);
                 setValue(proprietario);
             }
-            @Override//Estratégia de conversão do objeto para texto
+            @Override
             public String getAsText() {
                 Proprietario proprietario = (Proprietario)this.getValue();
                 if(proprietario != null)
@@ -195,4 +203,5 @@ public class ProprietarioController {
             }
         });        
     }
+    
 }

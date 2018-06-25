@@ -1,5 +1,5 @@
 package com.vetweb.controller;
- //@author est.renanfr
+//@author renan.rodrigues@metasix.com.br
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -11,9 +11,8 @@ import com.vetweb.dao.ConfigDAO;
 import com.vetweb.dao.ProprietarioDAO;
 import com.vetweb.dao.RelatorioDAO;
 
-@Controller//Indica que a classe e uma Controller. Atende requisições
-//@RequestMapping("/home")
-public class HomeController {//Respeita o sufixo Controller
+@Controller
+public class HomeController {
 	
     @Autowired
     private ProprietarioDAO proprietarioDAO;
@@ -27,7 +26,7 @@ public class HomeController {//Respeita o sufixo Controller
     @Autowired
     private RelatorioDAO relatorioDAO;
     
-    @RequestMapping("/")//Indica a rota/URL pela qual o metodo e responsavel (binding)
+    @RequestMapping("/")
     public ModelAndView index (){
         ModelAndView modelAndView = new ModelAndView("index");
         modelAndView.addObject("quantidadeClientes", proprietarioDAO.quantidadeRegistros());
@@ -35,7 +34,7 @@ public class HomeController {//Respeita o sufixo Controller
         modelAndView.addObject("urlClinica", !configDAO.clinica().isPresent()? "/config/cadastroClinica" : "/config/detalhesClinica/" + configDAO.clinica().get().getRazaoSocial());
         modelAndView.addObject("totalPendente", relatorioDAO.contasAReceber());
         modelAndView.addObject("clientesDevedores", proprietarioDAO.getClientesEmDebito().stream().count());
-        return modelAndView;//Retorna a página buscando-a de acordo com as configurações no AppWebConfiguration
+        return modelAndView;
     }
     
 }

@@ -1,8 +1,8 @@
 package com.vetweb.config;
-// @author 11151504898
+// @author renan.rodrigues@metasix.com.br
 
-import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.time.LocalDate;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -12,10 +12,13 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
+
 import org.springframework.format.datetime.standard.DateTimeFormatterRegistrar;
 import org.springframework.format.support.DefaultFormattingConversionService;
 import org.springframework.format.support.FormattingConversionService;
+
 import org.springframework.http.HttpStatus;
+
 import org.springframework.web.WebApplicationInitializer;
 import org.springframework.web.multipart.MultipartResolver;
 import org.springframework.web.multipart.support.StandardServletMultipartResolver;
@@ -29,33 +32,32 @@ import org.springframework.web.servlet.i18n.CookieLocaleResolver;
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
-@EnableWebMvc//Habilita funcionalidades do Spring (Serialização, validações, etc.)
+@EnableWebMvc
 @Configuration
 @ComponentScan(basePackages = {"com.vetweb.controller", "com.vetweb.dao", "com.vetweb.scheduled",
     "com.vetweb.model", "com.vetweb.dao.auth", "com.vetweb.model.auth", "com.vetweb.controller.advice",
     "com.vetweb.model.error", "com.vetweb.model.pojo", "com.vetweb.service", "com.vetweb.controller.rest"})
-//Informa ao Spring os pacotes cujas classes devem ser lidas e carregadas
-public class AppWebConfiguration extends WebMvcConfigurerAdapter implements WebApplicationInitializer {//Classe de configurações
+public class AppWebConfiguration extends WebMvcConfigurerAdapter implements WebApplicationInitializer {
 	
-    @Bean//Retorna objeto gerenciado pelo container
-    public InternalResourceViewResolver internalResourceViewResolver() {//Config. um tipo de View p/ a aplicação
-        InternalResourceViewResolver resolver = new InternalResourceViewResolver();//Objeto responsável por interpretar as rotas da controller em páginas
-        resolver.setPrefix("/WEB-INF/view/");//Informa o caminho base para busca de recursos
-        resolver.setSuffix(".jsp");//Informa a extensão das páginas a serem buscadas
+    @Bean
+    public InternalResourceViewResolver internalResourceViewResolver() {
+        InternalResourceViewResolver resolver = new InternalResourceViewResolver();
+        resolver.setPrefix("/WEB-INF/view/");
+        resolver.setSuffix(".jsp");
         return resolver;
     }
     
-    @Bean//Config. do messages.properties
-    public MessageSource messageSource(){//Para busca do arquivo de propriedades com o mapa de mensagens. Bean deve ter o nome messageSource
+    @Bean
+    public MessageSource messageSource(){
         ReloadableResourceBundleMessageSource bundle = new ReloadableResourceBundleMessageSource();
-        bundle.setBasename("/WEB-INF/messages");//Informa localização e nome do arquivo de propriedades
-        bundle.setDefaultEncoding("UTF-8");//Codificação
-        bundle.setCacheSeconds(1);//Recarrega o arquivo a cada 1 segundo
+        bundle.setBasename("/WEB-INF/messages");
+        bundle.setDefaultEncoding("UTF-8");
+        bundle.setCacheSeconds(1);
         return bundle;
     }
     
-    @Bean//Registra conversores de formato p/ a aplicação
-    public FormattingConversionService mvcConversionService(){//Nome do método tem que ser mvcConversionService
+    @Bean
+    public FormattingConversionService mvcConversionService(){
         FormattingConversionService formattingConversionService = new DefaultFormattingConversionService(true);
         DateTimeFormatterRegistrar formatter = new DateTimeFormatterRegistrar();
         formatter.setDateFormatter((DateTimeFormatter.ofPattern("dd-MM-yyyy")));
@@ -63,12 +65,12 @@ public class AppWebConfiguration extends WebMvcConfigurerAdapter implements WebA
         return formattingConversionService;
     }
     
-    @Override//Sendo usado p/ habilitar mapeamento de recursos css & js
+    @Override
     public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {
         configurer.enable();
     }
 
-    @Override//o	Permite mapear páginas para determinada URL sem a necessidade de criar uma controller somente para realizar esse mapeamento
+    @Override
     public void addViewControllers(ViewControllerRegistry registry) {
         registry.addViewController("/forbidden").setViewName("/login/403");
         registry.addViewController("/table").setViewName("/proprietario/table");
@@ -76,17 +78,17 @@ public class AppWebConfiguration extends WebMvcConfigurerAdapter implements WebA
     }
 
     @Override
-    public void addInterceptors(InterceptorRegistry registry) {//Filtros aplicados antes/depois de requisições
-        registry.addInterceptor(new LocaleChangeInterceptor());//Para observar mudança de idioma
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(new LocaleChangeInterceptor());
     }
     
     @Bean
     public LocaleResolver localeResolver(){
-        return new CookieLocaleResolver();//Armazena a localização selecionada em Cookie em função do parâmetro recebido pelo LocaleChangeInterceptor
+        return new CookieLocaleResolver();
     }
     
     @Bean
-    public MultipartResolver multipartResolver() {//Para reconhecer envio de campos multipart
+    public MultipartResolver multipartResolver() {
     	return new StandardServletMultipartResolver();
     }
     

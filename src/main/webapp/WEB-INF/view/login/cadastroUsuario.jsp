@@ -1,11 +1,11 @@
 <%-- 
     Document   : cadastroUsuario
     Created on : 02/11/2017, 20:22:20
-    Author     : renanrodrigues
+    Author     : renan.rodrigues
 --%>
 <%@ taglib prefix="vetweb" tagdir="/WEB-INF/tags"%>
-<%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%><!--   Form c/ utilidades do spring    -->
-<%@ taglib uri="http://www.springframework.org/security/tags" prefix="security" %><!--   Adc. token p/ proteção contra csrf -->
+<%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
+<%@ taglib uri="http://www.springframework.org/security/tags" prefix="security" %>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <vetweb:layout title="">

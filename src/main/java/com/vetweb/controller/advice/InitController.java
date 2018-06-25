@@ -1,5 +1,5 @@
 package com.vetweb.controller.advice;
-// @author Maria Jéssica
+//@author renan.rodrigues@metasix.com.br
 
 import java.beans.PropertyEditorSupport;
 import java.time.LocalDate;
@@ -56,20 +56,20 @@ public class InitController {
     
     private static final Logger LOGGER = Logger.getLogger(InitController.class);
     
-    @InitBinder//Método invocado a cada request neste Controller
-    public void initBinder(HttpServletRequest request, ServletRequestDataBinder binder) {//Para parametrização de requisições p/ a Controller
+    @InitBinder
+    public void initBinder(HttpServletRequest request, ServletRequestDataBinder binder) {
         LOGGER.info("initBinder".toUpperCase());
         configDAO.salvarClinica(new Clinica(servletContext.getInitParameter("razaoSocial"),
                 LocalDate.parse(servletContext.getInitParameter("fundadaEm"), DateTimeFormatter.ofPattern("dd/MM/yyyy")),
                 servletContext.getInitParameter("cnpj"), servletContext.getInitParameter("proprietario")));
         
         binder.registerCustomEditor(Proprietario.class, "proprietario", new PropertyEditorSupport(){
-            @Override//Estratégia de conversão do formulário (Vem como texto) para objeto
+            @Override
             public void setAsText(String text) throws IllegalArgumentException {
                 Proprietario proprietario = proprietarioDAO.consultarPorNome(text);
                 setValue(proprietario);
             }
-            @Override//Estratégia de conversão do objeto para texto
+            @Override
             public String getAsText() {
                 Proprietario proprietario = (Proprietario)this.getValue();
                 if(proprietario != null)
@@ -214,6 +214,6 @@ public class InitController {
                 else return "atendimento";
             }
         });
-        
     }
+    
 }

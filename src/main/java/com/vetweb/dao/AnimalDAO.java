@@ -1,14 +1,18 @@
 package com.vetweb.dao;
-// @author 11151504898
-import com.vetweb.model.Animal;
+//@author renan.rodrigues@metasix.com.br
+
 import com.vetweb.model.Especie;
+import com.vetweb.model.Animal;
 import com.vetweb.model.Patologia;
 import com.vetweb.model.Pelagem;
 import com.vetweb.model.Raca;
+
 import java.util.List;
 import java.util.Optional;
+
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Repository;
 

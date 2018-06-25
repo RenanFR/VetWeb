@@ -1,9 +1,12 @@
 package com.vetweb.model;
- //@author renanrodrigues
-import java.io.Serializable;
+
+//@author renan.rodrigues@metasix.com.br
+
 import javax.persistence.Entity;
+import java.io.Serializable;
 import javax.persistence.Id;
 import javax.persistence.Table;
+
 @Entity
 @Table(name = "patologias")
 public class Patologia implements Serializable, ElementoProntuario {
@@ -12,7 +15,9 @@ public class Patologia implements Serializable, ElementoProntuario {
 	
 	@Id
     private String nome;
+	
     private boolean ativo;
+    
     private StringBuilder descricao;
 
     public String getNome() {

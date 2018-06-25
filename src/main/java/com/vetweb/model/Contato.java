@@ -1,16 +1,24 @@
 package com.vetweb.model;
- // @author 11151504898
-import java.io.Serializable;
+//@author renan.rodrigues@metasix.com.br
+
 import javax.persistence.Embeddable;
+
+import java.io.Serializable;
+
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Pattern;
 
-@Embeddable//Indica um relacionamento no banco de dados. É atributo de outra entidade
+@Embeddable
 public class Contato implements Serializable {
-    @Pattern(regexp = "^\\(\\d{2}\\)\\d{4}-\\d{4}$")
+	
+	private static final long serialVersionUID = 1L;
+
+	@Pattern(regexp = "^\\(\\d{2}\\)\\d{4}-\\d{4}$")
     private String telefone;
+    
     private String celular;
-    @Email//Garante que o formato de email seja respeitado. Implementado pelo Hibernate Validator
+    
+    @Email
     private String email;
 
     public Contato() {
@@ -45,4 +53,5 @@ public class Contato implements Serializable {
     public void setEmail(String email) {
         this.email = email;
     }
+    
 }

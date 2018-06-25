@@ -1,8 +1,6 @@
-/**
- * @author renanfr
- *
- */
 package com.vetweb.dao;
+//@author renan.rodrigues@metasix.com.br
+
 
 import java.util.List;
 
