@@ -1,31 +1,42 @@
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring" %>
 <%@ taglib prefix="vetweb" tagdir="/WEB-INF/tags"%>
-<%@ attribute name="title" required="true" %><!--    Informa que recebe um atributo obrigatório title    -->
-<%@ attribute name="script" fragment="true" %><!--   Informa que pode receber fragmento de página. No caso usado p/ script-->
+<%@ attribute name="title" required="true" %>
+<%@ attribute name="script" fragment="true" %>
 <%@ attribute name="mascaras" fragment="true" %>
 <%@ attribute name="js" fragment="true" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %><!--    Importação JSTL -->
-
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@	taglib	prefix="security"	uri="http://www.springframework.org/security/tags"	%>
+<security:authentication	property="principal"	var="user"/>
 <!DOCTYPE html>
 <html>
     <head>
-        <title>${title}</title><!-- Consumindo o atributo   -->
+    
+        <title>${title}</title>
+        
         <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">        
+        
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                
         <link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/style.css"></c:url>"   />
+        
         <link rel="icon" type="image/png" href="<c:url value="/resources/images/pawprint.png"></c:url>">
+        
         <script src="<c:url value="/resources/js/jquery/jquery.js"></c:url>" type="text/javascript"></script>
-        <!-- BOOTSTRAP STYLES-->
+        
         <link href="<c:url value="/resources/css/bootstrap/bootstrap.css"></c:url>" rel="stylesheet" type="text/css"/>
-        <!-- FONTAWESOME STYLES-->
+        
         <link href="<c:url value="/resources/css/font-awesome/font-awesome.min.css"></c:url>" rel="stylesheet" type="text/css"/>
-        <!-- CUSTOM STYLES-->
+        
         <link href="<c:url value="/resources/css/custom.css"></c:url>" rel="stylesheet" type="text/css"/>
-        <!-- GOOGLE FONTS-->
+        
         <link href="<c:url value="/resources/css/jquery/datatables.css"></c:url>" rel="stylesheet" type="text/css"/>
+        
         <script src="<c:url value="/resources/js/jquery/datatables.js"></c:url>" type="text/javascript"></script>
+        
         <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css' />
-        <jsp:invoke fragment="js"></jsp:invoke><!-- Aqui será passado o script (Fragmento) pela página cliente  -->
+        
+        <jsp:invoke fragment="js"></jsp:invoke>
+        
     </head>
 	<body>
 	    <div id="wrapper">
@@ -99,12 +110,12 @@
 	            <div class="row">
 	                <div class="col-lg-12">
 	                    <div class="alert alert-info">
-	                        <strong>Welcome Jhon Doe ! </strong> You Have No pending Task For Today.
+	                        <strong><spring:message code="saudacoes"></spring:message> ${user.username} ! </strong>
 	                    </div>
 	                </div>
 	            </div>
 	            <div class="container-fluid">
-	                <jsp:doBody /><!--  Recebe o corpo/implementaçao da página que irá utilizar o layout    -->                    
+	                <jsp:doBody />                    
 	            </div>
 	        </div>
 	    </div>
@@ -121,11 +132,15 @@
 	        </div>
 	    </div>
 	    </div>
-	    <jsp:invoke fragment="script"></jsp:invoke><!-- Aqui será passado o script (Fragmento) pela página cliente  -->
+	    
+	    <jsp:invoke fragment="script"></jsp:invoke>
+	    
 	    <script src="<c:url value="/resources/js/bootstrap/bootstrap.min.js"></c:url>" type="text/javascript"></script>
 	    <script src="<c:url value="/resources/js/custom.js"></c:url>" type="text/javascript"></script>
 	    <script src="<c:url value="/resources/js/jquery/jquery.maskedinput.js"></c:url>" type="text/javascript"></script>
+	    
 	    <jsp:invoke fragment="mascaras"></jsp:invoke>
+	    
 	</body>
 </html>
 

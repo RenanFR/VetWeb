@@ -10,66 +10,117 @@
 <%@ taglib prefix="vetweb" tagdir="/WEB-INF/tags"%>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 
-<vetweb:layout title="prontuario ${prontuario.animal.nome}">
+<vetweb:layout title="Prontuario ${prontuario.animal.nome}">
+
     <jsp:attribute name="js">
+    
         <script src="https://cloud.tinymce.com/stable/tinymce.min.js?apiKey=2i80p03koooieys6i5h5yz1n9d4uaxrwt1iaoy9938bmcahs"></script>          
         <script>tinymce.init({ selector:'#preenchimentoModeloAtendimento' });</script>        
         <script src="<c:url value="/resources/js/ajaxService.js"></c:url>" type="text/javascript"></script>
+        <script>
+            $(document).ready(function(){
+               $('#historicos').dataTable();
+            });
+        </script>        
     </jsp:attribute>
+    
     <jsp:body>
-        <table id="prontuario" class="table table-responsive">
-            <caption><spring:message code="prontuario" arguments="${prontuario.animal.nome}"></spring:message></caption>
-            <thead>
-                <tr>
-                    <th><spring:message code="atendimentoMedico"></spring:message>  <button data-toggle="modal" data-target="#modalAtendimento" onclick="ajaxService.buscaModeloPorTipoDeAtendimento()"><i class="fa fa-caret-right"></i></button> </th>
-                    <th><spring:message code="patologias"></spring:message> <button data-toggle="modal" data-target="#modalPatologia"><i class="fa fa-caret-right"></i></button></th>
-                    <th><spring:message code="vacina"></spring:message> <button data-toggle="modal" data-target="#modalVacina"><i class="fa fa-caret-right" aria-hidden="true"></i></button></th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>
-	                    <ul>
-		                    <c:forEach items="${prontuario.atendimentos}" var="atendimento">
-		                    	<li>
-			                        ${atendimento.preenchimentoModeloAtendimento} ${atendimento.dataAtendimento}	${atendimento.tipoDeAtendimento.custo}
-		                        	<a href="<c:url value="/prontuario/removerAtendimentoDoProntuario/${prontuario.prontuarioId}/${atendimento.atendimentoId}"></c:url>"><i class="fa fa-trash-o fa-2x"></i></a>
-									<button data-toggle="modal" data-target="#modalAtendimento" onclick="ajaxService.editarAtendimento(${atendimento.atendimentoId})">
-										<i class="fa fa-file-text-o"></i>
-									</button>
-		                    	</li>
-		                    </c:forEach>
-	                    </ul>
-                    </td>
-                    <td>
-                    	<ul>
-	                        <c:forEach items="${prontuario.patologias}" var="prontuarioPatologia">
-		                    	<li>
-		                            ${prontuarioPatologia.patologia.nome}	
-		                            <a href="<c:url value="/prontuario/removerPatologiaDoProntuario/${prontuario.prontuarioId}/${prontuarioPatologia.prontuarioPatologiaId}"></c:url>"><i class="fa fa-trash-o fa-2x"></i></a>
-									<button data-toggle="modal" data-target="#modalPatologia" onclick="ajaxService.editarPatologia(${prontuarioPatologia.prontuarioPatologiaId})">
-										<i class="fa fa-file-text-o"></i>
-									</button>
-		                    	</li>
-	                        </c:forEach>
-                    	</ul>
-                    </td>
-                    <td>
-	                    <ul>
-	                        <c:forEach items="${prontuario.vacinas}" var="prontuarioVacina">
-		                    	<li>
-		                            ${prontuarioVacina.vacina.nome}	${prontuarioVacina.inclusaoVacina}	${prontuarioVacina.vacina.preco}
-		                            <a href="<c:url value="/prontuario/removerVacinaDoProntuario/${prontuario.prontuarioId}/${prontuarioVacina.prontuarioVacinaId}?inclusaoOcorrenciaVacina=${prontuarioVacina.inclusaoVacina}"></c:url>"><i class="fa fa-trash-o fa-2x"></i></a>
-									<button data-toggle="modal" data-target="#modalVacina" onclick="ajaxService.editarVacina(${prontuarioVacina.prontuarioVacinaId})">
-										<i class="fa fa-file-text-o"></i>
-									</button>
-		                    	</li>
-	                        </c:forEach>
-	                    </ul>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+		<div class="row">
+
+			<div class="col-md-6">
+				<table class="table table-bordered" id="historicos">
+					<thead>
+						<tr>
+							<th><spring:message code="historico"></spring:message>	<i class="fa fa-calendar fa-2x" aria-hidden="true"></i></th>
+						</tr>
+					</thead>
+					<tbody>
+						<c:forEach items="${historico}" var="elementoHistorico">
+							<tr>
+								<td>
+									<c:if test="${elementoHistorico.tipo == 'ATENDIMENTO'}">
+										<div class="panel panel-info">
+										  <div class="panel-heading">${elementoHistorico.tipo}</div>
+										  <div class="panel-body">
+										  
+											<button data-toggle="modal" data-target="#modalAtendimento" onclick="ajaxService.editarAtendimento(${elementoHistorico.elementohistoricoId})">
+												<i class="fa fa-file-text-o fa-lg"></i>
+											</button>
+											
+											<button>
+												<a href="<c:url value="/prontuario/removerAtendimentoDoProntuario/${prontuario.prontuarioId}/${elementoHistorico.elementohistoricoId}"></c:url>"><i class="fa fa-trash-o fa-2x"></i></a>
+											</button>
+											
+										  	${elementoHistorico.descricao}
+										  	
+										  </div>
+										    <div class="panel-footer">${elementoHistorico.data}</div>
+										</div>
+									</c:if>
+									<c:if test="${elementoHistorico.tipo == 'VACINA'}">
+										<div class="panel panel-warning">
+										  <div class="panel-heading">${elementoHistorico.tipo}</div>
+										  <div class="panel-body">
+										  
+											<button data-toggle="modal" data-target="#modalVacina" onclick="ajaxService.editarVacina(${elementoHistorico.elementohistoricoId})">
+												<i class="fa fa-file-text-o fa-lg"></i>
+											</button>										  
+										  	
+										  	<button>
+										  		<a href="<c:url value="/prontuario/removerVacinaDoProntuario/${prontuario.prontuarioId}/${elementoHistorico.elementohistoricoId}?inclusaoOcorrenciaVacina=${elementoHistorico.data}"></c:url>"><i class="fa fa-trash-o fa-2x"></i></a>
+										  	</button>
+										  	
+										    ${elementoHistorico.descricao}
+										  </div>
+										    <div class="panel-footer">${elementoHistorico.data}</div>
+										</div>
+									</c:if>
+									<c:if test="${elementoHistorico.tipo == 'PATOLOGIA'}">
+										<div class="panel panel-danger">
+										  <div class="panel-heading">${elementoHistorico.tipo}</div>
+										  <div class="panel-body">
+										  
+											<button data-toggle="modal" data-target="#modalPatologia" onclick="ajaxService.editarPatologia(${elementoHistorico.elementohistoricoId})">
+												<i class="fa fa-file-text-o fa-lg"></i>
+											</button>
+																			  
+										  	<button>
+											  	<a href="<c:url value="/prontuario/removerPatologiaDoProntuario/${prontuario.prontuarioId}/${elementoHistorico.elementohistoricoId}"></c:url>"><i class="fa fa-trash-o fa-2x"></i></a>
+										  	</button>
+										  	
+										    ${elementoHistorico.descricao}
+										  </div>
+										    <div class="panel-footer">${elementoHistorico.data}</div>
+										</div>
+									</c:if>
+								</td>
+							</tr>
+						</c:forEach>	
+					</tbody>
+				</table>
+			</div>
+			
+			<div class="col-md-6">
+				<div class="row">
+					<div class="col-md-3">
+						<button data-toggle="modal" data-target="#modalAtendimento" onclick="ajaxService.buscaModeloPorTipoDeAtendimento()" class="btn btn-info">
+							<i class="fa fa-medkit fa-5x" aria-hidden="true"></i>
+						</button>
+					</div>
+					<div class="col-md-3">
+						<button data-toggle="modal" data-target="#modalVacina" class="btn btn-warning">
+							<i class="fa fa-eyedropper fa-5x"></i>
+						</button>
+					</div>
+					<div class="col-md-3">
+						<button data-toggle="modal" data-target="#modalPatologia" class="btn btn-danger">
+							<i class="fa  fa-plus-square fa-5x" aria-hidden="true"></i>
+						</button>
+					</div>
+				</div>
+			</div>
+			
+		</div>
         <!-- Modal -->
         <div class="modal fade" id="modalAtendimento" tabindex="-1" role="dialog" aria-labelledby="labelmodalAtendimento" aria-hidden="true">
           <div class="modal-dialog" role="document">

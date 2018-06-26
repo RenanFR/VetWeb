@@ -2,7 +2,10 @@ package com.vetweb.controller;
 //@author renan.rodrigues@metasix.com.br
 
 import java.time.Period;
+import java.time.format.DateTimeFormatter;
 import java.time.Duration;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -35,6 +38,8 @@ import com.vetweb.model.ProntuarioPatologia;
 import com.vetweb.model.ProntuarioVacina;
 import com.vetweb.model.TipoDeAtendimento;
 import com.vetweb.model.Vacina;
+import com.vetweb.model.pojo.ElementoHistorico;
+import com.vetweb.model.pojo.TipoElementoHistorico;
 import com.vetweb.service.EmailService;
 
 @Controller
@@ -155,12 +160,24 @@ public class ProntuarioController {
     public ModelAndView prontuarioDoAnimal(@PathVariable("animalId") final Long animalId, @ModelAttribute("atendimento") Atendimento atendimento,
     		@ModelAttribute("prontuarioPatologia") Patologia patologia, @ModelAttribute("prontuarioVacina") Vacina vacina) {
         ModelAndView modelAndView = new ModelAndView("prontuario/prontuario");
-        modelAndView.addObject("prontuario", prontuarioDAO.prontuarioPorAnimal(animalId));
+        Prontuario prontuario = prontuarioDAO.prontuarioPorAnimal(animalId);
+		modelAndView.addObject("prontuario", prontuario);
 		modelAndView.addObject("tiposDeAtendimento", prontuarioDAO.tiposDeAtendimento());
 		modelAndView.addObject("vacinas", prontuarioDAO.vacinas().stream()
 	    		.map(vac -> vac.getNome()).collect(Collectors.toList()));
 		modelAndView.addObject("patologias", animalDAO.patologias().stream()
 	    		.map(pat -> pat.getNome()).collect(Collectors.toList()));
+		List<ElementoHistorico> elementosHistorico = new ArrayList<>();
+		prontuario.getAtendimentos()
+			.forEach(at -> elementosHistorico
+					.add(new ElementoHistorico(at.getAtendimentoId(), at.getTipoDeAtendimento().getNome(), LocalDate.parse(at.getDataAtendimento(), DateTimeFormatter.ofPattern("dd/MM/yyyy")), TipoElementoHistorico.ATENDIMENTO)));
+		prontuario.getPatologias()
+			.forEach(pat -> elementosHistorico
+					.add(new ElementoHistorico(pat.getProntuarioPatologiaId(), pat.getPatologia().getNome(), LocalDate.parse(pat.getInclusaoPatologia(), DateTimeFormatter.ofPattern("dd/MM/yyyy")), TipoElementoHistorico.PATOLOGIA)));
+		prontuario.getVacinas()
+			.forEach(vac -> elementosHistorico
+					.add(new ElementoHistorico(vac.getProntuarioVacinaId(), vac.getVacina().getNome(), LocalDate.parse(vac.getInclusaoVacina(), DateTimeFormatter.ofPattern("dd/MM/yyyy")), TipoElementoHistorico.VACINA)));
+		modelAndView.addObject("historico", elementosHistorico);
         return modelAndView;
     }
     

@@ -158,29 +158,29 @@ var ajaxService = {
 	
 	carregaEnderecoPeloCEP: function() {
 		
-       var cep = $('#cep').val().replace(/\D/g, '');//Recebe valor do campo. Mantém somente dígitos
+       var cep = $('#cep').val().replace(/\D/g, '');
        if(cep !== ''){
-           var validacao = /^[0-9]{8}$/;//RegEx (Padrão de caracteres) p/ validação || processamento de texto
-           if(validacao.test(cep)){//RegEx, valida se texto bate c/ o padrão
-               $('#rua').val('Carregando');//Atribuí loading enquanto a consulta ao Web service é feita
+           var validacao = /^[0-9]{8}$/;
+           if(validacao.test(cep)){
+               $('#rua').val('Carregando');
                $('#bairro').val('Carregando');
                $('#cidade').val('Carregando');
                $('#estado').val('Carregando');
-               $.ajax({//Consulta ao Web service//Requisição HTTP c/ retorno JSON
-                    url: "https://viacep.com.br/ws/" + cep + "/json/?callback=?",//url da requisição
-                    type: 'POST',//Método HTTP p/ requisição
-                    dataType: 'JSON',//Retorno JSON
-                    crossDomain: true,//Permite requisição entre domínios !=
+               $.ajax({
+                    url: "https://viacep.com.br/ws/" + cep + "/json/?callback=?",
+                    type: 'POST',
+                    dataType: 'JSON',
+                    crossDomain: true,
                     contentType: 'application/json',
-                    success: function (data, textStatus, jqXHR) {//CallBack (Função) p/ caso sucesso
-                        $('#rua').val(data.logradouro);//Atribuí campo do JSON retornado ao campo
+                    success: function (data, textStatus, jqXHR) {
+                        $('#rua').val(data.logradouro);
                         $('#bairro').val(data.bairro);
                         $('#cidade').val(data.localidade);
                         $('#estado').val(data.uf);
                         $('#complemento').val(data.complemento);
                         $('#cep').val(data.cep);
                     },
-                    error: function (jqXHR, textStatus, errorThrown) {//CallBack p/ erro no Web service
+                    error: function (jqXHR, textStatus, errorThrown) {
                         alert("ERRO AO CONSULTAR O VIACEP! VERIFIQUE SUA CONEXÃO.   ".toUpperCase());
                     }
                });
