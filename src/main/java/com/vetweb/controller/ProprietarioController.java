@@ -1,31 +1,21 @@
 package com.vetweb.controller;
 //@author renan.rodrigues@metasix.com.br
 
-import java.io.IOException;
-
 import java.beans.PropertyEditorSupport;
-
+import java.io.IOException;
 import java.math.BigDecimal;
-
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardOpenOption;
-
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
-
 import java.util.List;
 
 import javax.annotation.PostConstruct;
-import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
-
 import javax.validation.Valid;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
@@ -39,13 +29,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
+import com.fasterxml.jackson.databind.type.TypeFactory;
 import com.vetweb.dao.AnimalDAO;
 import com.vetweb.dao.ProntuarioDAO;
 import com.vetweb.dao.ProprietarioDAO;
-
 import com.vetweb.model.Animal;
 import com.vetweb.model.Proprietario;
 import com.vetweb.model.pojo.Pais;
@@ -59,9 +47,6 @@ public class ProprietarioController {
 	
     @Autowired
     private ProprietarioDAO proprietarioDAO;
-    
-    @Autowired
-    private ServletContext servletContext;
     
     @Autowired
     private AnimalDAO animalDAO;
@@ -78,13 +63,15 @@ public class ProprietarioController {
     @PostConstruct
     public void readFiles() {
     	try{
-    		Path paisesJson = Paths.get(servletContext.getContextPath(), "paises.json");
-    		Path profissoesJson = Paths.get(servletContext.getRealPath("vetwebFiles"), "profissoes.json");
+    		ClassPathResource paisesResource = new ClassPathResource("paises.json");
+    		ClassPathResource profissoes = new ClassPathResource("profissoes.json");
     		ObjectMapper objectMapper = new ObjectMapper();
-    		paises = objectMapper.readValue(Files.newInputStream(paisesJson, StandardOpenOption.READ), new TypeReference<List<Pais>>() {});
-    		profissao = objectMapper.readValue(Files.newInputStream(profissoesJson, StandardOpenOption.READ), Profissao.class);
+			profissao = objectMapper.readValue(IOUtils.toString(profissoes.getInputStream()), Profissao.class);
+			TypeFactory typeFactory = TypeFactory.defaultInstance();
+			paises = objectMapper.readValue(paisesResource.getInputStream(), typeFactory.constructCollectionType(List.class, Pais.class));
     		LOGGER.info(paises);
     		LOGGER.info(profissao.getProfissoes());
+    		LOGGER.info(System.getProperty("jboss.home.dir"));
     	} catch(IOException exception){
     		LOGGER.error(exception);
     	}

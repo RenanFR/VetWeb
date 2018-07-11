@@ -12,7 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 public class ArquivoService {
 	
 	public String escreverArquivo(String dirBase, MultipartFile file) {
-		String caminhoReal = System.getenv("catalina_base") + "/" + dirBase;
+		String caminhoReal = System.getProperty("jboss.home.dir") + "/" + dirBase;
 		try {
 			String caminho = caminhoReal + "/" + file.getOriginalFilename();
 			file.transferTo(new File(caminho));

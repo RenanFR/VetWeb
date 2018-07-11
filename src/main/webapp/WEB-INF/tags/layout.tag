@@ -7,6 +7,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@	taglib	prefix="security"	uri="http://www.springframework.org/security/tags"	%>
 <security:authentication	property="principal"	var="user"/>
+
 <!DOCTYPE html>
 <html>
     <head>
@@ -57,7 +58,7 @@
 	            </span>
 	        </div>
 	    </div>
-	    <!-- /. NAV TOP  -->
+
 	    <nav class="navbar-default navbar-side" role="navigation">
 	        <div class="sidebar-collapse">
 	            <ul class="nav" id="main-menu">
@@ -79,10 +80,10 @@
 	                    </ul>
 	                </li>
 	                <li>
-	                    <a href="#"><i class="fa fa-qrcode "></i>My Link One</a>
+	                    <a href="http://localhost:8080/vetweb-auth/index.xhtml"><i class="fa fa-user-circle"></i><spring:message code="usuarios"></spring:message></a>
 	                </li>
 	                <li>
-	                    <a href="#"><i class="fa fa-bar-chart-o"></i>My Link Two</a>
+	                    <a href="#"><i class="fa fa-user-plus"></i>My Link Two</a>
 	                </li>
 	
 	                <li>
@@ -97,7 +98,7 @@
 	            </ul>
 	        </div>
 	    </nav>
-	    <!-- /. NAV SIDE  -->
+
 	    <div id="page-wrapper" >
 	        <div id="page-inner">
 	            <div class="row">
