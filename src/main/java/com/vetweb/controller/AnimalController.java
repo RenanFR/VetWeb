@@ -40,7 +40,7 @@ import com.vetweb.service.ArquivoService;
 public class AnimalController {
     
     @Autowired
-    AnimalDAO animalDAO;
+    private AnimalDAO animalDAO;
     
     @Autowired
     private ProprietarioDAO proprietarioDAO;

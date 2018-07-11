@@ -17,6 +17,8 @@ import java.time.temporal.ChronoUnit;
 
 import java.util.List;
 
+import javax.annotation.PostConstruct;
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
 import javax.validation.Valid;
@@ -56,35 +58,40 @@ import com.vetweb.model.validators.ProprietarioValidator;
 public class ProprietarioController {
 	
     @Autowired
-    ProprietarioDAO proprietarioDAO;
+    private ProprietarioDAO proprietarioDAO;
     
     @Autowired
-    AnimalDAO animalDAO;
+    private ServletContext servletContext;
     
     @Autowired
-    ProntuarioDAO prontuarioDAO;
+    private AnimalDAO animalDAO;
+    
+    @Autowired
+    private ProntuarioDAO prontuarioDAO;
     
     private static final Logger LOGGER = Logger.getLogger(ProprietarioController.class);
     
-    static List<Pais> paises;
+    private static List<Pais> paises;
     
-    static Profissao profissao;
-    {
-        try{
-            Path paisesJson = Paths.get(System.getenv("catalina_base"), "vetwebFiles", "paises.json");
-            Path profissoesJson = Paths.get(System.getenv("catalina_base"), "vetwebFiles", "profissoes.json");
-            ObjectMapper objectMapper = new ObjectMapper();
-            paises = objectMapper.readValue(Files.newInputStream(paisesJson, StandardOpenOption.READ), new TypeReference<List<Pais>>() {});
-            profissao = objectMapper.readValue(Files.newInputStream(profissoesJson, StandardOpenOption.READ), Profissao.class);
-            LOGGER.info(paises);
-            LOGGER.info(profissao.getProfissoes());
-        } catch(IOException exception){
-            LOGGER.error(exception);
-        }
+    private static Profissao profissao;
+    
+    @PostConstruct
+    public void readFiles() {
+    	try{
+    		Path paisesJson = Paths.get(servletContext.getContextPath(), "paises.json");
+    		Path profissoesJson = Paths.get(servletContext.getRealPath("vetwebFiles"), "profissoes.json");
+    		ObjectMapper objectMapper = new ObjectMapper();
+    		paises = objectMapper.readValue(Files.newInputStream(paisesJson, StandardOpenOption.READ), new TypeReference<List<Pais>>() {});
+    		profissao = objectMapper.readValue(Files.newInputStream(profissoesJson, StandardOpenOption.READ), Profissao.class);
+    		LOGGER.info(paises);
+    		LOGGER.info(profissao.getProfissoes());
+    	} catch(IOException exception){
+    		LOGGER.error(exception);
+    	}
     }
     
     @RequestMapping("/cadastro")
-    public ModelAndView formCadastro(Proprietario proprietario){
+    public ModelAndView form(Proprietario proprietario){
         ModelAndView modelAndView = new ModelAndView("proprietario/cadastroProprietario");
         modelAndView.addObject("paises", paises);
         modelAndView.addObject("profissoes", profissao.getProfissoes());
@@ -95,7 +102,7 @@ public class ProprietarioController {
     public ModelAndView cadastrar(@Valid @ModelAttribute("proprietario") Proprietario proprietario, BindingResult bindingResult){
         ModelAndView modelAndView = new ModelAndView("redirect:listar");
         if(bindingResult.hasErrors()){
-            return formCadastro(proprietario);
+            return form(proprietario);
         }
         try{
             LOGGER.info("Proprietario" + proprietario);

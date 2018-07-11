@@ -8,7 +8,7 @@ var ajaxService = {
 		var dataAtendimento = $('#dataAtendimento');
 			$.ajax({
 			    type: 'GET',
-			    url: '/VetWeb/prontuario/editarAtendimento/' + atendimentoId,
+			    url: '/vetweb/prontuario/editarAtendimento/' + atendimentoId,
 			    contentType: 'text/html',
 			    success: function (data, textStatus, jqXHR) {
 			    	var formAtendimento = $('#formAtendimento');
@@ -36,7 +36,7 @@ var ajaxService = {
 		var select = $("select[id='vacinas']");
 		$.ajax({
 		    type: 'GET',
-		    url: '/VetWeb/prontuario/editarProntuarioVacina/' + vacinaId,
+		    url: '/vetweb/prontuario/editarProntuarioVacina/' + vacinaId,
 		    contentType: 'text/html',
 		    success: function (data, textStatus, jqXHR) {
 		    	inputVacinaId.val(data.prontuarioVacinaId);
@@ -63,7 +63,7 @@ var ajaxService = {
 		var inclusaoPatologia = $('#inclusaoPatologia');
 		$.ajax({
 		    type: 'GET',
-		    url: '/VetWeb/prontuario/editarProntuarioPatologia/' + prontuarioPatologiaId,
+		    url: '/vetweb/prontuario/editarProntuarioPatologia/' + prontuarioPatologiaId,
 		    contentType: 'text/html',
 		    success: function (data, textStatus, jqXHR) {
 		    	inputProntuarioPatologiaId.val(data.prontuarioPatologiaId);
@@ -87,7 +87,7 @@ var ajaxService = {
 		
 		$.ajax({
 		    type: 'GET',
-		    url: '/VetWeb/prontuario/atualizaStatusPagoAtendimento/' + atendimentoId,
+		    url: '/vetweb/prontuario/atualizaStatusPagoAtendimento/' + atendimentoId,
 		    contentType: 'text/html',
 		    success: function (data, textStatus, jqXHR) {
 		    	alert('STATUS DE PAGAMENTO DO ATENDIMENTO ALTERADO.	');
@@ -103,7 +103,7 @@ var ajaxService = {
 		
 		$.ajax({
 		    type: 'GET',
-		    url: '/VetWeb/prontuario/atualizaStatusPagoVacina/' + prontuarioVacinaId,
+		    url: '/vetweb/prontuario/atualizaStatusPagoVacina/' + prontuarioVacinaId,
 		    contentType: 'text/html',
 		    success: function (data, textStatus, jqXHR) {
 		    	alert('STATUS DE PAGAMENTO DA VACINA ALTERADO.	');
@@ -120,7 +120,7 @@ var ajaxService = {
 	    var ta = $('#tipoDeAtendimento').val();
 	    $.ajax({
 	        type: 'GET',
-	        url: '/VetWeb/prontuario/modeloPorTipoDeAtendimento/' + ta,
+	        url: '/vetweb/prontuario/modeloPorTipoDeAtendimento/' + ta,
 	        contentType: 'text/html',
 	        success: function (data, textStatus, jqXHR) {
 	            tinymce.get('preenchimentoModeloAtendimento').setContent(data);
@@ -137,7 +137,7 @@ var ajaxService = {
         var esp = $('#especies').val();
         $.ajax({
             type: 'GET',
-            url: '/VetWeb/animais/racasPorEspecie/' + esp,
+            url: '/vetweb/animais/racasPorEspecie/' + esp,
             contentType: 'application/json',
             success: function (data, textStatus, jqXHR) {
                 if (data.length === 0) {

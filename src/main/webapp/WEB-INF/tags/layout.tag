@@ -48,12 +48,12 @@
 	                    <span class="icon-bar"></span>
 	                    <span class="icon-bar"></span>
 	                </button>
-	                <a class="navbar-brand" href="/VetWeb/">
+	                <a class="navbar-brand" href="/vetweb/">
 	                    <img src="<c:url value="/resources/images/Dog_Paw_Print.png"></c:url>" alt="" height="40" width="40"/>
 	                </a>
 	            </div>
 	            <span class="logout-spn">
-	                <a href="/VetWeb/logout" style="color: #fff;">Logout</a>
+	                <a href="/vetweb/logout" style="color: #fff;">Logout</a>
 	            </span>
 	        </div>
 	    </div>
