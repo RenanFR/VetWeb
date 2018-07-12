@@ -71,7 +71,6 @@ public class ProprietarioController {
 			paises = objectMapper.readValue(paisesResource.getInputStream(), typeFactory.constructCollectionType(List.class, Pais.class));
     		LOGGER.info(paises);
     		LOGGER.info(profissao.getProfissoes());
-    		LOGGER.info(System.getProperty("jboss.home.dir"));
     	} catch(IOException exception){
     		LOGGER.error(exception);
     	}
