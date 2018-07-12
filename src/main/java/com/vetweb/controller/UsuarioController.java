@@ -23,7 +23,7 @@ public class UsuarioController {
     private UsuarioDAO usuarioDAO;
     
     @RequestMapping("/cadastro")
-    public String frmCadastro(){
+    public String formCadastro(){
         return "login/cadastroUsuario";
     }
     
