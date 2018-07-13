@@ -2,28 +2,38 @@ package com.vetweb.controller.rest;
 //@author renan.rodrigues@metasix.com.br
 
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.vetweb.dao.AnimalDAO;
 import com.vetweb.dao.AtendimentoDAO;
 import com.vetweb.dao.ProntuarioDAO;
 import com.vetweb.model.Atendimento;
 import com.vetweb.model.ProntuarioPatologia;
 import com.vetweb.model.ProntuarioVacina;
+import com.vetweb.model.Raca;
 
 @RestController
 @Transactional
-@RequestMapping("/prontuario")
-public class ProntuarioRestController {
+@RequestMapping("/ajax/prontuario")
+public class AjaxController {
 	
     @Autowired
     private AtendimentoDAO atendimentoDAO;
     
     @Autowired
     private ProntuarioDAO prontuarioDAO;
+    
+    @Autowired
+    private AnimalDAO animalDAO;
     
     @RequestMapping(value = "/editarAtendimento/{atendimentoId}", method = RequestMethod.GET)
     public Atendimento atendimentoParaEdicao(@PathVariable("atendimentoId") final Long atendimentoId) {
@@ -57,5 +67,10 @@ public class ProntuarioRestController {
     	vacina.setPago(!vacina.isPago());
     	return vacina.isPago();    	
     }
+    
+    @RequestMapping(value = "/racasPorEspecie/{especie}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<Raca> racasPorEspecie(@PathVariable("especie")String especie){
+        return animalDAO.racasPorEspecie(especie);
+    }    
     
 }

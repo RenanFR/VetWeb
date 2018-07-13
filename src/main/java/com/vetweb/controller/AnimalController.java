@@ -2,14 +2,10 @@ package com.vetweb.controller;
 // @author renan.rodrigues@metasix.com.br
 
 
-import java.util.List;
-
 import javax.validation.Valid;
 
 import org.apache.log4j.Logger;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
@@ -18,7 +14,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -63,18 +58,13 @@ public class AnimalController {
     }
     
     @RequestMapping(value = "/cadastro", method = RequestMethod.GET)
-    public synchronized ModelAndView formCadastro(Animal animal, @RequestParam("desabilitaTrocaProprietario") final boolean desabilitaTrocaProprietario) {//Envia o modelAttribute ao form
+    public synchronized ModelAndView form(Animal animal, @RequestParam("desabilitaTrocaProprietario") final boolean desabilitaTrocaProprietario) {//Envia o modelAttribute ao form
         ModelAndView modelAndView = new ModelAndView("animal/cadastroAnimal");
         modelAndView.addObject("proprietarios", proprietarioDAO.listar());
         modelAndView.addObject("especies", animalDAO.especies());
         modelAndView.addObject("pelagens", animalDAO.pelagens());
         modelAndView.addObject("desabilitaTrocaProprietario", desabilitaTrocaProprietario);
         return modelAndView;
-    }
-    
-    @RequestMapping(value = "/racasPorEspecie/{especie}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public @ResponseBody List<Raca> racasPorEspecie(@PathVariable("especie")String especie){
-        return animalDAO.racasPorEspecie(especie);
     }
     
     @RequestMapping(value = "/cadastrar", method = RequestMethod.POST)
@@ -85,7 +75,7 @@ public class AnimalController {
         ModelAndView modelAndView = new ModelAndView("forward:/prontuario/gerarProntuario");
         if (bindingResult.hasErrors()) {
             LOGGER.error(bindingResult.getAllErrors());
-            return formCadastro(animal, true);
+            return form(animal, true);
         }
         try {
             Proprietario prop = proprietarioDAO.consultarPorId(animal.getProprietario().getPessoaId());
