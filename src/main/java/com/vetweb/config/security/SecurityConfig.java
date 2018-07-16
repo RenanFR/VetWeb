@@ -35,6 +35,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(SystemURL.USUARIOS).hasRole("admin")
                 .antMatchers(SystemURL.PRONTUARIO).hasRole("admin")
                 .antMatchers("/endpoint/auth").permitAll()
+                .antMatchers("/integration/mappings").permitAll()
                 .anyRequest().authenticated() 
                 .and().formLogin().loginPage("/usuarios/login")
                 .permitAll()

@@ -14,9 +14,11 @@ public class SystemURL {
 	public static final String ANIMAIS = "/animais/**";
 	
 	public static final String CONFIG = "/config/**";
+	
+	public static final String INTEGRATION = "/integration/mappings";
 
 	public static List<String> all() {
-		return Arrays.asList(CLIENTES, USUARIOS, PRONTUARIO, ANIMAIS, CONFIG);
+		return Arrays.asList(CLIENTES, USUARIOS, PRONTUARIO, ANIMAIS, CONFIG, INTEGRATION);
 	}
 
 }
