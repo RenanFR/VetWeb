@@ -4,18 +4,21 @@
     Author     : 11151504898
 --%>
 <%@ taglib prefix="vetweb" tagdir="/WEB-INF/tags"%>
-<%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%><!--   Form c/ utilidades do spring    -->
-<%@ taglib uri="http://www.springframework.org/security/tags" prefix="security" %><!--   Adc. token p/ proteção contra csrf -->
-<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%><!--  tags úteis do spring framework   -->
+<%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
+<%@ taglib uri="http://www.springframework.org/security/tags" prefix="security" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 
 <vetweb:layout title="Cadastro Proprietario">
+
     <jsp:attribute name="js">
-        <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/ajaxService.js"></script>
+        <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/app/ajaxService.js"></script>
     </jsp:attribute>
+    
     <jsp:attribute name="mascaras">   
-        <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/mascaras.js"></script>
+        <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/app/mascaras.js"></script>
     </jsp:attribute>
-    <jsp:body><!--  Substituí o jsp:doBody no layout. Deve vir por último   -->
+    
+    <jsp:body>
         <form:form servletRelativeAction="/clientes/cadastrar" method="POST" modelAttribute="proprietario">
             <table class="table table-responsive" id="detalhesProprietario">
                 <caption><spring:message code="cliente"></spring:message> ${proprietario.nome}   /   <spring:message code="dadosPessoais"></spring:message></caption>
@@ -158,5 +161,6 @@
             </table>                                          
             <input type="submit" value="submit"  />            
         </form:form> 
+        
     </jsp:body>
 </vetweb:layout>

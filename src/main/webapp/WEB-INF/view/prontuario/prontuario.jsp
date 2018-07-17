@@ -16,7 +16,7 @@
     
         <script src="https://cloud.tinymce.com/stable/tinymce.min.js?apiKey=2i80p03koooieys6i5h5yz1n9d4uaxrwt1iaoy9938bmcahs"></script>          
         <script>tinymce.init({ selector:'#preenchimentoModeloAtendimento' });</script>        
-        <script src="<c:url value="/resources/js/ajaxService.js"></c:url>" type="text/javascript"></script>
+        <script src="<c:url value="/resources/js/app/ajaxService.js"></c:url>" type="text/javascript"></script>
         <script>
             $(document).ready(function(){
                $('#historicos').dataTable();

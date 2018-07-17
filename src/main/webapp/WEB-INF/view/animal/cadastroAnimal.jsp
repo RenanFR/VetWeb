@@ -11,7 +11,7 @@
 
 <vetweb:layout title="cadastroAnimal">
     <jsp:attribute name="script">
-        <script src="<c:url value="/resources/js/ajaxService.js"></c:url>" type="text/javascript"></script>
+        <script src="<c:url value="/resources/js/app/ajaxService.js"></c:url>" type="text/javascript"></script>
         <script>
         	$(document).ready(ajaxService.buscaRacasPorEspecie());
         </script>

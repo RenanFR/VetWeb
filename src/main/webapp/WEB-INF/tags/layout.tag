@@ -137,8 +137,14 @@
 	    <jsp:invoke fragment="script"></jsp:invoke>
 	    
 	    <script src="<c:url value="/resources/js/bootstrap/bootstrap.min.js"></c:url>" type="text/javascript"></script>
+	    
 	    <script src="<c:url value="/resources/js/custom.js"></c:url>" type="text/javascript"></script>
+	    
 	    <script src="<c:url value="/resources/js/jquery/jquery.maskedinput.js"></c:url>" type="text/javascript"></script>
+	    
+	    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+	    
+	    <script type="text/javascript" src="<c:url value="/resources/js/app/websocket.js"></c:url>"></script>
 	    
 	    <jsp:invoke fragment="mascaras"></jsp:invoke>
 	    
