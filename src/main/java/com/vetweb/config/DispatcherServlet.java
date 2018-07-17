@@ -6,6 +6,8 @@ import javax.servlet.Filter;
 import com.vetweb.config.security.SecurityConfig;
 
 import javax.servlet.MultipartConfigElement;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
 import javax.servlet.ServletRegistration.Dynamic;
 
 import org.springframework.orm.jpa.support.OpenEntityManagerInViewFilter;
@@ -17,7 +19,7 @@ public class DispatcherServlet extends AbstractAnnotationConfigDispatcherServlet
 
     @Override
     protected Class<?>[] getRootConfigClasses() {
-        return new Class[]{SecurityConfig.class, AppWebConfiguration.class, ConfigJPA.class};
+        return new Class[]{SecurityConfig.class, AppWebConfiguration.class, ConfigJPA.class, TestDataSource.class};
     }
 
     @Override
@@ -44,6 +46,12 @@ public class DispatcherServlet extends AbstractAnnotationConfigDispatcherServlet
     @Override
     protected void customizeRegistration(Dynamic registration) {
     	registration.setMultipartConfig(new MultipartConfigElement(""));
+    }
+    
+    @Override
+    public void onStartup(ServletContext servletContext) throws ServletException {
+    	super.onStartup(servletContext);
+    	servletContext.setInitParameter("spring.profiles.active", "production");
     }
     
 }
