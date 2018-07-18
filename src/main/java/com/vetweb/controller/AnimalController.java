@@ -58,7 +58,7 @@ public class AnimalController {
     }
     
     @RequestMapping(value = "/cadastro", method = RequestMethod.GET)
-    public synchronized ModelAndView form(Animal animal, @RequestParam("desabilitaTrocaProprietario") final boolean desabilitaTrocaProprietario) {//Envia o modelAttribute ao form
+    public synchronized ModelAndView form(Animal animal, @RequestParam("desabilitaTrocaProprietario") final boolean desabilitaTrocaProprietario) {
         ModelAndView modelAndView = new ModelAndView("animal/cadastroAnimal");
         modelAndView.addObject("proprietarios", proprietarioDAO.listar());
         modelAndView.addObject("especies", animalDAO.especies());
@@ -94,7 +94,7 @@ public class AnimalController {
     }
     
     @RequestMapping(value = "/remover/{animalId}")
-    public ModelAndView remover(@PathVariable("animalId") long animalId) {//${animal.animalId}
+    public ModelAndView remover(@PathVariable("animalId") long animalId) {
         ModelAndView modelAndView = new ModelAndView("redirect:/animais/listar");
         try {
             LOGGER.info(("Eliminando prontuário do animal " + animalDAO.consultarPorId(animalId).getNome()).toUpperCase());

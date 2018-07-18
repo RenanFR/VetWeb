@@ -192,6 +192,7 @@ public class ProntuarioController {
         return new ModelAndView("redirect:prontuarioDoAnimal/" + prontuario.getAnimal().getAnimalId());
     }
 
+	@SuppressWarnings("static-access")
 	private void notificaCliente(ElementoProntuario elementoProntuario, Prontuario prontuario) {
 		emailService.enviar(prontuario.getAnimal().getProprietario(),
         		"Foi feita uma nova inclusao de " + elementoProntuario
@@ -282,7 +283,8 @@ public class ProntuarioController {
 		return modelAndView;
     }
     
-    private void adicionarListasAoProntuario(ModelAndView viewProntuario) {
+    @SuppressWarnings("rawtypes")
+	private void adicionarListasAoProntuario(ModelAndView viewProntuario) {
     	Map<String, List> listasProntuario = new HashMap<>();
     	listasProntuario.put("tiposDeAtendimento", prontuarioDAO.tiposDeAtendimento());
     	LOGGER.info("ADICIONANDO LISTA DE SERVIÇOS P/ INCLUSÃO DE ATENDIMENTOS NO PRONTUÁRIO.");

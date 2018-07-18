@@ -1,8 +1,8 @@
-package com.vetweb.dao.auth;
+package com.vetweb.service;
 //@author renan.rodrigues@metasix.com.br
 
-import java.util.List;
 
+import java.util.List;
 import com.vetweb.model.auth.Usuario;
 
 import javax.persistence.EntityManager;
@@ -14,7 +14,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class UsuarioDAOImpl implements UserDetailsService {
+public class UsuarioService implements UserDetailsService {
 	
     @PersistenceContext
     private EntityManager entityManager;
