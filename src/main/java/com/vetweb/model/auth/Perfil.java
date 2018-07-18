@@ -1,31 +1,24 @@
 package com.vetweb.model.auth;
 
-//@author renan.rodrigues@metasix.com.br
-
-import javax.persistence.Id;
-import javax.persistence.ManyToMany;
-
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-
 import org.springframework.security.core.GrantedAuthority;
 
-@Entity
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class Perfil implements GrantedAuthority {
 	
 	private static final long serialVersionUID = 1L;
 	
-	@Id
+	@JsonProperty("descricao")
     private String descricaoPerfil;
 	
-	@ManyToMany(fetch = FetchType.LAZY)
+	@JsonProperty("permissoes")
 	private Set<Permissao> permissoes = new HashSet<>();
     
 	public Perfil(String descricaoPerfil) {
-		this.descricaoPerfil = descricaoPerfil;
+		this.descricaoPerfil = "ROLE_".concat(descricaoPerfil);
 	}
 	
 	public Perfil() {
@@ -37,7 +30,7 @@ public class Perfil implements GrantedAuthority {
     }
 
     public void setDescricaoPerfil(String descricaoPerfil) {
-        this.descricaoPerfil = descricaoPerfil;
+        this.descricaoPerfil = "ROLE_".concat(descricaoPerfil);
     }
 
 	public Set<Permissao> getPermissoes() {

@@ -2,7 +2,6 @@ package com.vetweb.client;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
@@ -33,10 +32,6 @@ public class UsersClient {
 		ResponseEntity<List<Usuario>> response = restTemplate
 					.exchange(uriBuilder.toUriString(), HttpMethod.GET, null, 
 					new ParameterizedTypeReference<List<Usuario>>() {});
-		Map<String, Object> map = restTemplate.getForObject(uriBuilder.toUriString(), Map.class);
-		for (Map.Entry entry : map.entrySet()) {
-			System.out.println(entry);
-		}
 		this.usuariosIntegration = response.getBody();
 		return usuariosIntegration;
 		
