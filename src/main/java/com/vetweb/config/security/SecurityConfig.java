@@ -39,9 +39,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     	ExpressionUrlAuthorizationConfigurer<HttpSecurity>.ExpressionInterceptUrlRegistry auth = http.authorizeRequests();
     	for (Map.Entry<String, List<String>> perm : permissionsWithProfiles.entrySet()) {
     		List<String> profiles = perm.getValue();
-			auth.antMatchers(perm.getKey()).hasAnyRole(profiles.toArray(new String[profiles.size()]));
+//    		auth.antMatchers(perm.getKey()).hasAnyRole(profiles.toArray(new String[profiles.size()]));
     	}
     	auth
+    			.antMatchers("/clientes/**").hasRole("recepcionista")
                 .antMatchers("/endpoint/auth").permitAll()
                 .antMatchers("/integration/mappings").permitAll()
                 .anyRequest().authenticated() 
