@@ -8,7 +8,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring" %>
 
-<vetweb:layout title="patologias">
+<vetweb:layout title="Patologias">
     <jsp:attribute name="js">
         <script>
             $(document).ready(function(){

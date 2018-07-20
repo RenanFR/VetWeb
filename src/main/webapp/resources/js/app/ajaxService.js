@@ -162,10 +162,10 @@ var ajaxService = {
        if(cep !== ''){
            var validacao = /^[0-9]{8}$/;
            if(validacao.test(cep)){
-               $('#rua').val('Carregando');
-               $('#bairro').val('Carregando');
-               $('#cidade').val('Carregando');
-               $('#estado').val('Carregando');
+               $('#rua').val('loading');
+               $('#bairro').val('loading');
+               $('#cidade').val('loading');
+               $('#estado').val('loading');
                $.ajax({
                     url: "https://viacep.com.br/ws/" + cep + "/json/?callback=?",
                     type: 'POST',

@@ -2,7 +2,6 @@ package com.vetweb.model;
 //	@author renan.rodrigues@metasix.com.br
 
 import java.io.Serializable;
-
 import java.time.LocalDate;
 
 import javax.persistence.Entity;
@@ -14,9 +13,6 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Positive;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -35,7 +31,6 @@ public class Animal implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long animalId;
     
-    @NotBlank 
     private String nome;
     
     @DateTimeFormat(pattern = "yyyy-MM-dd")
@@ -45,7 +40,6 @@ public class Animal implements Serializable {
     
     private boolean status;
     
-    @Positive
     private double peso;
     
     @ManyToOne

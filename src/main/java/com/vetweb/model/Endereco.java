@@ -1,13 +1,10 @@
 package com.vetweb.model;
 
+import java.io.Serializable;
+
 //@author renan.rodrigues@metasix.com.br
 
 import javax.persistence.Embeddable;
-
-import java.io.Serializable;
-
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Pattern;
 
 @Embeddable
 
@@ -23,7 +20,6 @@ public class Endereco implements Serializable {
     
     private String estado;
     
-    @NotBlank @Pattern(regexp = "^\\d{5}-\\d{3}$")
     private String cep;
     
     private int numero;

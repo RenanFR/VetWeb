@@ -4,10 +4,10 @@
     Author     : 11151504898
 --%>
 <%@ taglib prefix="vetweb" tagdir="/WEB-INF/tags"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %><!--    Importação JSTL -->
-<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%><!--  tags úteis do spring framework   -->
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 
-<vetweb:layout title="proprietarios">
+<vetweb:layout title="Proprietários">
     <jsp:attribute name="js">
         <script>
             $(document).ready(function(){
@@ -18,13 +18,13 @@
     <jsp:body>
         <button class="btn btn-primary">
             <i class="fa fa-save"></i>
-            <a href="<c:url value="/clientes/cadastro"></c:url>" style="color: white">   <spring:message code="cadastrar"></spring:message></a>
+            <a href="<c:url value="/clientes/cadastro"></c:url>" style="color: white">   <spring:message code="cadastrar"></spring:message>	</a>
         </button>
         <table class="table table-striped table-bordered table-hover" id="proprietarios">
             <thead>
                 <tr>
-                    <th>Nome do Cliente </th>
-                    <th>Animais</th>
+                    <th><spring:message code="proprietario"></spring:message></th>
+                    <th><spring:message code="animais"></spring:message></th>
                 </tr>
             </thead>
             <tbody>

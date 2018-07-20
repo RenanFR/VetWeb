@@ -1,9 +1,11 @@
 package com.vetweb.model;
 
+import java.io.Serializable;
+
 //@author renan.rodrigues@metasix.com.br
 
 import java.time.LocalDate;
-import java.io.Serializable;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -11,9 +13,7 @@ import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.Table;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Past;
-import org.hibernate.validator.constraints.br.CPF;
+
 import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
@@ -29,13 +29,10 @@ public class Pessoa implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long pessoaId;
     
-    @NotBlank
     private String nome;
     
-    @NotBlank
     private String rg;
     
-    @NotBlank @CPF
     private String cpf;
     
     private char sexo;
@@ -47,7 +44,7 @@ public class Pessoa implements Serializable {
     
     private String nacionalidade;
     
-    @Past @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate nascimento; 
     
     private Endereco endereco;

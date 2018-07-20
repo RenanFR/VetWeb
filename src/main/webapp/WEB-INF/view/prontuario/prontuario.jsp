@@ -10,7 +10,7 @@
 <%@ taglib prefix="vetweb" tagdir="/WEB-INF/tags"%>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 
-<vetweb:layout title="Prontuario ${prontuario.animal.nome}">
+<vetweb:layout title="Prontuário ${prontuario.animal.nome}">
 
     <jsp:attribute name="js">
     

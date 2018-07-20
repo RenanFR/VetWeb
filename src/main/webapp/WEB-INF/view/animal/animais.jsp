@@ -7,7 +7,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 
-<vetweb:layout title="animais">
+<vetweb:layout title="Animais">
     <jsp:attribute name="js">
         <script>
             $(document).ready(function(){
@@ -23,7 +23,7 @@
         <table class="table table-striped table-bordered table-hover" id="animais">
             <thead>
                 <tr>
-                    <th>Animal  </th>
+                    <th><spring:message code="nomeAnimal"></spring:message>  </th>
                 </tr>
             </thead>
             <tbody>
