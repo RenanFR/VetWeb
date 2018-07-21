@@ -17,7 +17,7 @@ import javax.persistence.Table;
 import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
-@Table(name = "pessoas")
+@Table(name = "tbl_pessoa")
 @Inheritance(strategy = InheritanceType.JOINED)
 public class Pessoa implements Serializable {
 	

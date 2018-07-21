@@ -9,7 +9,7 @@ import javax.persistence.Table;
 
 @SuppressWarnings("serial")
 @Entity
-@Table(name = "modelosDocumento")
+@Table(name = "tbl_modelo_documento")
 public class ModeloDocumento implements Serializable {
 	
     @Id

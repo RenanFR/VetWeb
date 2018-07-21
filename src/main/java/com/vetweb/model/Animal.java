@@ -17,7 +17,7 @@ import javax.persistence.Table;
 import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
-@Table(name = "animais")
+@Table(name = "tbl_animal")
 @NamedQueries({@NamedQuery(name = "animalPorNome", query = "SELECT a FROM Animal a WHERE a.nome = :nomeAnimal"),
                 @NamedQuery(name = "quantidadeAnimais", query = "SELECT COUNT(a) FROM Animal a"),
                 @NamedQuery(name = "consultaGetId", query = "SELECT a FROM Animal a WHERE a.nome = :nomeAnimal"

@@ -15,7 +15,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "tiposDeAtendimento")
+@Table(name = "tbl_tipo_atendimento")
 @NamedQueries({@NamedQuery(name = "tiposDeAtendimentoQuery", query = "SELECT t FROM TipoDeAtendimento t"),
                 @NamedQuery(name = "tipoDeAtendimentoPorNomeQuery", query = "SELECT t FROM TipoDeAtendimento t WHERE t.nome = :nomeTipoAtendimento")})
 public class TipoDeAtendimento implements Serializable {

@@ -9,7 +9,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import org.springframework.format.annotation.DateTimeFormat;
 
-@Entity @Table(name = "estabelecimento")
+@Entity @Table(name = "tbl_clinica")
 public class Clinica implements Serializable {
 	
 	private static final long serialVersionUID = 1L;

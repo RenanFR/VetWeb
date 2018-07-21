@@ -14,6 +14,13 @@
         <caption>Animal ${animal.nome}   <a href="<c:url value="/prontuario/prontuarioDoAnimal/${animal.animalId}"></c:url>"><i class="fa fa-clipboard fa-2x"></i></a></caption>
         <tbody>
             <tr>
+                <th><spring:message code="fotoAnimal"/></th>
+                <td>
+					<img src="${animal.imagem}"
+						height="30%" alt="${animal.imagem}" />                
+				</td>
+            </tr>
+            <tr>
                 <th><spring:message code="nomeAnimal"/></th>
                 <td>${animal.nome}</td>
             </tr>

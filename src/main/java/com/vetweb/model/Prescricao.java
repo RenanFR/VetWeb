@@ -14,11 +14,13 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "prescricoes")
+@Table(name = "tbl_prescricao")
 public class Prescricao implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
@@ -34,6 +36,9 @@ public class Prescricao implements Serializable {
 	private LocalDate tomarAte;
     
     @OneToMany
+    @JoinTable(name = "tbl_prescricao_medicamento", 
+	    joinColumns = {@JoinColumn(name = "prescricaoId", referencedColumnName = "prescricaoId")}, 
+	    inverseJoinColumns = {@JoinColumn(name = "medicamentoId", referencedColumnName = "medicamentoId")})
     private List<Medicamento> medicamentos;
     
     public Prescricao() {

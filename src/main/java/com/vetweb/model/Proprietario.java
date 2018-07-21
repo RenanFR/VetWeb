@@ -15,7 +15,7 @@ import javax.persistence.Table;
 import org.hibernate.annotations.ColumnDefault;
 
 @Entity
-@Table(name = "proprietarios")
+@Table(name = "tbl_cliente")
 @NamedQueries({@NamedQuery(name = "quantidadeClientes", query = "SELECT COUNT(p) FROM Proprietario p"),
 	@NamedQuery(name = "prontuariosAnimaisDoCliente", query = "SELECT p FROM Prontuario p "
                 + "JOIN FETCH p.animal a JOIN FETCH a.proprietario prop WHERE prop.pessoaId = :Id"),

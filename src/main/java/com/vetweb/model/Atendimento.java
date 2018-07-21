@@ -17,7 +17,7 @@ import javax.persistence.Table;
 import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
-@Table(name = "atendimento")
+@Table(name = "tbl_atendimento")
 public class Atendimento implements Serializable, ElementoProntuario {
 	
 	private static final long serialVersionUID = 1L;

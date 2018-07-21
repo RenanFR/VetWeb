@@ -12,7 +12,7 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 
 @Entity
-@Table(name = "vacinas")
+@Table(name = "tbl_vacina")
 public class Vacina implements Serializable, ElementoProntuario {
 
 	private static final long serialVersionUID = 1L;
