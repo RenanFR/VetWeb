@@ -8,9 +8,12 @@ import com.vetweb.model.auth.Perfil;
 import java.util.List;
 import java.util.Map;
 
+import javax.ws.rs.core.Response.Status;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
@@ -38,6 +41,9 @@ public class ProfileClient {
 				.path("/permissions");
 		ResponseEntity<Map<String, List<String>>> response = restTemplate
 				.exchange(uriBuilder.toUriString(), HttpMethod.GET, null, new ParameterizedTypeReference<Map<String, List<String>>>() {});
+		if(response.getStatusCode() == HttpStatus.NOT_FOUND) {
+			throw new RuntimeException("Não foi possível se conectar no módulo de permissões");
+		}
 		return response.getBody();
 		
 	}

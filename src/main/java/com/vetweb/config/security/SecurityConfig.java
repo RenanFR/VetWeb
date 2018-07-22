@@ -37,9 +37,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
     	Map<String, List<String>> permissionsWithProfiles = profileClient.getPermissionsWithProfiles();
     	ExpressionUrlAuthorizationConfigurer<HttpSecurity>.ExpressionInterceptUrlRegistry auth = http.authorizeRequests();
-    	for (Map.Entry<String, List<String>> perm : permissionsWithProfiles.entrySet()) {
-    		List<String> profiles = perm.getValue();
-    		auth.antMatchers(perm.getKey()).hasAnyRole(profiles.toArray(new String[profiles.size()]));
+    	if (permissionsWithProfiles != null) {
+    		for (Map.Entry<String, List<String>> perm : permissionsWithProfiles.entrySet()) {
+    			List<String> profiles = perm.getValue();
+    			auth.antMatchers(perm.getKey()).hasAnyRole(profiles.toArray(new String[profiles.size()]));
+    		}
     	}
     	http.authorizeRequests()
                 .antMatchers("/endpoint/auth").permitAll()

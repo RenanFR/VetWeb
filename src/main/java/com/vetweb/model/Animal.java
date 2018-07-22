@@ -8,6 +8,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -43,15 +44,19 @@ public class Animal implements Serializable {
     private double peso;
     
     @ManyToOne
+    @JoinColumn(name = "pelagemId", referencedColumnName = "pelagemId")
     private Pelagem pelagem;
     
     @ManyToOne
+    @JoinColumn(name = "racaId", referencedColumnName = "racaId")
     private Raca raca;
     
     @ManyToOne
+    @JoinColumn(name = "proprietarioId", referencedColumnName = "pessoaId")
     private Proprietario proprietario;
     
     @OneToOne
+    @JoinColumn(name = "prontuarioid", referencedColumnName = "prontuarioId")
     private Prontuario prontuario;
     
     private String imagem;

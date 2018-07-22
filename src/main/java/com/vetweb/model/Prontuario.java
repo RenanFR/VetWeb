@@ -63,6 +63,7 @@ public class Prontuario implements Serializable {
     private List<ProntuarioPatologia> patologias;
     
     @OneToOne
+    @JoinColumn(name = "animalId", referencedColumnName = "animalId")
     private Animal animal;
 
     public Prontuario() {
