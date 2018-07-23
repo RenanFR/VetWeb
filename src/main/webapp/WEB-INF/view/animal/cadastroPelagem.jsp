@@ -10,7 +10,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring" %>
 
-<vetweb:layout title="cadastroPelagem">
+<vetweb:layout title="Cadastro Pelagem">
     <form:form servletRelativeAction="/animais/addPelagem" method="POST" modelAttribute="pelagem">
         <table class="table table-responsive">
             <caption><spring:message code="cadastroPelagem"></spring:message></caption>

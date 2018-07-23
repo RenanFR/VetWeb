@@ -9,36 +9,38 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
-<vetweb:layout title="cadastroVacina">
+<vetweb:layout title="Cadastro Vacina">
+
     <jsp:attribute name="js">
     </jsp:attribute>
+    
     <jsp:body>
         <form:form servletRelativeAction="/prontuario/addVacina" method="POST" modelAttribute="vacina">
             <table class="table table-responsive">
-                <caption><spring:message code="adcVacina"></spring:message></caption>
+                <caption><spring:message code="adcVacina"/></caption>
                 <tbody>
                     <form:hidden path="vacinaId" id="vacinaId"></form:hidden>
                     <tr>
-                        <th><label for="nome"><spring:message code="nome"></spring:message></label></th>
+                        <th><label for="nome"><spring:message code="nome"/></label></th>
                         <td><form:input path="nome" id="nome"></form:input></td>
                     </tr>
                     <tr>
-                        <th><label for="grupo"><spring:message code="grupo"></spring:message></label></th>
+                        <th><label for="grupo"><spring:message code="grupo"/></label></th>
                         <td><form:input path="grupo" id="grupo"></form:input></td>
                     </tr>
                     <tr>
-                        <th><label for="status"><spring:message code="ativo"></spring:message></label></th>
+                        <th><label for="status"><spring:message code="ativo"/></label></th>
                         <td>
                             <form:radiobutton path="status" value="true"></form:radiobutton>true
                             <form:radiobutton path="status" value="false"></form:radiobutton>false
                         </td>
                     </tr>
                     <tr>
-                        <th><label for="laboratorio"><spring:message code="laboratorio"></spring:message></label></th>
+                        <th><label for="laboratorio"><spring:message code="laboratorio"/></label></th>
                         <td><form:input path="laboratorio" id="laboratorio"></form:input></td>
                     </tr>
                     <tr>
-                        <th><label for="custo"><spring:message code="custo"></spring:message></label></th>
+                        <th><label for="custo"><spring:message code="custo"/></label></th>
                         <td><form:input path="preco" id="custo"></form:input></td>
                     </tr>
                 </tbody>

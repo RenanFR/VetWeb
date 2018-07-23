@@ -1,9 +1,11 @@
 package com.vetweb.scheduled;
 
+import java.time.LocalDate;
+
 //@author renan.rodrigues@metasix.com.br
 
 import java.time.format.DateTimeFormatter;
-import java.time.LocalDate;
+import java.util.List;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
@@ -44,9 +46,9 @@ public class JobsAgendados {
 	
 	private static final long HORA = 3600000;
 	
-    @Scheduled(fixedDelay = HORA)
+    @Scheduled(fixedDelay = MINUTO)
     public void verificacaoClientesEmDebito() {
-    	Set<Proprietario> proprietariosComDebito = proprietarioDAO.getClientesEmDebito(); 
+    	List<Proprietario> proprietariosComDebito = proprietarioDAO.getClientesEmDebito(); 
     	proprietariosComDebito
     		.stream()
     		.filter(prop -> prop.isAtivo())
@@ -71,7 +73,8 @@ public class JobsAgendados {
     		.forEach(ate -> this.notificaRetornoAtendimento(ate));
     }
     
-    private void notificaRetornoAtendimento(Atendimento atendimento) {
+    @SuppressWarnings("static-access")
+	private void notificaRetornoAtendimento(Atendimento atendimento) {
     	Pessoa pessoaDestinatario = prontuarioDAO.buscarProntuarioDoAtendimento(atendimento).getAnimal().getProprietario();
     	StringBuilder mensagemRetorno = new StringBuilder();
     	mensagemRetorno.append("O RETORNO DO ATENDIMENTO "

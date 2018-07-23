@@ -37,7 +37,7 @@ public class Proprietario extends Pessoa {
     @ColumnDefault("true")
     private boolean ativo;
     
-    @OneToMany(mappedBy = "proprietario", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "proprietario", fetch = FetchType.LAZY)
     private List<Animal> animais;
     
     @Column(columnDefinition = "TEXT")

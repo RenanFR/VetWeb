@@ -3,9 +3,6 @@ package com.vetweb.dao;
 //@author renan.rodrigues@metasix.com.br
 
 import java.math.BigDecimal;
-import java.math.BigInteger;
-
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -37,7 +34,8 @@ public class ProprietarioDAO implements IDAO<Proprietario> {
     @Autowired
     private ProntuarioDAO prontuarioDAO;
     
-    private static final Logger LOGGER = Logger.getLogger(ProprietarioDAO.class);
+    @SuppressWarnings("unused")
+	private static final Logger LOGGER = Logger.getLogger(ProprietarioDAO.class);
     
     @Override
     public void salvar(Proprietario proprietario) {
@@ -121,38 +119,18 @@ public class ProprietarioDAO implements IDAO<Proprietario> {
     	totalPendente = new BigDecimal(totalPendenteAtendimentos + totalPendenteVacinas);    
     	return totalPendente;
     }
-    
-    public Set<Proprietario> getClientesEmDebito() {
-    	List<BigInteger> idsProprietariosComDebitoVacina = idsClientesComDebitoVacina();
-    	List<BigInteger> idsProprietariosComDebitoAtendimento = idsClientesComDebitoAtendimento();
-    	Set<Proprietario> proprietariosComDebito = new HashSet<>();
-    	idsProprietariosComDebitoVacina.stream().forEach(prop -> proprietariosComDebito.add(consultarPorId(Long.parseLong(prop.toString()))));
-    	idsProprietariosComDebitoAtendimento.stream().forEach(prop -> proprietariosComDebito.add(consultarPorId(Long.parseLong(prop.toString()))));
-    	return proprietariosComDebito;
-    }
 
-	public List<BigInteger> idsClientesComDebitoAtendimento() {
-		List<Object> resultList = (List<Object>) entityManager.createNativeQuery("select cli.pessoaid from proprietarios cli\n" + 
-    			"join animais a on cli.pessoaid = a.proprietario_pessoaid\n" + 
-    			"join prontuarios p on a.prontuario_prontuarioid = p.prontuarioid\n" + 
-    			"join prontuarios_atendimento ate on ate.prontuario_prontuarioid = p.prontuarioid\n" + 
-    			"join atendimento atend on atend.atendimentoid = ate.atendimentos_atendimentoid\n" + 
-    			"where atend.pago = false;").getResultList();
-		List<BigInteger> idsProprietariosComDebitoAtendimento = new ArrayList<>();
-		for(Object result : resultList) idsProprietariosComDebitoAtendimento.add(new BigInteger(result.toString()));
-		return idsProprietariosComDebitoAtendimento;
-	}
-
-	public List<BigInteger> idsClientesComDebitoVacina() {
-		List<Object> resultList = (List<Object>) entityManager.createNativeQuery("select cli.pessoaid from proprietarios cli\n" + 
-    			"join animais a on cli.pessoaid = a.proprietario_pessoaid\n" + 
-    			"join prontuarios p on a.prontuario_prontuarioid = p.prontuarioid\n" + 
-    			"join prontuarios_prontuariovacina vac on vac.prontuario_prontuarioid = p.prontuarioid\n" + 
-    			"join prontuariovacina prvac on prvac.prontuariovacinaid = vac.vacinas_prontuariovacinaid\n" + 
-    			"where prvac.pago = false;").getResultList();
-		List<BigInteger> idsProprietariosComDebitoVacina = new ArrayList<>();
-		for(Object result : resultList) idsProprietariosComDebitoVacina.add(new BigInteger(result.toString()));		
-		return idsProprietariosComDebitoVacina;
+	public List<Proprietario> getClientesEmDebito() {
+		String query = "SELECT p FROM Proprietario p "
+		+ "JOIN p.animais a "
+		+ "JOIN a.prontuario pr "
+		+ "LEFT JOIN pr.vacinas v "
+		+ "LEFT JOIN pr.atendimentos a "
+		+ "WHERE v.pago = false OR a.pago = false";
+		List<Proprietario> clientesComDebito = entityManager
+												.createQuery(query, Proprietario.class)
+												.getResultList();
+		return clientesComDebito;
 	}
 	
 	public Set<Proprietario> getClientesInativosAdimplentes() {

@@ -22,7 +22,8 @@ public class AnimalDAO implements IDAO<Animal>{
     @PersistenceContext
     private EntityManager entityManager;
     
-    private static final Logger LOGGER = Logger.getLogger(AnimalDAO.class);
+    @SuppressWarnings("unused")
+	private static final Logger LOGGER = Logger.getLogger(AnimalDAO.class);
     
     @Override
     public void salvar(Animal animal) { 
