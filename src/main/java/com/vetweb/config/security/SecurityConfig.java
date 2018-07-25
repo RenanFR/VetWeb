@@ -47,10 +47,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/endpoint/auth").permitAll()
                 .antMatchers("/integration/mappings").permitAll()
                 .anyRequest().authenticated() 
-                .and().formLogin().loginPage("/usuarios/login")
+                .and().formLogin().loginPage("/login")
                 .permitAll()
                 .defaultSuccessUrl("/")
-                .failureUrl("/usuarios/fail")
+                .failureUrl("/fail")
                 .and().csrf()
                 .and().exceptionHandling().accessDeniedPage("/WEB-INF/view/exception/403.jsp")
                 .and().logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout")).permitAll();

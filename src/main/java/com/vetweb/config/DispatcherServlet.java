@@ -19,7 +19,7 @@ public class DispatcherServlet extends AbstractAnnotationConfigDispatcherServlet
 
     @Override
     protected Class<?>[] getRootConfigClasses() {
-        return new Class[]{SecurityConfig.class, AppWebConfiguration.class, ConfigJPA.class, TestDataSource.class};
+        return new Class[]{SecurityConfig.class, AppWebConfiguration.class, ConfigJPA.class, TestDataSource.class, AmazonConfig.class};
     }
 
     @Override

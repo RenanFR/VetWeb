@@ -70,8 +70,6 @@
                 </c:forEach>
             </tbody>
         </table>
-        <span class="label label-danger">
-            ${mensagemErro}
-        </span>        
+                
     </jsp:body>
 </vetweb:layout>

@@ -37,4 +37,14 @@ public class HomeController {
         return modelAndView;
     }
     
+    @RequestMapping("/login")
+    public String login(){
+        return "login/login";
+    }
+    
+    @RequestMapping("/fail")
+    public String failLogin(){
+        return "exception/401";
+    }    
+    
 }

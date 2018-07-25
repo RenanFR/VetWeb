@@ -2,12 +2,11 @@ package com.vetweb.controller;
 // @author renan.rodrigues@metasix.com.br
 
 
-import java.nio.file.Paths;
-
 import javax.validation.Valid;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
@@ -18,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.vetweb.dao.AnimalDAO;
 import com.vetweb.dao.ProntuarioDAO;
@@ -27,9 +25,8 @@ import com.vetweb.model.Animal;
 import com.vetweb.model.Especie;
 import com.vetweb.model.Patologia;
 import com.vetweb.model.Pelagem;
-import com.vetweb.model.Proprietario;
 import com.vetweb.model.Raca;
-import com.vetweb.service.ArquivoService;
+import com.vetweb.service.FileService;
 
 @Controller
 @Transactional
@@ -45,8 +42,8 @@ public class AnimalController {
     @Autowired
     private ProntuarioDAO prontuarioDAO;
     
-    @Autowired
-    private ArquivoService arquivoService;
+    @Autowired @Qualifier("amazon")
+    private FileService arquivoService;
     
     private static final Logger LOGGER = Logger.getLogger(AnimalController.class);
     
@@ -72,17 +69,13 @@ public class AnimalController {
     @RequestMapping(value = "/cadastrar", method = RequestMethod.POST)
     public synchronized ModelAndView cadastrar(@Valid @ModelAttribute("animal") Animal animal,
     		BindingResult bindingResult,
-    		MultipartFile imagemFile,
-    		RedirectAttributes attributes) {
-        ModelAndView modelAndView = new ModelAndView("forward:/prontuario/gerarProntuario");
+    		MultipartFile imagemFile) {
         if (bindingResult.hasErrors()) {
             LOGGER.error(bindingResult.getAllErrors());
             return form(animal, true);
         }
         try {
-            Proprietario prop = proprietarioDAO.consultarPorId(animal.getProprietario().getPessoaId());
-            animal.setProprietario(prop);
-            String caminhoImagem = arquivoService.escreverArquivo("vetwebFiles/imagens", imagemFile); 
+            String caminhoImagem = arquivoService.salvarArquivo(imagemFile); 
             animal.setImagem(caminhoImagem);
             animalDAO.salvar(animal);
             LOGGER.info(("Animal " + animal.getNome() + " inserido com sucesso na base.").toUpperCase());
@@ -91,13 +84,14 @@ public class AnimalController {
                     exception);
         }
         LOGGER.info(("Animal " + animal + " sendo encaminhado para criação do prontuário.").toUpperCase());
-        attributes.addFlashAttribute("animal", animal);
+        ModelAndView modelAndView = new ModelAndView("forward:/prontuario/gerarProntuario?animalId=" + animal.getAnimalId());
         return modelAndView;
     }
     
     @RequestMapping(value = "/remover/{animalId}")
     public ModelAndView remover(@PathVariable("animalId") long animalId) {
         ModelAndView modelAndView = new ModelAndView("redirect:/animais/listar");
+        modelDML = "Animal";
         try {
             LOGGER.info(("Eliminando prontuário do animal " + animalDAO.consultarPorId(animalId).getNome()).toUpperCase());
             prontuarioDAO.remover(prontuarioDAO.prontuarioPorAnimal(animalId));
@@ -157,7 +151,6 @@ public class AnimalController {
         	LOGGER.info(("Animal " + nomeAnimal + " encontrado na base de dados. ").toUpperCase());
             Animal animal = animalDAO.consultarPorNome(nomeAnimal.trim());
 			modelAndView.addObject("animal", animal);
-            modelAndView.addObject("imagemAnimal", Paths.get(System.getProperty("jboss.home.dir"), animal.getImagem()).toString());
         } catch (RuntimeException exception){LOGGER.error(("Animal " + nomeAnimal + " não encontrado na base de dados. ").toUpperCase());}
         return modelAndView;
     }

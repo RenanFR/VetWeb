@@ -26,8 +26,10 @@
         <div class="main-wthree">
                 <h2>${tipoException}</h2>
                 <p>
-                    <span class="sub-agileinfo">Oops! </span>
-                    <jsp:doBody></jsp:doBody>
+                    <span class="sub-agileinfo">
+                    	Oops! 
+	                    <jsp:doBody></jsp:doBody>
+                    </span>
                 </p>
         </div>
         <div class="copyright-w3-agile">

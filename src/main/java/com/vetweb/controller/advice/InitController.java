@@ -58,7 +58,7 @@ public class InitController {
     
     @InitBinder
     public void initBinder(HttpServletRequest request, ServletRequestDataBinder binder) {
-        LOGGER.info("initBinder".toUpperCase());
+    	LOGGER.info("EXECUTANDO MÉTODO @InitBinder");
         configDAO.salvarClinica(new Clinica(servletContext.getInitParameter("razaoSocial"),
                 LocalDate.parse(servletContext.getInitParameter("fundadaEm"), DateTimeFormatter.ofPattern("dd/MM/yyyy")),
                 servletContext.getInitParameter("cnpj"), servletContext.getInitParameter("proprietario")));

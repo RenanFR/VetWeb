@@ -30,7 +30,7 @@
                     <form:hidden path="animalId" id="animalId"></form:hidden>
                         <tbody>
                         	<tr>
-                        		<td><label for="imagem"><spring:message code="imagem"></spring:message></label></td>
+                        		<td><label for="imagem"><spring:message code="imagem"/></label></td>
                         		<td><input type="file" name="imagemFile"	/></td>
                         	</tr>
                             <tr>
@@ -81,9 +81,8 @@
                             </tr>
                             <tr>
                                 <th><label for="proprietario"><spring:message code="proprietario"/></label></th>
-                                <td><form:select path="proprietario" items="${proprietarios}" disabled="${desabilitaTrocaProprietario}"></form:select></td>
+                                <td><form:select path="proprietario" items="${proprietarios}" id="proprietario"/></td>
                             </tr>
-                            <form:hidden path="proprietario.pessoaId" id="proprietario"></form:hidden>
                         </tbody>
                 </table>
             </fieldset>

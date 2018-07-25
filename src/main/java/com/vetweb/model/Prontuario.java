@@ -1,9 +1,10 @@
 package com.vetweb.model;
 
+import java.io.Serializable;
+
 //@author renan.rodrigues@metasix.com.br
 
 import java.util.List;
-import java.io.Serializable;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -15,6 +16,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+
 
 @Entity
 @Table(name = "tbl_prontuario")

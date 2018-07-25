@@ -66,5 +66,6 @@
                 </c:forEach>
             </tbody>
         </table>
+        
     </jsp:body>
 </vetweb:layout>

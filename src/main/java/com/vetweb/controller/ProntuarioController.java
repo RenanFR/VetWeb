@@ -61,6 +61,8 @@ public class ProntuarioController {
     @Autowired
     private EmailService emailService;
     
+    public static String modelDML = null;
+    
     private static final Logger LOGGER = Logger.getLogger(ProntuarioController.class);
     
     @RequestMapping(value = "/cadastroTipoAtendimento", method = RequestMethod.GET)
@@ -138,20 +140,20 @@ public class ProntuarioController {
     
     @RequestMapping(value = "/removerVacina/{vacinaId}", method = RequestMethod.GET)
     public ModelAndView delVacina(@PathVariable("vacinaId")Long vacinaId) {
+    	modelDML = "Vacina";
         ModelAndView modelAndView = new ModelAndView("redirect:/prontuario/vacinas");
         vacinaDAO.remover(vacinaDAO.consultarPorId(vacinaId));
         return modelAndView;
     }
     
     @RequestMapping(value = "/gerarProntuario", method = RequestMethod.POST)
-    public ModelAndView criarProntuarioDoAnimal(@ModelAttribute("animal") final Animal animal) {
-        LOGGER.info("criarProntuarioDoAnimal".toUpperCase());
-        Animal animal1 = animalDAO.consultar(animal);
-        LOGGER.info(("Sendo criado prontuário do animal " + animal1).toUpperCase());
-        Prontuario prontuario = new Prontuario(animal1);
+    public ModelAndView criarProntuarioDoAnimal(@RequestParam("animalId") Long animalId) {
+		Animal animal = animalDAO.consultarPorId(animalId);
+        LOGGER.info(("SENDO CRIADO PRONTUÁRIO DO ANIMAL " + animal).toUpperCase());
+        Prontuario prontuario = new Prontuario(animal);
         prontuarioDAO.salvar(prontuario);
-        animal1.setProntuario(prontuario);
-        ModelAndView modelAndView = new ModelAndView("redirect:/prontuario/prontuarioDoAnimal/" + animal1.getAnimalId());
+        animal.setProntuario(prontuario);
+        ModelAndView modelAndView = new ModelAndView("redirect:/prontuario/prontuarioDoAnimal/" + animal.getAnimalId());
         return modelAndView;
     }
     

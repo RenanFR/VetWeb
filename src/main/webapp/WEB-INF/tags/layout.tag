@@ -106,8 +106,9 @@
 	                    <h2>${title}</h2>   
 	                </div>
 	            </div>              
-	            <!-- /. ROW  -->
+
 	            <hr />
+	            
 	            <div class="row">
 	                <div class="col-lg-12">
 	                    <div class="alert alert-info">
@@ -115,9 +116,19 @@
 	                    </div>
 	                </div>
 	            </div>
+	            
 	            <div class="container-fluid">
-	                <jsp:doBody />                    
+	            
+	                <jsp:doBody />
+	                
+			        <c:if test="${mensagemErro != null}">
+				        <span class="label label-danger">
+				            ${mensagemErro}
+				        </span>
+			        </c:if>
+			        	                                    
 	            </div>
+	            
 	        </div>
 	    </div>
 	    <div class="footer">

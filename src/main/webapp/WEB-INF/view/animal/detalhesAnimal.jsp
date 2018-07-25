@@ -8,6 +8,7 @@
 <%@ taglib prefix="vetweb" tagdir="/WEB-INF/tags"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 
 <vetweb:layout title="Animal ${animal.nome}">
     <table class="table table-responsive" id="detalhesAnimal">
@@ -16,8 +17,14 @@
             <tr>
                 <th><spring:message code="fotoAnimal"/></th>
                 <td>
-					<img src="${imagemAnimal}"
-						height="30%" alt="${animal.imagem}" />                
+				    <c:if test="${fn:containsIgnoreCase(animal.imagem, 'imagens')}">
+						<img src="${pageContext.request.contextPath}${animal.imagem}"
+							height="30%" alt="${animal.imagem}" />                
+				    </c:if>
+				    <c:if test="${not fn:containsIgnoreCase(animal.imagem, 'imagens')}">
+						<img src="${animal.imagem}"
+							height="30%" alt="${animal.imagem}" />                
+				    </c:if>
 				</td>
             </tr>
             <tr>
