@@ -16,7 +16,7 @@
             <tr>
                 <th><spring:message code="fotoAnimal"/></th>
                 <td>
-					<img src="${animal.imagem}"
+					<img src="${imagemAnimal}"
 						height="30%" alt="${animal.imagem}" />                
 				</td>
             </tr>

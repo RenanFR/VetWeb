@@ -2,6 +2,8 @@ package com.vetweb.controller;
 // @author renan.rodrigues@metasix.com.br
 
 
+import java.nio.file.Paths;
+
 import javax.validation.Valid;
 
 import org.apache.log4j.Logger;
@@ -152,8 +154,10 @@ public class AnimalController {
     public ModelAndView detalhesAnimal(@PathVariable("nomeAnimal") String nomeAnimal) {
         ModelAndView modelAndView = new ModelAndView("animal/detalhesAnimal");
         try{
-            modelAndView.addObject("animal", animalDAO.consultarPorNome(nomeAnimal.trim()));
-            LOGGER.info(("Animal " + nomeAnimal + " encontrado na base de dados. ").toUpperCase());
+        	LOGGER.info(("Animal " + nomeAnimal + " encontrado na base de dados. ").toUpperCase());
+            Animal animal = animalDAO.consultarPorNome(nomeAnimal.trim());
+			modelAndView.addObject("animal", animal);
+            modelAndView.addObject("imagemAnimal", Paths.get(System.getProperty("jboss.home.dir"), animal.getImagem()).toString());
         } catch (RuntimeException exception){LOGGER.error(("Animal " + nomeAnimal + " não encontrado na base de dados. ").toUpperCase());}
         return modelAndView;
     }

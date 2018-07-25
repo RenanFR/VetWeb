@@ -1,24 +1,19 @@
 package com.vetweb.model.pojo;
 
-//@author renan.rodrigues@metasix.com.br
-
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-
 public class ElementoHistorico {
 	
 	private Long elementohistoricoId;
 	
 	private String descricao;
 	
-	private LocalDate data;
+	private String data;
 	
 	private TipoElementoHistorico tipo;
 
 	public ElementoHistorico() {
 	}
 
-	public ElementoHistorico(Long elementohistoricoId, String descricao, LocalDate data, TipoElementoHistorico tipo) {
+	public ElementoHistorico(Long elementohistoricoId, String descricao, String data, TipoElementoHistorico tipo) {
 		this.elementohistoricoId = elementohistoricoId;
 		this.descricao = descricao;
 		this.data = data;
@@ -41,11 +36,11 @@ public class ElementoHistorico {
 		this.descricao = descricao;
 	}
 
-	public LocalDate getData() {
+	public String getData() {
 		return data;
 	}
 
-	public void setData(LocalDate data) {
+	public void setData(String data) {
 		this.data = data;
 	}
 

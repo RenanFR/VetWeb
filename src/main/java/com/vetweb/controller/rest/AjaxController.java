@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.vetweb.dao.AnimalDAO;
@@ -69,6 +70,11 @@ public class AjaxController {
     @RequestMapping(value = "/racasPorEspecie/{especie}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public List<Raca> racasPorEspecie(@PathVariable("especie")String especie){
         return animalDAO.racasPorEspecie(especie);
+    }    
+    
+    @RequestMapping(value = "/modeloPorTipoDeAtendimento/{tipoDeAtendimento}", method = RequestMethod.GET)
+    public @ResponseBody String modeloDoTipoDeAtendimento(@PathVariable("tipoDeAtendimento") String nomeTipoAtendimento) {
+        return prontuarioDAO.modeloDoTipoAtendimento(nomeTipoAtendimento);
     }    
     
 }

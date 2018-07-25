@@ -19,19 +19,60 @@
         <script src="<c:url value="/resources/js/app/ajaxService.js"></c:url>" type="text/javascript"></script>
         <script>
             $(document).ready(function(){
-               $('#historicos').dataTable();
+               $('#historicos').dataTable({
+            	    language: {
+            			"sEmptyTable": "Nenhum registro encontrado",
+            			"sInfo": "Mostrando de _START_ até _END_ de _TOTAL_ registros",
+            			"sInfoEmpty": "Mostrando 0 até 0 de 0 registros",
+            			"sInfoFiltered": "(Filtrados de _MAX_ registros)",
+            			"sInfoPostFix": "",
+            			"sInfoThousands": ".",
+            			"sLengthMenu": "_MENU_ resultados por página",
+            			"sLoadingRecords": "Carregando...",
+            			"sProcessing": "Processando...",
+            			"sZeroRecords": "Nenhum registro encontrado",
+            			"sSearch": "Pesquisar",
+            			"oPaginate": {
+            				"sNext": "Próximo",
+            				"sPrevious": "Anterior",
+            				"sFirst": "Primeiro",
+            				"sLast": "Último"
+            			},
+            			"oAria": {
+            				"sSortAscending": ": Ordenar colunas de forma ascendente",
+            				"sSortDescending": ": Ordenar colunas de forma descendente"
+            			}
+            	    }            	   
+               });
             });
         </script>        
     </jsp:attribute>
     
     <jsp:body>
+    
+			<div class="row">
+				<div class="col-md-12">
+					<button data-toggle="modal" data-target="#modalAtendimento" onclick="ajaxService.buscaModeloPorTipoDeAtendimento()" class="btn btn-info">
+						<i class="fa fa-medkit fa-5x" aria-hidden="true"></i>
+					</button>
+					<button data-toggle="modal" data-target="#modalVacina" class="btn btn-warning">
+						<i class="fa fa-eyedropper fa-5x"></i>
+					</button>
+					<button data-toggle="modal" data-target="#modalPatologia" class="btn btn-danger">
+						<i class="fa  fa-plus-square fa-5x" aria-hidden="true"></i>
+					</button>
+				</div>
+			</div>
+			
 		<div class="row">
 
-			<div class="col-md-6">
+			<div class="col-md-12">
 				<table class="table table-bordered" id="historicos">
 					<thead>
 						<tr>
+							<th><spring:message code="tipo"></spring:message>	<i class="fa fa-plus-square fa-2x" aria-hidden="true"></i></th>
 							<th><spring:message code="historico"></spring:message>	<i class="fa fa-calendar fa-2x" aria-hidden="true"></i></th>
+							<th><spring:message code="data"></spring:message>	<i class="fa fa-calendar-check-o fa-2x" aria-hidden="true"></i></th>
 						</tr>
 					</thead>
 					<tbody>
@@ -39,88 +80,40 @@
 							<tr>
 								<td>
 									<c:if test="${elementoHistorico.tipo == 'ATENDIMENTO'}">
-										<div class="panel panel-info">
-										  <div class="panel-heading">${elementoHistorico.tipo}</div>
-										  <div class="panel-body">
-										  
-											<button data-toggle="modal" data-target="#modalAtendimento" onclick="ajaxService.editarAtendimento(${elementoHistorico.elementohistoricoId})">
-												<i class="fa fa-file-text-o fa-lg"></i>
-											</button>
-											
-											<button>
-												<a href="<c:url value="/prontuario/removerAtendimentoDoProntuario/${prontuario.prontuarioId}/${elementoHistorico.elementohistoricoId}"></c:url>"><i class="fa fa-trash-o fa-2x"></i></a>
-											</button>
-											
-										  	${elementoHistorico.descricao}
-										  	
-										  </div>
-										    <div class="panel-footer">${elementoHistorico.data}</div>
-										</div>
+										<button data-toggle="modal" data-target="#modalAtendimento" onclick="ajaxService.editarAtendimento(${elementoHistorico.elementohistoricoId})">
+											<i class="fa fa-file-text-o fa-lg"></i>
+										</button>									
+										<button>
+											<a href="<c:url value="/prontuario/removerAtendimentoDoProntuario/${prontuario.prontuarioId}/${elementoHistorico.elementohistoricoId}"></c:url>"><i class="fa fa-trash-o fa-2x"></i></a>
+										</button>									
 									</c:if>
 									<c:if test="${elementoHistorico.tipo == 'VACINA'}">
-										<div class="panel panel-warning">
-										  <div class="panel-heading">${elementoHistorico.tipo}</div>
-										  <div class="panel-body">
-										  
-											<button data-toggle="modal" data-target="#modalVacina" onclick="ajaxService.editarVacina(${elementoHistorico.elementohistoricoId})">
-												<i class="fa fa-file-text-o fa-lg"></i>
-											</button>										  
-										  	
-										  	<button>
-										  		<a href="<c:url value="/prontuario/removerVacinaDoProntuario/${prontuario.prontuarioId}/${elementoHistorico.elementohistoricoId}?inclusaoOcorrenciaVacina=${elementoHistorico.data}"></c:url>"><i class="fa fa-trash-o fa-2x"></i></a>
-										  	</button>
-										  	
-										    ${elementoHistorico.descricao}
-										  </div>
-										    <div class="panel-footer">${elementoHistorico.data}</div>
-										</div>
+										<button data-toggle="modal" data-target="#modalVacina" onclick="ajaxService.editarVacina(${elementoHistorico.elementohistoricoId})">
+											<i class="fa fa-file-text-o fa-lg"></i>
+										</button>
+									  	<button>
+									  		<a href="<c:url value="/prontuario/removerVacinaDoProntuario/${prontuario.prontuarioId}/${elementoHistorico.elementohistoricoId}?inclusaoOcorrenciaVacina=${elementoHistorico.data}"></c:url>"><i class="fa fa-trash-o fa-2x"></i></a>
+									  	</button>
 									</c:if>
 									<c:if test="${elementoHistorico.tipo == 'PATOLOGIA'}">
-										<div class="panel panel-danger">
-										  <div class="panel-heading">${elementoHistorico.tipo}</div>
-										  <div class="panel-body">
-										  
-											<button data-toggle="modal" data-target="#modalPatologia" onclick="ajaxService.editarPatologia(${elementoHistorico.elementohistoricoId})">
-												<i class="fa fa-file-text-o fa-lg"></i>
-											</button>
-																			  
-										  	<button>
-											  	<a href="<c:url value="/prontuario/removerPatologiaDoProntuario/${prontuario.prontuarioId}/${elementoHistorico.elementohistoricoId}"></c:url>"><i class="fa fa-trash-o fa-2x"></i></a>
-										  	</button>
-										  	
-										    ${elementoHistorico.descricao}
-										  </div>
-										    <div class="panel-footer">${elementoHistorico.data}</div>
-										</div>
+										<button data-toggle="modal" data-target="#modalPatologia" onclick="ajaxService.editarPatologia(${elementoHistorico.elementohistoricoId})">
+											<i class="fa fa-file-text-o fa-lg"></i>
+										</button>
+									  	<button>
+										  	<a href="<c:url value="/prontuario/removerPatologiaDoProntuario/${prontuario.prontuarioId}/${elementoHistorico.elementohistoricoId}"></c:url>"><i class="fa fa-trash-o fa-2x"></i></a>
+									  	</button>
 									</c:if>
+									${elementoHistorico.tipo}
 								</td>
+								<td>${elementoHistorico.descricao}</td>
+								<td>${elementoHistorico.data}</td>
 							</tr>
 						</c:forEach>	
 					</tbody>
 				</table>
 			</div>
-			
-			<div class="col-md-6">
-				<div class="row">
-					<div class="col-md-3">
-						<button data-toggle="modal" data-target="#modalAtendimento" onclick="ajaxService.buscaModeloPorTipoDeAtendimento()" class="btn btn-info">
-							<i class="fa fa-medkit fa-5x" aria-hidden="true"></i>
-						</button>
-					</div>
-					<div class="col-md-3">
-						<button data-toggle="modal" data-target="#modalVacina" class="btn btn-warning">
-							<i class="fa fa-eyedropper fa-5x"></i>
-						</button>
-					</div>
-					<div class="col-md-3">
-						<button data-toggle="modal" data-target="#modalPatologia" class="btn btn-danger">
-							<i class="fa  fa-plus-square fa-5x" aria-hidden="true"></i>
-						</button>
-					</div>
-				</div>
-			</div>
-			
 		</div>
+		
         <!-- Modal -->
         <div class="modal fade" id="modalAtendimento" tabindex="-1" role="dialog" aria-labelledby="labelmodalAtendimento" aria-hidden="true">
           <div class="modal-dialog" role="document">
