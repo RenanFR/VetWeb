@@ -26,6 +26,8 @@
         
         <link href="<c:url value="/resources/css/bootstrap/bootstrap.css"></c:url>" rel="stylesheet" type="text/css"/>
         
+        <link href="<c:url value="/resources/css/fullcalendar/fullcalendar.css"></c:url>" rel="stylesheet" type="text/css"/>
+        
         <link href="<c:url value="/resources/css/font-awesome/font-awesome.min.css"></c:url>" rel="stylesheet" type="text/css"/>
         
         <link href="<c:url value="/resources/css/custom.css"></c:url>" rel="stylesheet" type="text/css"/>
@@ -63,27 +65,27 @@
 	        <div class="sidebar-collapse">
 	            <ul class="nav" id="main-menu">
 	                <li class="active-link">
-	                    <a href="<c:url value="/clientes/listar"></c:url>" ><i class="fa fa-user "></i><spring:message code="clientes"></spring:message> </a>
+	                    <a href="<c:url value="/clientes/listar"></c:url>" ><i class="fa fa-user "></i><spring:message code="clientes"/> </a>
 	                </li>
 	                <li>
-	                    <a href="<c:url value="/animais/listar"></c:url>"><i class="fa fa-github-alt "></i><spring:message code="animais"></spring:message>  </a>
+	                    <a href="<c:url value="/animais/listar"></c:url>"><i class="fa fa-github-alt "></i><spring:message code="animais"/>  </a>
 	                </li>
 	                <li class="dropdown">
-	                    <a class="dropdown-toggle" href="blank.html" data-toggle="dropdown"><i class="fa fa-folder-open"></i><spring:message code="cadastros"></spring:message><span class="caret"></span></a>  
+	                    <a class="dropdown-toggle" href="blank.html" data-toggle="dropdown"><i class="fa fa-folder-open"></i><spring:message code="cadastros"/><span class="caret"></span></a>  
 	                    <ul class="dropdown-menu">
-	                        <li><a href="<c:url value="/animais/especies"></c:url>"><spring:message code="especies"></spring:message></a></li>
-	                        <li><a href="<c:url value="/animais/racas"></c:url>"><spring:message code="racas"></spring:message></a></li>
-	                        <li><a href="<c:url value="/animais/pelagens"></c:url>"><spring:message code="pelagens"></spring:message></a></li>
-	                        <li><a href="<c:url value="/animais/patologias"></c:url>"><spring:message code="patologias"></spring:message></a></li>
-	                        <li><a href="<c:url value="/prontuario/tiposDeAtendimento"></c:url>"><spring:message code="tiposAtendimento"></spring:message></a></li>
-	                        <li><a href="<c:url value="/prontuario/vacinas"></c:url>"><spring:message code="vacinas"></spring:message></a></li>
+	                        <li><a href="<c:url value="/animais/especies"></c:url>"><spring:message code="especies"/></a></li>
+	                        <li><a href="<c:url value="/animais/racas"></c:url>"><spring:message code="racas"/></a></li>
+	                        <li><a href="<c:url value="/animais/pelagens"></c:url>"><spring:message code="pelagens"/></a></li>
+	                        <li><a href="<c:url value="/animais/patologias"></c:url>"><spring:message code="patologias"/></a></li>
+	                        <li><a href="<c:url value="/prontuario/tiposDeAtendimento"></c:url>"><spring:message code="tiposAtendimento"/></a></li>
+	                        <li><a href="<c:url value="/prontuario/vacinas"></c:url>"><spring:message code="vacinas"/></a></li>
 	                    </ul>
 	                </li>
 	                <li>
-	                    <a href="http://localhost:8080/vetweb-auth/index.xhtml"><i class="fa fa-user-circle"></i><spring:message code="usuarios"></spring:message></a>
+	                    <a href="http://localhost:8080/vetweb-auth/index.xhtml"><i class="fa fa-user-circle"></i><spring:message code="usuarios"/></a>
 	                </li>
 	                <li>
-	                    <a href="#"><i class="fa fa-user-plus"></i>My Link Two</a>
+	                    <a href="<c:url value="/agendamento"></c:url>"><i class="fa  fa-calendar-plus-o"></i><spring:message code="agendamento"/></a>
 	                </li>
 	
 	                <li>
