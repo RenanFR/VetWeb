@@ -15,7 +15,6 @@ import com.vetweb.model.Prontuario;
 import com.vetweb.model.ProntuarioPatologia;
 import com.vetweb.model.ProntuarioVacina;
 import com.vetweb.model.Proprietario;
-import com.vetweb.model.TipoDeAtendimento;
 import com.vetweb.model.Vacina;
 
 @Repository
@@ -37,7 +36,7 @@ public class ProntuarioDAO implements IDAO<Prontuario>{
     }
 
     @Override
-    public List<Prontuario> listar() {
+    public List<Prontuario> listarTodos() {
         return entityManager.createQuery("SELECT p FROM Prontuario p "
         		+ "LEFT OUTER JOIN p.patologias pat "
                 + "LEFT OUTER JOIN p.atendimentos at "
@@ -46,59 +45,34 @@ public class ProntuarioDAO implements IDAO<Prontuario>{
     }
 
     @Override
-    public Prontuario consultarPorId(long id) {
-        return entityManager.find(Prontuario.class, id);
+    public Prontuario buscarPorId(long id) {
+        return entityManager
+        		.find(Prontuario.class, id);
     }
 
     @Override
     public void remover(Prontuario prontuario) {
         entityManager.remove(prontuario);
     }
-
-    @Override
-    public Prontuario consultarPorNome(String nome) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public long quantidadeRegistros() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
     
-    public Prontuario prontuarioPorAnimal(Long animalId){
+    public Prontuario buscarProntuarioPorAnimal(Long animalId){
         return entityManager.createQuery("SELECT p FROM Prontuario p "
         		+ "LEFT OUTER JOIN p.patologias pat "
                 + "LEFT OUTER JOIN p.atendimentos at "
                 + "LEFT OUTER JOIN p.vacinas vac "
                 + "WHERE p.animal.animalId = :animal", Prontuario.class)
-                .setParameter("animal", animalId).getSingleResult();
-    }
-    
-    public List<Vacina> vacinas() {
-        return entityManager.createQuery("SELECT v FROM Vacina v", Vacina.class)
-                .getResultList();
-    }
-    
-    public List<TipoDeAtendimento> tiposDeAtendimento() {
-        return entityManager.createNamedQuery("tiposDeAtendimentoQuery", TipoDeAtendimento.class)
-                .getResultList();
-    }
-    
-    public TipoDeAtendimento tipoDeAtendimentoPorNome(String tipoDeAtendimento) {
-        return entityManager.createQuery("SELECT t FROM TipoDeAtendimento t WHERE t.nome = :tipoDeAtendimento", TipoDeAtendimento.class)
-                .setParameter("tipoDeAtendimento", tipoDeAtendimento)
+                .setParameter("animal", animalId)
                 .getSingleResult();
     }
     
-    public String modeloDoTipoAtendimento(String nomeTipoAtendimento) {
-        TipoDeAtendimento tipoDeAtendimento = entityManager.createNamedQuery("tipoDeAtendimentoPorNomeQuery", TipoDeAtendimento.class)
-                .setParameter("nomeTipoAtendimento", nomeTipoAtendimento)
-                .getSingleResult();
-        return tipoDeAtendimento.getModeloAtendimento().toString();
+    public List<Vacina> buscarVacinas() {
+        return entityManager
+        		.createQuery("SELECT v FROM Vacina v", Vacina.class)
+                .getResultList();
     }
     
     public void adicionarAtendimento(Atendimento atendimento, Long prontuarioId) {
-        Prontuario prontuario = consultarPorId(prontuarioId);
+        Prontuario prontuario = buscarPorId(prontuarioId);
         if(prontuario.getAtendimentos().contains(atendimento)) {
         	prontuario.getAtendimentos()
         			.set(prontuario.getAtendimentos().indexOf(atendimento), atendimento);
@@ -109,13 +83,8 @@ public class ProntuarioDAO implements IDAO<Prontuario>{
     }
     
     public void adicionarPatologia(ProntuarioPatologia patologia, Long prontuarioId) {
-    	Prontuario prontuario = consultarPorId(prontuarioId);
-    	if (patologia.getProntuarioPatologiaId() == null) {
-    		entityManager.persist(patologia);
-    	}
-    	else {
-    		entityManager.merge(patologia);
-    	}
+    	Prontuario prontuario = buscarPorId(prontuarioId);
+    	salvarPatologia(patologia);
     	if (!prontuario.getPatologias().contains(patologia)) {
     		prontuario.getPatologias().add(patologia);
     	} else {
@@ -124,13 +93,19 @@ public class ProntuarioDAO implements IDAO<Prontuario>{
     	}
     	salvar(prontuario);
     }
+
+	private void salvarPatologia(ProntuarioPatologia patologia) {
+		if (patologia.getProntuarioPatologiaId() == null) {
+    		entityManager.persist(patologia);
+    	}
+    	else {
+    		entityManager.merge(patologia);
+    	}
+	}
     
     public void adicionarVacina(ProntuarioVacina vacina, Long prontuarioId) {
-    	Prontuario prontuario = consultarPorId(prontuarioId);
-    	if (vacina.getProntuarioVacinaId() == null)
-    		entityManager.persist(vacina);
-    	else
-    		entityManager.merge(vacina);
+    	Prontuario prontuario = buscarPorId(prontuarioId);
+    	salvarVacina(vacina);
     	if (!prontuario.getVacinas().contains(vacina))
     		prontuario.getVacinas().add(vacina);
     	else
@@ -138,9 +113,16 @@ public class ProntuarioDAO implements IDAO<Prontuario>{
     			.set(prontuario.getVacinas().indexOf(vacina), vacina);
     	salvar(prontuario);
     }
+
+	private void salvarVacina(ProntuarioVacina vacina) {
+		if (vacina.getProntuarioVacinaId() == null)
+    		entityManager.persist(vacina);
+    	else
+    		entityManager.merge(vacina);
+	}
     
-    public void removerAtendimentoDoProntuario (Atendimento atendimento, Long prontuarioId) {
-    	Prontuario prontuario = consultarPorId(prontuarioId);
+    public void removerAtendimento (Atendimento atendimento, Long prontuarioId) {
+    	Prontuario prontuario = buscarPorId(prontuarioId);
     	if(prontuario.getAtendimentos().contains(atendimento)) {
     		prontuario.getAtendimentos().remove(atendimento);
     	} else {
@@ -148,8 +130,8 @@ public class ProntuarioDAO implements IDAO<Prontuario>{
     	}
     }
     
-    public void removerVacinaDoProntuario (ProntuarioVacina prontuarioVacina, Long prontuarioId) {
-    	Prontuario prontuario = consultarPorId(prontuarioId);
+    public void removerVacina (ProntuarioVacina prontuarioVacina, Long prontuarioId) {
+    	Prontuario prontuario = buscarPorId(prontuarioId);
     	if(prontuario.getVacinas().contains(prontuarioVacina)) {
     		prontuario.getVacinas().remove(prontuarioVacina);
     	} else {
@@ -157,16 +139,18 @@ public class ProntuarioDAO implements IDAO<Prontuario>{
     	}
     }
     
-    public ProntuarioVacina buscarOcorrenciaVacinaProntuarioPorId(Long prontuarioVacinaId) {
-    	return entityManager.find(ProntuarioVacina.class, prontuarioVacinaId);
+    public ProntuarioVacina buscarOcorrenciaDaVacina(Long prontuarioVacinaId) {
+    	return entityManager
+    			.find(ProntuarioVacina.class, prontuarioVacinaId);
     }
     
-    public ProntuarioPatologia buscarOcorrenciaPatologiaProntuarioPorId(Long prontuarioPatologiaId) {
-    	return entityManager.find(ProntuarioPatologia.class, prontuarioPatologiaId);
+    public ProntuarioPatologia buscarOcorrenciaDaPatologia(Long prontuarioPatologiaId) {
+    	return entityManager
+    			.find(ProntuarioPatologia.class, prontuarioPatologiaId);
     }
     
-    public void removerPatologiaDoProntuario (ProntuarioPatologia prontuarioPatologia, Long prontuarioId) {
-    	Prontuario prontuario = consultarPorId(prontuarioId);
+    public void removerPatologia (ProntuarioPatologia prontuarioPatologia, Long prontuarioId) {
+    	Prontuario prontuario = buscarPorId(prontuarioId);
     	if(prontuario.getPatologias().contains(prontuarioPatologia)) {
     		prontuario.getPatologias().remove(prontuarioPatologia);
     	} else {
@@ -181,29 +165,33 @@ public class ProntuarioDAO implements IDAO<Prontuario>{
             entityManager.merge(atendimento);
     }
     
-    public Atendimento atendimentoPorPreenchimento(String preenchimentoAtendimento) {
-    	return entityManager.createQuery("SELECT at FROM Atendimento at WHERE at.preenchimentoModeloAtendimento = :preenchimento", Atendimento.class)
-    			.setParameter("preenchimento", preenchimentoAtendimento).getSingleResult();
+    public Atendimento buscarAtendimentoPorPreenchimento(String preenchimentoAtendimento) {
+    	return entityManager
+    			.createQuery("SELECT at FROM Atendimento at WHERE at.preenchimentoModeloAtendimento = :preenchimento", Atendimento.class)
+    			.setParameter("preenchimento", preenchimentoAtendimento)
+    			.getSingleResult();
     }
     
-    public Proprietario proprietarioQueRecebeuAtendimento(Atendimento atendimento) {
+    //FIXME Migrar consulta nativa
+    public Proprietario buscarClienteParaOAtendimento(Atendimento atendimento) {
     	Object pessoaid = entityManager.createNativeQuery("SELECT cli.pessoaid FROM proprietarios cli\n" + 
     			"JOIN animais a ON cli.pessoaid = a.proprietario_pessoaid\n" + 
     			"JOIN prontuarios p ON a.prontuario_prontuarioid = p.prontuarioid\n" + 
     			"JOIN prontuarios_atendimento ate ON ate.prontuario_prontuarioid = p.prontuarioid\n" + 
     			"WHERE ate.atendimentos_atendimentoid = :id LIMIT 1;")
     			.setParameter(1, atendimento.getAtendimentoId()).getSingleResult();
-    	return proprietarioDAO.consultarPorId(Long.parseLong(pessoaid.toString()));
+    	return proprietarioDAO.buscarPorId(Long.parseLong(pessoaid.toString()));
     }
-
-	public Proprietario proprietarioQueRecebeuVacina(ProntuarioVacina vacina) {
+    
+    //FIXME Migrar consulta nativa
+	public Proprietario buscarClienteParaAVacina(ProntuarioVacina vacina) {
     	Object pessoaid = entityManager.createNativeQuery("SELECT cli.pessoaid FROM proprietarios cli\n" + 
     			"JOIN animais a ON cli.pessoaid = a.proprietario_pessoaid\n" + 
     			"JOIN prontuarios p ON a.prontuario_prontuarioid = p.prontuarioid\n" + 
     			"JOIN prontuarios_prontuariovacina vac ON vac.prontuario_prontuarioid = p.prontuarioid\n" + 
     			"WHERE vac.vacinas_prontuariovacinaid = 15 LIMIT 1;")
     			.setParameter(1, vacina.getProntuarioVacinaId()).getSingleResult();
-    	return proprietarioDAO.consultarPorId(Long.parseLong(pessoaid.toString()));
+    	return proprietarioDAO.buscarPorId(Long.parseLong(pessoaid.toString()));
 	}
 	
 	public Prontuario buscarProntuarioDoAtendimento(Atendimento atendimento) {

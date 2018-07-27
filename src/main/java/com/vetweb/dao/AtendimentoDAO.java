@@ -26,30 +26,21 @@ public class AtendimentoDAO implements IDAO<Atendimento> {
     }
 
     @Override
-    public List<Atendimento> listar() {
+    public List<Atendimento> listarTodos() {
         return entityManager
         		.createQuery("SELECT a FROM Atendimento a", Atendimento.class)
         		.getResultList();
     }
 
     @Override
-    public Atendimento consultarPorId(long id) {
-    	return entityManager.find(Atendimento.class, id);
+    public Atendimento buscarPorId(long id) {
+    	return entityManager
+    			.find(Atendimento.class, id);
     }
 
     @Override
-    public void remover(Atendimento e) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Atendimento consultarPorNome(String nome) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public long quantidadeRegistros() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void remover(Atendimento atendimento) {
+        entityManager.remove(atendimento);
     }
     
     public void salvarTipoDeAtendimento(TipoDeAtendimento tipoDeAtendimento){
@@ -60,13 +51,28 @@ public class AtendimentoDAO implements IDAO<Atendimento> {
         }
     }
     
-    public List<TipoDeAtendimento> tiposDeAtendimento(){
-        return entityManager.createQuery("SELECT ta FROM TipoDeAtendimento ta", TipoDeAtendimento.class).getResultList();
+    public List<TipoDeAtendimento> buscarTiposDeAtendimento(){
+        return entityManager
+        		.createNamedQuery("tiposDeAtendimentoQuery", TipoDeAtendimento.class)
+        		.getResultList();
     }
     
-    public TipoDeAtendimento tipoDeAtendimentoPorId(Long tipoDeAtendimentoId) {
-        return entityManager.find(TipoDeAtendimento.class, tipoDeAtendimentoId);
+    public TipoDeAtendimento buscarTipoDeAtendimentoPorId(Long tipoDeAtendimentoId) {
+        return entityManager
+        		.find(TipoDeAtendimento.class, tipoDeAtendimentoId);
     }
+    
+    public TipoDeAtendimento buscarTipoDeAtendimentoPorNome(String tipoDeAtendimento) {
+        return entityManager
+        		.createNamedQuery("tipoDeAtendimentoPorNomeQuery", TipoDeAtendimento.class)
+                .setParameter("tipoDeAtendimento", tipoDeAtendimento)
+                .getSingleResult();
+    }
+    
+    public String buscarModeloDoTipoDeAtendimento(String tipoDeAtendimento) {
+        TipoDeAtendimento tipo = buscarTipoDeAtendimentoPorNome(tipoDeAtendimento);
+        return tipo.getModeloAtendimento().toString();
+    }    
     
     public void removerTipoDeAtendimento(TipoDeAtendimento tipoDeAtendimento) {
         entityManager.remove(tipoDeAtendimento);

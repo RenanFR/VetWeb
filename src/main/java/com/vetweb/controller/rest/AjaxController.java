@@ -36,25 +36,25 @@ public class AjaxController {
     
     @RequestMapping(value = "/editarAtendimento/{atendimentoId}", method = RequestMethod.GET)
     public Atendimento atendimentoParaEdicao(@PathVariable("atendimentoId") final Long atendimentoId) {
-    	Atendimento atendimento = atendimentoDAO.consultarPorId(atendimentoId);
+    	Atendimento atendimento = atendimentoDAO.buscarPorId(atendimentoId);
     	return atendimento;
     }
     
     @RequestMapping(value = "/editarProntuarioPatologia/{prontuarioPatologiaId}", method = RequestMethod.GET)
     public ProntuarioPatologia prontuarioPatologiaParaEdicao(@PathVariable("prontuarioPatologiaId") final Long prontuarioPatologiaId) {
-    	ProntuarioPatologia prontuarioPatologia = prontuarioDAO.buscarOcorrenciaPatologiaProntuarioPorId(prontuarioPatologiaId);
+    	ProntuarioPatologia prontuarioPatologia = prontuarioDAO.buscarOcorrenciaDaPatologia(prontuarioPatologiaId);
     	return prontuarioPatologia;
     }
     
     @RequestMapping(value = "/editarProntuarioVacina/{prontuarioVacinaId}", method = RequestMethod.GET)
     public ProntuarioVacina ProntuarioVacinaParaEdicao(@PathVariable("prontuarioVacinaId") final Long prontuarioVacinaId) {
-    	ProntuarioVacina prontuarioVacina = prontuarioDAO.buscarOcorrenciaVacinaProntuarioPorId(prontuarioVacinaId);
+    	ProntuarioVacina prontuarioVacina = prontuarioDAO.buscarOcorrenciaDaVacina(prontuarioVacinaId);
     	return prontuarioVacina;
     }
     
     @RequestMapping(value = "/atualizaStatusPagoAtendimento/{atendimentoId}", method = RequestMethod.GET)
     public boolean atualizaStatusPagamento(@PathVariable("atendimentoId") final Long atendimentoId) {
-    	Atendimento atendimento = atendimentoDAO.consultarPorId(atendimentoId);
+    	Atendimento atendimento = atendimentoDAO.buscarPorId(atendimentoId);
     	atendimento.setPago(!atendimento.isPago());
     	atendimentoDAO.salvar(atendimento);
     	return atendimento.isPago();
@@ -62,19 +62,19 @@ public class AjaxController {
     
     @RequestMapping(value = "/atualizaStatusPagoVacina/{prontuarioVacinaId}", method = RequestMethod.GET)
     public boolean atualizaStatusPagamentoVacina(@PathVariable("prontuarioVacinaId") final Long prontuarioVacinaId) {
-    	ProntuarioVacina vacina = prontuarioDAO.buscarOcorrenciaVacinaProntuarioPorId(prontuarioVacinaId);
+    	ProntuarioVacina vacina = prontuarioDAO.buscarOcorrenciaDaVacina(prontuarioVacinaId);
     	vacina.setPago(!vacina.isPago());
     	return vacina.isPago();    	
     }
     
     @RequestMapping(value = "/racasPorEspecie/{especie}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public List<Raca> racasPorEspecie(@PathVariable("especie")String especie){
-        return animalDAO.racasPorEspecie(especie);
+        return animalDAO.buscarRacasPorEspecie(especie);
     }    
     
     @RequestMapping(value = "/modeloPorTipoDeAtendimento/{tipoDeAtendimento}", method = RequestMethod.GET)
     public @ResponseBody String modeloDoTipoDeAtendimento(@PathVariable("tipoDeAtendimento") String nomeTipoAtendimento) {
-        return prontuarioDAO.modeloDoTipoAtendimento(nomeTipoAtendimento);
+        return atendimentoDAO.buscarModeloDoTipoDeAtendimento(nomeTipoAtendimento);
     }    
     
 }

@@ -52,16 +52,16 @@ public class AnimalController {
     @RequestMapping(value = "/listar", method = RequestMethod.GET)
     public ModelAndView animais() {
         ModelAndView modelAndView = new ModelAndView("animal/animais");
-        modelAndView.addObject("animais", animalDAO.listar());
+        modelAndView.addObject("animais", animalDAO.listarTodos());
         return modelAndView;
     }
     
     @RequestMapping(value = "/cadastro", method = RequestMethod.GET)
     public synchronized ModelAndView form(Animal animal, @RequestParam("desabilitaTrocaProprietario") final boolean desabilitaTrocaProprietario) {
         ModelAndView modelAndView = new ModelAndView("animal/cadastroAnimal");
-        modelAndView.addObject("proprietarios", proprietarioDAO.listar());
-        modelAndView.addObject("especies", animalDAO.especies());
-        modelAndView.addObject("pelagens", animalDAO.pelagens());
+        modelAndView.addObject("proprietarios", proprietarioDAO.listarTodos());
+        modelAndView.addObject("especies", animalDAO.buscarEspecies());
+        modelAndView.addObject("pelagens", animalDAO.buscarPelagens());
         modelAndView.addObject("desabilitaTrocaProprietario", desabilitaTrocaProprietario);
         return modelAndView;
     }
@@ -93,8 +93,8 @@ public class AnimalController {
         ModelAndView modelAndView = new ModelAndView("redirect:/animais/listar");
         modelDML = "Animal";
         try {
-            LOGGER.info(("Eliminando prontuário do animal " + animalDAO.consultarPorId(animalId).getNome()).toUpperCase());
-            prontuarioDAO.remover(prontuarioDAO.prontuarioPorAnimal(animalId));
+            LOGGER.info(("Eliminando prontuário do animal " + animalDAO.buscarPorId(animalId).getNome()).toUpperCase());
+            prontuarioDAO.remover(prontuarioDAO.buscarProntuarioPorAnimal(animalId));
             proprietarioDAO.removerAnimal(animalId);
         } catch (Exception e) {
             LOGGER.error(("Erro na remoção do animal " + animalId + ". ").toUpperCase(), e);
@@ -105,8 +105,8 @@ public class AnimalController {
     @RequestMapping(value = "/atualizar/{animalId}", method = RequestMethod.GET)
     public ModelAndView atualizar(@PathVariable("animalId") long animalId) {
         ModelAndView modelAndView = new ModelAndView("animal/cadastroAnimal");
-        modelAndView.addObject("animal", animalDAO.consultarPorId(animalId));
-        modelAndView.addObject("proprietarios", proprietarioDAO.listar());
+        modelAndView.addObject("animal", animalDAO.buscarPorId(animalId));
+        modelAndView.addObject("proprietarios", proprietarioDAO.listarTodos());
         modelAndView.addObject("desabilitaTrocaProprietario", true);
         return modelAndView;
     }
@@ -114,7 +114,7 @@ public class AnimalController {
     @RequestMapping(value = "/atualizarEspecie/{especieId}", method = RequestMethod.GET)
     public ModelAndView atualizarEspecie(@PathVariable("especieId") long especieId) {
         ModelAndView modelAndView = new ModelAndView("animal/cadastroEspecie");
-        Especie especie = animalDAO.especiePorId(especieId);
+        Especie especie = animalDAO.buscarEspeciePorId(especieId);
         modelAndView.addObject("especie", especie);
         return modelAndView;
     }
@@ -122,16 +122,16 @@ public class AnimalController {
     @RequestMapping(value = "/atualizarRaca/{racaId}", method = RequestMethod.GET)
     public ModelAndView atualizarRaca(@PathVariable("racaId") long racaId) {
         ModelAndView modelAndView = new ModelAndView("animal/cadastroRaca");
-        Raca raca = animalDAO.racaPorId(racaId);
+        Raca raca = animalDAO.buscarRacaPorId(racaId);
         modelAndView.addObject("raca", raca);
-        modelAndView.addObject("especies", animalDAO.especies());
+        modelAndView.addObject("especies", animalDAO.buscarEspecies());
         return modelAndView;
     }
     
     @RequestMapping(value = "/atualizarPelagem/{pelagemId}", method = RequestMethod.GET)
     public ModelAndView atualizarPelagem(@PathVariable("pelagemId") long pelagemId) {
         ModelAndView modelAndView = new ModelAndView("animal/cadastroPelagem");
-        Pelagem p = animalDAO.pelagemPorId(pelagemId);
+        Pelagem p = animalDAO.buscarPelagemPorId(pelagemId);
         modelAndView.addObject("pelagem", p);
         return modelAndView;
     }
@@ -139,7 +139,7 @@ public class AnimalController {
     @RequestMapping(value = "/atualizarPatologia/{nome}", method = RequestMethod.GET)
     public ModelAndView atualizarPatologia(@PathVariable("nome") String nome) {
         ModelAndView modelAndView = new ModelAndView("animal/cadastroPatologia");
-        Patologia patologia = animalDAO.patologiaPorDescricao(nome);
+        Patologia patologia = animalDAO.buscarPatologiaPorDescricao(nome);
         modelAndView.addObject("patologia", patologia);
         return modelAndView;
     }
@@ -149,7 +149,7 @@ public class AnimalController {
         ModelAndView modelAndView = new ModelAndView("animal/detalhesAnimal");
         try{
         	LOGGER.info(("Animal " + nomeAnimal + " encontrado na base de dados. ").toUpperCase());
-            Animal animal = animalDAO.consultarPorNome(nomeAnimal.trim());
+            Animal animal = animalDAO.buscarPorNome(nomeAnimal.trim());
 			modelAndView.addObject("animal", animal);
         } catch (RuntimeException exception){LOGGER.error(("Animal " + nomeAnimal + " não encontrado na base de dados. ").toUpperCase());}
         return modelAndView;
@@ -158,7 +158,7 @@ public class AnimalController {
     @RequestMapping(value = "/especies", method = RequestMethod.GET)
     public ModelAndView especies(){
         ModelAndView modelAndView = new ModelAndView("animal/especies");
-        modelAndView.addObject("especies", animalDAO.especies());
+        modelAndView.addObject("especies", animalDAO.buscarEspecies());
         return modelAndView;
     }
     
@@ -191,14 +191,14 @@ public class AnimalController {
     @RequestMapping(value = "/cadastroRaca", method = RequestMethod.GET)
     public ModelAndView cadastroRaca(@ModelAttribute("raca")Raca raca){
         ModelAndView modelAndView = new ModelAndView("animal/cadastroRaca");
-        modelAndView.addObject("especies", animalDAO.especies());
+        modelAndView.addObject("especies", animalDAO.buscarEspecies());
         return modelAndView;
     }
     
     @RequestMapping(value = "/cadastroPatologia", method = RequestMethod.GET)
     public ModelAndView cadastroPatologia(@ModelAttribute("patologia")Patologia patologia){
         ModelAndView modelAndView = new ModelAndView("animal/cadastroPatologia");
-        modelAndView.addObject("patologias", animalDAO.patologias());
+        modelAndView.addObject("patologias", animalDAO.buscarPatologias());
         return modelAndView;
     }
     
@@ -219,21 +219,21 @@ public class AnimalController {
     @RequestMapping(value = "/pelagens", method = RequestMethod.GET)
     public ModelAndView pelagens(){
         ModelAndView modelAndView = new ModelAndView("animal/pelagens");
-        modelAndView.addObject("pelagens", animalDAO.pelagens());
+        modelAndView.addObject("pelagens", animalDAO.buscarPelagens());
         return modelAndView;
     }
     
     @RequestMapping(value = "/racas", method = RequestMethod.GET)
     public ModelAndView racas(){
         ModelAndView modelAndView = new ModelAndView("animal/racas");
-        modelAndView.addObject("racas", animalDAO.racas());
+        modelAndView.addObject("racas", animalDAO.buscarRacas());
         return modelAndView;
     }
     
     @RequestMapping(value = "/patologias", method = RequestMethod.GET)
     public ModelAndView patologias(){
         ModelAndView modelAndView = new ModelAndView("animal/patologias");
-        modelAndView.addObject("patologias", animalDAO.patologias());
+        modelAndView.addObject("patologias", animalDAO.buscarPatologias());
         return modelAndView;
     }
     
@@ -241,7 +241,7 @@ public class AnimalController {
     public ModelAndView delEspecie(@PathVariable("especieId") Long especieId){
         modelDML = "Especie";
         ModelAndView modelAndView = new ModelAndView("redirect:/animais/especies");
-        animalDAO.removerEspecie(animalDAO.especiePorId(especieId));
+        animalDAO.removerEspecie(animalDAO.buscarEspeciePorId(especieId));
         return modelAndView;
     }
     
@@ -249,14 +249,14 @@ public class AnimalController {
     public ModelAndView delRaca(@PathVariable("racaId") Long racaId){
         modelDML = "Raca";
         ModelAndView modelAndView = new ModelAndView("redirect:/animais/racas");
-        animalDAO.removerRaca(animalDAO.racaPorId(racaId));
+        animalDAO.removerRaca(animalDAO.buscarRacaPorId(racaId));
         return modelAndView;
     }
     
     @RequestMapping(value = "/removerPelagem/{pelagemId}", method = RequestMethod.GET)
     public ModelAndView delPelagem(@PathVariable("pelagemId") Long pelagemId){
         modelDML = "Pelagem";
-        Pelagem p = animalDAO.pelagemPorId(pelagemId);
+        Pelagem p = animalDAO.buscarPelagemPorId(pelagemId);
         ModelAndView modelAndView = new ModelAndView("redirect:/animais/pelagens");
         animalDAO.removerPelagem(p);
         return modelAndView;
@@ -265,7 +265,7 @@ public class AnimalController {
     @RequestMapping(value = "/removerPatologia/{nome}", method = RequestMethod.GET)
     public ModelAndView delPatologia(@PathVariable("nome") String nome){
         modelDML = "Patologia";
-        Patologia p = animalDAO.patologiaPorDescricao(nome);
+        Patologia p = animalDAO.buscarPatologiaPorDescricao(nome);
         ModelAndView modelAndView = new ModelAndView("redirect:/animais/patologias");
         animalDAO.removerPatologia(p);
         return modelAndView;

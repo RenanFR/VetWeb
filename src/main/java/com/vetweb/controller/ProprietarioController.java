@@ -102,18 +102,18 @@ public class ProprietarioController {
     @RequestMapping("/listar")
     public ModelAndView proprietarios(){
         ModelAndView modelAndView = new ModelAndView("proprietario/proprietarios");
-        modelAndView.addObject("proprietarios", proprietarioDAO.listar());
+        modelAndView.addObject("proprietarios", proprietarioDAO.listarTodos());
         return modelAndView;
     }
     
 	@RequestMapping(value = "/remover/{pessoaId}")
     public ModelAndView remover(@PathVariable("pessoaId") long pessoaId){
         ModelAndView modelAndView = new ModelAndView("redirect:/clientes/listar");
-        Proprietario p = proprietarioDAO.consultarPorId(pessoaId);
+        Proprietario p = proprietarioDAO.buscarPorId(pessoaId);
         try{
             p.getAnimais().stream().forEach(a -> {
             	
-                prontuarioDAO.remover(prontuarioDAO.prontuarioPorAnimal(a.getAnimalId()));
+                prontuarioDAO.remover(prontuarioDAO.buscarProntuarioPorAnimal(a.getAnimalId()));
             });
             LOGGER.info(("Prontuários dos animais do " + p.getNome() + " eliminados.").toUpperCase());
             p.getAnimais().stream().forEach(a -> animalDAO.remover(a));
@@ -129,7 +129,7 @@ public class ProprietarioController {
     @RequestMapping(value = "/atualizar/{pessoaId}")
     public ModelAndView atualizar(@PathVariable("pessoaId") long pessoaId){
         ModelAndView modelAndView = new ModelAndView("proprietario/cadastroProprietario");
-        modelAndView.addObject("proprietario", proprietarioDAO.consultarPorId(pessoaId));
+        modelAndView.addObject("proprietario", proprietarioDAO.buscarPorId(pessoaId));
         return modelAndView;
     } 
     
@@ -137,7 +137,7 @@ public class ProprietarioController {
     public ModelAndView addAnimal(@PathVariable("pessoaId") long pessoaId, RedirectAttributes attributes){
         ModelAndView modelAndView = new ModelAndView("redirect:/animais/cadastro");
         attributes.addAttribute("desabilitaTrocaProprietario", true);
-        Proprietario p = proprietarioDAO.consultarPorId(pessoaId);
+        Proprietario p = proprietarioDAO.buscarPorId(pessoaId);
         attributes.addAttribute("proprietario", p.getNome());
         return modelAndView;
     }
@@ -145,17 +145,17 @@ public class ProprietarioController {
     @RequestMapping(value = "/financeiro/{pessoaId}", method = RequestMethod.GET)
     public ModelAndView financeiroCliente(@PathVariable("pessoaId") Long clienteId) {
     	ModelAndView modelAndView = new ModelAndView("proprietario/balancoCliente");
-    	Proprietario proprietario = proprietarioDAO.consultarPorId(clienteId);
-    	BigDecimal totalPendente = proprietarioDAO.getValoresPendentesDoCliente(proprietario);
+    	Proprietario proprietario = proprietarioDAO.buscarPorId(clienteId);
+    	BigDecimal totalPendente = proprietarioDAO.buscarValorPendenteDoCliente(proprietario);
     	modelAndView.addObject("atendimentosFeitos", proprietarioDAO.getAtendimentosRealizadosPorCliente(proprietario.getPessoaId()));
-    	modelAndView.addObject("vacinasAplicadas", proprietarioDAO.getVacinasAplicadasPorCliente(proprietario.getPessoaId()));
+    	modelAndView.addObject("vacinasAplicadas", proprietarioDAO.buscarVacinasParaOCliente(proprietario.getPessoaId()));
     	modelAndView.addObject("totalPendente", totalPendente);
     	return modelAndView;
     }
     
     @RequestMapping(value = "/detalhesCliente/{pessoaId}", method = RequestMethod.GET)
     public ModelAndView detalhesCliente(@PathVariable("pessoaId") long pessoaId) {
-        Proprietario proprietario = proprietarioDAO.consultarPorId(pessoaId);
+        Proprietario proprietario = proprietarioDAO.buscarPorId(pessoaId);
         ModelAndView modelAndView = new ModelAndView("proprietario/detalhesCliente");
         modelAndView.addObject(proprietario);
         modelAndView.addObject("idadeCliente", ChronoUnit.YEARS.between(proprietario.getNascimento(), LocalDate.now()));
@@ -168,7 +168,7 @@ public class ProprietarioController {
         requestDataBinder.registerCustomEditor(Proprietario.class, "proprietario", new PropertyEditorSupport(){
             @Override
             public void setAsText(String text) throws IllegalArgumentException {
-                Proprietario proprietario = proprietarioDAO.consultarPorNome(text);
+                Proprietario proprietario = proprietarioDAO.buscarPorNome(text);
                 setValue(proprietario);
             }
             @Override
@@ -183,7 +183,7 @@ public class ProprietarioController {
         requestDataBinder.registerCustomEditor(Animal.class, "animal", new PropertyEditorSupport(){
             @Override
             public void setAsText(String text) throws IllegalArgumentException {
-                Animal a = animalDAO.consultarPorNome(text);
+                Animal a = animalDAO.buscarPorNome(text);
                 this.setValue(a);
             }
             @Override

@@ -38,7 +38,7 @@ public class ConfigController {
     @RequestMapping(value = "/atualizarClinica/{cnpj}", method = RequestMethod.GET)
     public ModelAndView cadClinica(@PathVariable("cnpj") String cnpj){
         ModelAndView modelAndView = new ModelAndView("config/cadastroClinica");
-        modelAndView.addObject("clinica", configDAO.clinicaPorCnpj(cnpj));
+        modelAndView.addObject("clinica", configDAO.buscarClinicaPorCnpj(cnpj));
         return modelAndView;
     }
     
@@ -53,7 +53,7 @@ public class ConfigController {
     @RequestMapping(value = "/detalhesClinica/{cnpj}", method = RequestMethod.GET)
     public ModelAndView detalhesClinica(@PathVariable("cnpj") String cnpj){
         ModelAndView modelAndView = new ModelAndView("config/clinica");
-        modelAndView.addObject("clinica", configDAO.clinicaPorCnpj(cnpj));
+        modelAndView.addObject("clinica", configDAO.buscarClinicaPorCnpj(cnpj));
         return modelAndView;
     }
     

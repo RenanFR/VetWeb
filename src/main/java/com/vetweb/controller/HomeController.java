@@ -29,11 +29,11 @@ public class HomeController {
     @RequestMapping("/")
     public ModelAndView index (){
         ModelAndView modelAndView = new ModelAndView("index");
-        modelAndView.addObject("quantidadeClientes", proprietarioDAO.quantidadeRegistros());
-        modelAndView.addObject("quantidadeAnimais", animalDAO.quantidadeRegistros());
-        modelAndView.addObject("urlClinica", !configDAO.clinica().isPresent()? "/config/cadastroClinica" : "/config/detalhesClinica/" + configDAO.clinica().get().getRazaoSocial());
-        modelAndView.addObject("totalPendente", relatorioDAO.contasAReceber());
-        modelAndView.addObject("clientesDevedores", proprietarioDAO.getClientesEmDebito().stream().count());
+        modelAndView.addObject("quantidadeClientes", proprietarioDAO.buscarQuantidade());
+        modelAndView.addObject("quantidadeAnimais", animalDAO.buscarQuantidade());
+        modelAndView.addObject("urlClinica", !configDAO.buscarClinica().isPresent()? "/config/cadastroClinica" : "/config/detalhesClinica/" + configDAO.buscarClinica().get().getRazaoSocial());
+        modelAndView.addObject("totalPendente", relatorioDAO.buscarTotalAReceber());
+        modelAndView.addObject("clientesDevedores", proprietarioDAO.buscarClientesEmDebito().stream().count());
         return modelAndView;
     }
     

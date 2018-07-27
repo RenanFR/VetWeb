@@ -32,22 +32,22 @@ public class ExceptionController {
         	switch(modelDML) {
 	        	case "Especie": {
 	        		modelAndView = new ModelAndView("animal/especies");
-	        		modelAndView.addObject("especies", animalDAO.especies());
+	        		modelAndView.addObject("especies", animalDAO.buscarEspecies());
 	        		break;
 	        	}
 	        	case "Raca": {
 	        		modelAndView = new ModelAndView("animal/racas");
-	        		modelAndView.addObject("racas", animalDAO.racas());
+	        		modelAndView.addObject("racas", animalDAO.buscarRacas());
 	        		break;
 	        	}
 	        	case "Pelagem": {
 	        		modelAndView = new ModelAndView("animal/pelagens");
-	        		modelAndView.addObject("pelagens", animalDAO.pelagens());
+	        		modelAndView.addObject("pelagens", animalDAO.buscarPelagens());
 	        		break;
 	        	}
 	        	case "Animal": {
 	        		modelAndView = new ModelAndView("animal/animais");
-	        		modelAndView.addObject("animais", animalDAO.listar());
+	        		modelAndView.addObject("animais", animalDAO.listarTodos());
 	        		break;
 	        	}
         	}

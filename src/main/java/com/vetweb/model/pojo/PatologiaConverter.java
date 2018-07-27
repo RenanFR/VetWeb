@@ -23,7 +23,7 @@ public class PatologiaConverter implements Converter<String, Patologia>{
 	@Override
 	public Patologia convert(String patologia) { 
 		LOGGER.info(("Realizando conversão de " + patologia + " para objeto Patologia").toUpperCase());
-		return animalDAO.patologiaPorDescricao(patologia);	
+		return animalDAO.buscarPatologiaPorDescricao(patologia);	
 	}
 	
 }

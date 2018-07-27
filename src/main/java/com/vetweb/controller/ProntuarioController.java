@@ -100,14 +100,14 @@ public class ProntuarioController {
     @RequestMapping(value = "/tiposDeAtendimento", method = RequestMethod.GET)
     public ModelAndView listarTiposDeAtendimento(){
         ModelAndView modelAndView = new ModelAndView("prontuario/tiposDeAtendimento");
-        modelAndView.addObject("tiposDeAtendimento", atendimentoDAO.tiposDeAtendimento());
+        modelAndView.addObject("tiposDeAtendimento", atendimentoDAO.buscarTiposDeAtendimento());
         return modelAndView;
     }
     
     @RequestMapping(value = "/vacinas", method = RequestMethod.GET)
     public ModelAndView listarVacinas(){
         ModelAndView modelAndView = new ModelAndView("prontuario/vacinas");
-        modelAndView.addObject("vacinas", vacinaDAO.listar());
+        modelAndView.addObject("vacinas", vacinaDAO.listarTodos());
         return modelAndView;
     }
     
@@ -120,21 +120,21 @@ public class ProntuarioController {
     			.collect(Collectors.toSet());
     	modelAndView.addObject("duracoesValidas", duracoesValidas);
     	modelAndView.addObject("frequenciasValidas", frequenciasValidas);        
-    	modelAndView.addObject("tipoDeAtendimento", atendimentoDAO.tipoDeAtendimentoPorId(tipoDeAtendimentoId));
+    	modelAndView.addObject("tipoDeAtendimento", atendimentoDAO.buscarTipoDeAtendimentoPorId(tipoDeAtendimentoId));
     	return modelAndView;
     }
     
     @RequestMapping(value = "/atualizarVacina/{vacinaId}", method = RequestMethod.GET)
     public ModelAndView atualizarVacina(@PathVariable("vacinaId")Long vacinaId) {
         ModelAndView modelAndView = new ModelAndView("prontuario/cadastroVacina");
-        modelAndView.addObject("vacina", vacinaDAO.consultarPorId(vacinaId));
+        modelAndView.addObject("vacina", vacinaDAO.buscarPorId(vacinaId));
         return modelAndView;
     }
     
     @RequestMapping(value = "/removerTipoDeAtendimento/{tipoDeAtendimentoId}", method = RequestMethod.GET)
     public ModelAndView delTipoDeAtendimento(@PathVariable("tipoDeAtendimentoId")Long tipoDeAtendimentoId) {
     	ModelAndView modelAndView = new ModelAndView("redirect:/prontuario/tiposDeAtendimento");
-    	atendimentoDAO.removerTipoDeAtendimento(atendimentoDAO.tipoDeAtendimentoPorId(tipoDeAtendimentoId));
+    	atendimentoDAO.removerTipoDeAtendimento(atendimentoDAO.buscarTipoDeAtendimentoPorId(tipoDeAtendimentoId));
     	return modelAndView;
     }
     
@@ -142,13 +142,13 @@ public class ProntuarioController {
     public ModelAndView delVacina(@PathVariable("vacinaId")Long vacinaId) {
     	modelDML = "Vacina";
         ModelAndView modelAndView = new ModelAndView("redirect:/prontuario/vacinas");
-        vacinaDAO.remover(vacinaDAO.consultarPorId(vacinaId));
+        vacinaDAO.remover(vacinaDAO.buscarPorId(vacinaId));
         return modelAndView;
     }
     
     @RequestMapping(value = "/gerarProntuario", method = RequestMethod.POST)
     public ModelAndView criarProntuarioDoAnimal(@RequestParam("animalId") Long animalId) {
-		Animal animal = animalDAO.consultarPorId(animalId);
+		Animal animal = animalDAO.buscarPorId(animalId);
         LOGGER.info(("SENDO CRIADO PRONTUÁRIO DO ANIMAL " + animal).toUpperCase());
         Prontuario prontuario = new Prontuario(animal);
         prontuarioDAO.salvar(prontuario);
@@ -161,12 +161,12 @@ public class ProntuarioController {
     public ModelAndView prontuarioDoAnimal(@PathVariable("animalId") final Long animalId, @ModelAttribute("atendimento") Atendimento atendimento,
     		@ModelAttribute("prontuarioPatologia") Patologia patologia, @ModelAttribute("prontuarioVacina") Vacina vacina) {
         ModelAndView modelAndView = new ModelAndView("prontuario/prontuario");
-        Prontuario prontuario = prontuarioDAO.prontuarioPorAnimal(animalId);
+        Prontuario prontuario = prontuarioDAO.buscarProntuarioPorAnimal(animalId);
 		modelAndView.addObject("prontuario", prontuario);
-		modelAndView.addObject("tiposDeAtendimento", prontuarioDAO.tiposDeAtendimento());
-		modelAndView.addObject("vacinas", prontuarioDAO.vacinas().stream()
+		modelAndView.addObject("tiposDeAtendimento", atendimentoDAO.buscarTiposDeAtendimento());
+		modelAndView.addObject("vacinas", prontuarioDAO.buscarVacinas().stream()
 	    		.map(vac -> vac.getNome()).collect(Collectors.toList()));
-		modelAndView.addObject("patologias", animalDAO.patologias().stream()
+		modelAndView.addObject("patologias", animalDAO.buscarPatologias().stream()
 	    		.map(pat -> pat.getNome()).collect(Collectors.toList()));
 		List<ElementoHistorico> elementosHistorico = new ArrayList<>();
 		DateTimeFormatter formatoData = DateTimeFormatter.ofPattern("dd/MM/yyyy");
@@ -187,7 +187,7 @@ public class ProntuarioController {
     public ModelAndView adcAtendimento(@ModelAttribute("atendimento") Atendimento atendimento,
     		@RequestParam("dataAtendimento") final String dataAtendimento,
     		@RequestParam("prontuarioId") final Long prontuarioId) {
-    	Prontuario prontuario = prontuarioDAO.consultarPorId(prontuarioId);
+    	Prontuario prontuario = prontuarioDAO.buscarPorId(prontuarioId);
         prontuarioDAO.salvarAtendimento(atendimento);
         prontuarioDAO.adicionarAtendimento(atendimento, prontuarioId);
         notificaCliente(atendimento, prontuario);
@@ -209,13 +209,13 @@ public class ProntuarioController {
     	@RequestParam("inclusaoPatologia") final String inclusaoPatologia) {
     	LOGGER.info(("Inserindo patologia " + patologiaStr + " no prontuário " + prontuarioId).toUpperCase());
     	ProntuarioPatologia prontuarioPatologia = new ProntuarioPatologia();
-    	Patologia pat = animalDAO.patologiaPorDescricao(patologiaStr);
+    	Patologia pat = animalDAO.buscarPatologiaPorDescricao(patologiaStr);
 		animalDAO.salvarPatologia(pat);
 		if (prontuarioPatologiaId != null) {
-			prontuarioPatologia = prontuarioDAO.buscarOcorrenciaPatologiaProntuarioPorId(prontuarioPatologiaId);
+			prontuarioPatologia = prontuarioDAO.buscarOcorrenciaDaPatologia(prontuarioPatologiaId);
 		}
 		prontuarioPatologia.setPatologia(pat);
-		Prontuario prontuario = prontuarioDAO.consultarPorId(prontuarioId);
+		Prontuario prontuario = prontuarioDAO.buscarPorId(prontuarioId);
 		prontuarioPatologia.setProntuario(prontuario);
 		prontuarioPatologia.setInclusaoPatologia(inclusaoPatologia);
     	prontuarioDAO.adicionarPatologia(prontuarioPatologia, prontuarioId);
@@ -230,17 +230,17 @@ public class ProntuarioController {
     		@RequestParam("inclusaoVacina") final String inclusaoVacina) {
     	LOGGER.info(("Inserindo vacina " + vacinaStr + " no prontuário " + prontuarioId).toUpperCase());
     	ProntuarioVacina prontuarioVacina = new ProntuarioVacina();
-    	Vacina vacina = vacinaDAO.consultarPorNome(vacinaStr);
+    	Vacina vacina = vacinaDAO.buscarPorNome(vacinaStr);
 		vacinaDAO.salvar(vacina);
 		if (prontuarioVacinaId != null)
-			prontuarioVacina = prontuarioDAO.buscarOcorrenciaVacinaProntuarioPorId(prontuarioVacinaId);
+			prontuarioVacina = prontuarioDAO.buscarOcorrenciaDaVacina(prontuarioVacinaId);
 		prontuarioVacina.setVacina(vacina);
-		Prontuario prontuario = prontuarioDAO.consultarPorId(prontuarioId);
+		Prontuario prontuario = prontuarioDAO.buscarPorId(prontuarioId);
 		prontuarioVacina.setProntuario(prontuario);
 		prontuarioVacina.setInclusaoVacina(inclusaoVacina);
     	prontuarioDAO.adicionarVacina(prontuarioVacina, prontuarioId);
     	notificaCliente(prontuarioVacina, prontuario);
-    	return new ModelAndView("redirect:prontuarioDoAnimal/" + prontuarioDAO.consultarPorId(prontuarioId).getAnimal().getAnimalId());
+    	return new ModelAndView("redirect:prontuarioDoAnimal/" + prontuarioDAO.buscarPorId(prontuarioId).getAnimal().getAnimalId());
     }
     
     @RequestMapping(value = "/removerAtendimentoDoProntuario/{prontuarioId}/{atendimentoId}", method = RequestMethod.GET)
@@ -248,10 +248,10 @@ public class ProntuarioController {
     		@ModelAttribute("atendimento") Atendimento atendimento,
     		@ModelAttribute("prontuarioPatologia") Patologia patologia,
     		@ModelAttribute("prontuarioVacina") Vacina vacina) {
-    	Prontuario prontuario = prontuarioDAO.consultarPorId(prontuarioId);
+    	Prontuario prontuario = prontuarioDAO.buscarPorId(prontuarioId);
     	ModelAndView modelAndView = new ModelAndView("redirect:/prontuario/prontuarioDoAnimal/" + prontuario.getAnimal().getAnimalId());
 		modelAndView.addObject("prontuario", prontuario);
-    	prontuarioDAO.removerAtendimentoDoProntuario(atendimentoDAO.consultarPorId(atendimentoId), prontuarioId);
+    	prontuarioDAO.removerAtendimento(atendimentoDAO.buscarPorId(atendimentoId), prontuarioId);
     	adicionarListasAoProntuario(modelAndView);
     	return modelAndView;
     }
@@ -262,10 +262,10 @@ public class ProntuarioController {
     		@ModelAttribute("atendimento") Atendimento atendimento,
     		@ModelAttribute("prontuarioPatologia") Patologia patologia,
     		@ModelAttribute("prontuarioVacina") Vacina vacina) {
-    	Prontuario prontuario = prontuarioDAO.consultarPorId(prontuarioId);
+    	Prontuario prontuario = prontuarioDAO.buscarPorId(prontuarioId);
     	ModelAndView modelAndView = new ModelAndView("redirect:/prontuario/prontuarioDoAnimal/" + prontuario.getAnimal().getAnimalId());
 		modelAndView.addObject("prontuario", prontuario);
-    	prontuarioDAO.removerVacinaDoProntuario(prontuarioDAO.buscarOcorrenciaVacinaProntuarioPorId(vacinaId),prontuarioId);
+    	prontuarioDAO.removerVacina(prontuarioDAO.buscarOcorrenciaDaVacina(vacinaId),prontuarioId);
     	adicionarListasAoProntuario(modelAndView);
     	return modelAndView;
     }
@@ -275,10 +275,10 @@ public class ProntuarioController {
     		@ModelAttribute("atendimento") Atendimento atendimento,
     		@ModelAttribute("prontuarioPatologia") Patologia patologia,
     		@ModelAttribute("prontuarioVacina") Vacina vacina) {
-    	Prontuario prontuario = prontuarioDAO.consultarPorId(prontuarioId);
+    	Prontuario prontuario = prontuarioDAO.buscarPorId(prontuarioId);
     	ModelAndView modelAndView = new ModelAndView("redirect:/prontuario/prontuarioDoAnimal/" + prontuario.getAnimal().getAnimalId());
 		modelAndView.addObject("prontuario", prontuario);
-    	prontuarioDAO.removerPatologiaDoProntuario(prontuarioDAO.buscarOcorrenciaPatologiaProntuarioPorId(patologiaId),prontuarioId);
+    	prontuarioDAO.removerPatologia(prontuarioDAO.buscarOcorrenciaDaPatologia(patologiaId),prontuarioId);
     	adicionarListasAoProntuario(modelAndView);
 		return modelAndView;
     }
@@ -286,12 +286,12 @@ public class ProntuarioController {
     @SuppressWarnings("rawtypes")
 	private void adicionarListasAoProntuario(ModelAndView viewProntuario) {
     	Map<String, List> listasProntuario = new HashMap<>();
-    	listasProntuario.put("tiposDeAtendimento", prontuarioDAO.tiposDeAtendimento());
+    	listasProntuario.put("tiposDeAtendimento", atendimentoDAO.buscarTiposDeAtendimento());
     	LOGGER.info("ADICIONANDO LISTA DE SERVIÇOS P/ INCLUSÃO DE ATENDIMENTOS NO PRONTUÁRIO.");
-    	listasProntuario.put("vacinas", prontuarioDAO.vacinas().stream()
+    	listasProntuario.put("vacinas", prontuarioDAO.buscarVacinas().stream()
 	    		.map(v -> v.getNome()).collect(Collectors.toList()));
     	LOGGER.info("ADICIONANDO LISTA DE VACINAS DISPONÍVEIS PARA USO NO PRONTUÁRIO. ");
-    	listasProntuario.put("patologias", animalDAO.patologias().stream()
+    	listasProntuario.put("patologias", animalDAO.buscarPatologias().stream()
 	    		.map(pat -> pat.getNome()).collect(Collectors.toList()));
     	LOGGER.info("ADICIONANDO POSSÍVEIS PATOLOGIAS QUE PODEM SER ANEXADAS NO HISTÓRICO DO ANIMAL NO PRONTUÁRIO. ");
     	viewProntuario.addAllObjects(listasProntuario);

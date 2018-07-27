@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.InitBinder;
 
 import com.vetweb.dao.AnimalDAO;
+import com.vetweb.dao.AtendimentoDAO;
 import com.vetweb.dao.ConfigDAO;
 import com.vetweb.dao.ProntuarioDAO;
 import com.vetweb.dao.ProprietarioDAO;
@@ -46,6 +47,9 @@ public class InitController {
     private ProntuarioDAO prontuarioDAO;
     
     @Autowired
+    private AtendimentoDAO atendimentoDAO;
+    
+    @Autowired
     private VacinaDAO vacinaDAO;
     
     @Autowired 
@@ -66,7 +70,7 @@ public class InitController {
         binder.registerCustomEditor(Proprietario.class, "proprietario", new PropertyEditorSupport(){
             @Override
             public void setAsText(String text) throws IllegalArgumentException {
-                Proprietario proprietario = proprietarioDAO.consultarPorNome(text);
+                Proprietario proprietario = proprietarioDAO.buscarPorNome(text);
                 setValue(proprietario);
             }
             @Override
@@ -82,7 +86,7 @@ public class InitController {
         binder.registerCustomEditor(Animal.class, "animal", new PropertyEditorSupport(){
             @Override
             public void setAsText(String text) throws IllegalArgumentException {
-                Animal a = animalDAO.consultarPorNome(text);
+                Animal a = animalDAO.buscarPorNome(text);
                 this.setValue(a);
             }
             @Override
@@ -98,7 +102,7 @@ public class InitController {
         binder.registerCustomEditor(Especie.class, "especie", new PropertyEditorSupport(){
             @Override
             public void setAsText(String text) throws IllegalArgumentException {
-                Especie especie = animalDAO.especiePorDescricao(text);
+                Especie especie = animalDAO.buscarEspeciePorDescricao(text);
                 this.setValue(especie);
             }
 
@@ -113,7 +117,7 @@ public class InitController {
         binder.registerCustomEditor(Raca.class, "raca", new PropertyEditorSupport(){
             @Override
             public void setAsText(String text) throws IllegalArgumentException {
-                Raca raca = animalDAO.racaPorDescricao(text);
+                Raca raca = animalDAO.buscarRacaPorDescricao(text);
                 this.setValue(raca);
             }
 
@@ -128,7 +132,7 @@ public class InitController {
         binder.registerCustomEditor(Pelagem.class, "pelagem", new PropertyEditorSupport(){
             @Override
             public void setAsText(String text) throws IllegalArgumentException {
-                Pelagem p = animalDAO.pelagemPorDescricao(text);
+                Pelagem p = animalDAO.buscarPelagemPorDescricao(text);
                 this.setValue(p);
             }
 
@@ -143,7 +147,7 @@ public class InitController {
         binder.registerCustomEditor(Prontuario.class, "prontuario", new PropertyEditorSupport(){
             @Override
             public void setAsText(String text) throws IllegalArgumentException {
-                Prontuario prontuario = prontuarioDAO.prontuarioPorAnimal(animalDAO.consultarPorNome(text).getAnimalId());
+                Prontuario prontuario = prontuarioDAO.buscarProntuarioPorAnimal(animalDAO.buscarPorNome(text).getAnimalId());
                 this.setValue(prontuario);
             }
 
@@ -158,7 +162,7 @@ public class InitController {
         binder.registerCustomEditor(TipoDeAtendimento.class, "tipoDeAtendimento", new PropertyEditorSupport(){
             @Override
             public void setAsText(String text) throws IllegalArgumentException {
-                TipoDeAtendimento tipoDeAtendimento = prontuarioDAO.tipoDeAtendimentoPorNome(text);
+                TipoDeAtendimento tipoDeAtendimento = atendimentoDAO.buscarTipoDeAtendimentoPorNome(text);
                 this.setValue(tipoDeAtendimento);
             }
 
@@ -173,7 +177,7 @@ public class InitController {
         binder.registerCustomEditor(Vacina.class, "vacina", new PropertyEditorSupport(){
             @Override
             public void setAsText(String text) throws IllegalArgumentException {
-                Vacina vacina = vacinaDAO.consultarPorNome(text);
+                Vacina vacina = vacinaDAO.buscarPorNome(text);
                 this.setValue(vacina);
             }
 
@@ -188,7 +192,7 @@ public class InitController {
         binder.registerCustomEditor(Patologia.class, "patologia", new PropertyEditorSupport(){
         	@Override
         	public void setAsText(String text) throws IllegalArgumentException {
-        		Patologia patologia = animalDAO.patologiaPorDescricao(text);
+        		Patologia patologia = animalDAO.buscarPatologiaPorDescricao(text);
         		this.setValue(patologia);
         	}
         	
@@ -203,7 +207,7 @@ public class InitController {
         binder.registerCustomEditor(Patologia.class, "patologia", new PropertyEditorSupport(){
             @Override
             public void setAsText(String text) throws IllegalArgumentException {
-                Atendimento atendimento = prontuarioDAO.atendimentoPorPreenchimento(text);
+                Atendimento atendimento = prontuarioDAO.buscarAtendimentoPorPreenchimento(text);
                 this.setValue(atendimento);
             }
 

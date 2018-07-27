@@ -21,13 +21,18 @@ public class ConfigDAO {
         else entityManager.merge(c);
     }
     
-    public Clinica clinicaPorCnpj(String razaoSocial){
-        return entityManager.createQuery("SELECT c FROM Clinica c WHERE c.razaoSocial = :razaoSocial", Clinica.class)
-                .setParameter("razaoSocial", razaoSocial).getSingleResult();
+    public Clinica buscarClinicaPorCnpj(String razaoSocial){
+        return entityManager
+        		.createQuery("SELECT c FROM Clinica c WHERE c.razaoSocial = :razaoSocial", Clinica.class)
+                .setParameter("razaoSocial", razaoSocial)
+                .getSingleResult();
     }
     
-    public Optional<Clinica> clinica(){
-        return entityManager.createQuery("SELECT c FROM Clinica c ORDER BY c.cnpj ASC", Clinica.class)
-                .getResultList().stream().findFirst();
+    public Optional<Clinica> buscarClinica(){
+        return entityManager
+        		.createQuery("SELECT c FROM Clinica c ORDER BY c.cnpj ASC", Clinica.class)
+                .getResultList()
+                .stream()
+                .findFirst();
     }
 }

@@ -27,7 +27,7 @@ public class DaoTest {
 	
 	@Test
 	public void verificaConsultaClientesEmDebito() {
-		assertTrue(proprietarioDAO.getClientesEmDebito().contains(proprietarioDAO.consultarPorId(6L)));
+		assertTrue(proprietarioDAO.buscarClientesEmDebito().contains(proprietarioDAO.buscarPorId(6L)));
 	}
 
 }

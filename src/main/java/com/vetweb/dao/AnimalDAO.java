@@ -36,48 +36,43 @@ public class AnimalDAO implements IDAO<Animal>{
     }
     
     @Override
-    public List<Animal> listar() {
-        return entityManager.createQuery("select a from Animal a", Animal.class).getResultList();
+    public List<Animal> listarTodos() {
+        return entityManager
+        		.createQuery("SELECT a FROM Animal a", Animal.class)
+        		.getResultList();
     }
 
     @Override
-    public Animal consultarPorId(long id) {
-        return entityManager.find(Animal.class, id);
+    public Animal buscarPorId(long id) {
+        return entityManager
+        		.find(Animal.class, id);
     }
 
     @Override
     public void remover(Animal e) {
         entityManager.remove(e);
     }
-    
-    public Animal atualizar(Animal animal) {
-        return entityManager.merge(animal);
-    }
 
-    @Override
-    public Animal consultarPorNome(String nome) {
-        Optional<Animal> optionalAnimal = Optional.of(entityManager.createNamedQuery("animalPorNome", Animal.class).setParameter("nomeAnimal", nome).getSingleResult());                
+    public Animal buscarPorNome(String nome) {
+        Optional<Animal> optionalAnimal = Optional
+        		.of(entityManager
+        				.createNamedQuery("animalPorNome", Animal.class)
+        				.setParameter("nomeAnimal", nome)
+        				.getSingleResult());                
         Animal a = optionalAnimal.orElseThrow(RuntimeException::new);
         return a;
     }
     
-    public Animal consultar(Animal animal) {
-        return entityManager.createNamedQuery("consultaGetId", Animal.class)
-                .setParameter("nomeAnimal", animal.getNome())
-                .setParameter("idPessoa", animal.getProprietario().getPessoaId())
-                .setParameter("nascimentoAnimal", animal.getDtNascimento())
-                .getSingleResult();
-    }
-    
-    @Override
-    public long quantidadeRegistros() {
-        return entityManager.createNamedQuery("quantidadeAnimais", Long.class).getSingleResult();
+    public long buscarQuantidade() {
+        return entityManager
+        		.createNamedQuery("quantidadeAnimais", Long.class)
+        		.getSingleResult();
     }
     
     public void salvarEspecie(Especie especie){
-        if(especie.getEspecieId() == null){
+        if(especie.getEspecieId() == null) {
             entityManager.persist(especie);
-        }else{
+        } else{
             entityManager.merge(especie);
         }
     }
@@ -103,57 +98,78 @@ public class AnimalDAO implements IDAO<Animal>{
             entityManager.merge(patologia);
     }
     
-    public List<Pelagem> pelagens(){
-        return entityManager.createQuery("SELECT p FROM Pelagem p", Pelagem.class).getResultList();
+    public List<Pelagem> buscarPelagens(){
+        return entityManager
+        		.createQuery("SELECT p FROM Pelagem p", Pelagem.class)
+        		.getResultList();
     }
     
-    public List<Especie> especies(){
-        return entityManager.createQuery("SELECT E FROM Especie E", Especie.class).getResultList();
+    public List<Especie> buscarEspecies(){
+        return entityManager
+        		.createQuery("SELECT e FROM Especie e", Especie.class)
+        		.getResultList();
     }
     
-    public List<Raca> racas(){
-        return entityManager.createQuery("SELECT R FROM Raca R", Raca.class).getResultList();
+    public List<Raca> buscarRacas(){
+        return entityManager
+        		.createQuery("SELECT r FROM Raca r", Raca.class)
+        		.getResultList();
     }
     
-    public List<Patologia> patologias(){
-        return entityManager.createQuery("SELECT pat FROM Patologia pat", Patologia.class).getResultList();
+    public List<Patologia> buscarPatologias(){
+        return entityManager
+        		.createQuery("SELECT pat FROM Patologia pat", Patologia.class)
+        		.getResultList();
     }
     
-    public Especie especiePorDescricao(String especie){
-        return entityManager.createQuery("SELECT e FROM Especie e WHERE e.descricao = :desc", Especie.class)
-                .setParameter("desc", especie).getSingleResult();
+    public Especie buscarEspeciePorDescricao(String especie){
+        return entityManager
+        		.createQuery("SELECT e FROM Especie e WHERE e.descricao = :desc", Especie.class)
+                .setParameter("desc", especie)
+                .getSingleResult();
     }
     
-    public List<Raca> racasPorEspecie(String especie){
-        return entityManager.createQuery("SELECT r FROM Raca r WHERE r.especie.descricao = :especie", Raca.class)
-                .setParameter("especie", especie).getResultList();
+    public List<Raca> buscarRacasPorEspecie(String especie){
+        return entityManager
+        		.createQuery("SELECT r FROM Raca r WHERE r.especie.descricao = :especie", Raca.class)
+                .setParameter("especie", especie)
+                .getResultList();
     }
     
-    public Raca racaPorDescricao(String raca){
-        return entityManager.createQuery("SELECT r FROM Raca r WHERE r.descricao = :descricao", Raca.class)
-                .setParameter("descricao", raca).getSingleResult();
+    public Raca buscarRacaPorDescricao(String raca){
+        return entityManager
+        		.createQuery("SELECT r FROM Raca r WHERE r.descricao = :descricao", Raca.class)
+                .setParameter("descricao", raca)
+                .getSingleResult();
     }
     
-    public Pelagem pelagemPorDescricao(String pelagem){
-        return entityManager.createQuery("SELECT p FROM Pelagem p WHERE p.descricao = :descricao", Pelagem.class)
-                .setParameter("descricao", pelagem).getSingleResult();
+    public Pelagem buscarPelagemPorDescricao(String pelagem){
+        return entityManager
+        		.createQuery("SELECT p FROM Pelagem p WHERE p.descricao = :descricao", Pelagem.class)
+                .setParameter("descricao", pelagem)
+                .getSingleResult();
     }
     
-    public Patologia patologiaPorDescricao(String patologia){
-        return entityManager.createQuery("SELECT p FROM Patologia p WHERE p.nome = :nome", Patologia.class)
-                .setParameter("nome", patologia).getSingleResult();
+    public Patologia buscarPatologiaPorDescricao(String patologia){
+        return entityManager
+        		.createQuery("SELECT p FROM Patologia p WHERE p.nome = :nome", Patologia.class)
+                .setParameter("nome", patologia)
+                .getSingleResult();
     }
     
-    public Especie especiePorId(Long especieId) {
-        return entityManager.find(Especie.class, especieId);
+    public Especie buscarEspeciePorId(Long especieId) {
+        return entityManager
+        		.find(Especie.class, especieId);
     }
     
-    public Raca racaPorId(Long racaId) {
-        return entityManager.find(Raca.class, racaId);
+    public Raca buscarRacaPorId(Long racaId) {
+        return entityManager
+        		.find(Raca.class, racaId);
     }
     
-    public Pelagem pelagemPorId(Long pelagemId) {
-        return entityManager.find(Pelagem.class, pelagemId);
+    public Pelagem buscarPelagemPorId(Long pelagemId) {
+        return entityManager
+        		.find(Pelagem.class, pelagemId);
     }
     
     public void removerEspecie(Especie especie) {

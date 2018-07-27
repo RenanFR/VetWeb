@@ -46,12 +46,12 @@ public class ProprietarioDAO implements IDAO<Proprietario> {
     }
 
     @Override
-    public List<Proprietario> listar() {
+    public List<Proprietario> listarTodos() {
         return entityManager.createQuery("select p from Proprietario p", Proprietario.class).getResultList();
     }
 
     @Override
-    public Proprietario consultarPorId(long id) {
+    public Proprietario buscarPorId(long id) {
         return entityManager.find(Proprietario.class, id);
     }
 
@@ -61,52 +61,61 @@ public class ProprietarioDAO implements IDAO<Proprietario> {
     }
     
     public void removerAnimal(long animalId) {
-        Animal animal = animalDAO.consultarPorId(animalId);
-        Proprietario proprietario = consultarPorId(animal.getProprietario().getPessoaId());
-        Animal a = proprietario.getAnimais().stream().filter(animal1 -> animal1.getAnimalId().equals(animalId)).findFirst().get();
+        Animal animal = animalDAO.buscarPorId(animalId);
+        Proprietario proprietario = buscarPorId(animal.getProprietario().getPessoaId());
+        Animal a = proprietario
+        		.getAnimais()
+        		.stream()
+        		.filter(animal1 -> animal1.getAnimalId().equals(animalId))
+        		.findFirst()
+        		.get();
         proprietario.getAnimais().remove(a);
         animalDAO.remover(a);
-        System.out.println(a.getNome() + a.getAnimalId());
     }
-
-    @Override
-    public Proprietario consultarPorNome(String nome) {
-        Optional<Proprietario> o = Optional.of(entityManager.createNamedQuery("proprietarioPorNome", Proprietario.class)
-                .setParameter("nomeProprietario", nome).getSingleResult());
+    //FIXME Remover tratamento opcional
+    public Proprietario buscarPorNome(String nome) {
+        Optional<Proprietario> o = Optional
+        		.of(entityManager
+        				.createNamedQuery("proprietarioPorNome", Proprietario.class)
+        				.setParameter("nomeProprietario", nome).getSingleResult());
         Proprietario p = o.orElseThrow(RuntimeException::new);
         return p;
     }
 
-    public void detachProprietario(Proprietario proprietario) {
+    public void detach(Proprietario proprietario) {
     	entityManager.detach(proprietario);
     }
     
-    @Override
-    public long quantidadeRegistros() {
-        return entityManager.createNamedQuery("quantidadeClientes", Long.class).getSingleResult();
+    public long buscarQuantidade() {
+        return entityManager
+        		.createNamedQuery("quantidadeClientes", Long.class)
+        		.getSingleResult();
     }
     
-    public List<Prontuario> getProntuariosDosAnimaisDoCliente(Long proprietarioId) {
+    public List<Prontuario> buscarProntuariosParaOCliente(Long proprietarioId) {
     	return entityManager.createNamedQuery("prontuariosAnimaisDoCliente", Prontuario.class)
     			.setParameter("Id", proprietarioId)
     			.getResultList();
     }
     
-    public List<ProntuarioVacina> getVacinasAplicadasPorCliente(Long proprietario) {
-    	return getProntuariosDosAnimaisDoCliente(proprietario)
+    //FIXME Migrar Stream p/ critério na consulta
+    public List<ProntuarioVacina> buscarVacinasParaOCliente(Long proprietario) {
+    	return buscarProntuariosParaOCliente(proprietario)
     			.stream()
     			.flatMap(p -> p.getVacinas().stream()).collect(Collectors.toList());
     }
     
+    //FIXME Migrar Stream p/ critério na consulta    
     public List<Atendimento> getAtendimentosRealizadosPorCliente(Long proprietario) {
-    	return getProntuariosDosAnimaisDoCliente(proprietario)
+    	return buscarProntuariosParaOCliente(proprietario)
     			.stream()
     			.flatMap(p -> p.getAtendimentos().stream()).collect(Collectors.toList());
     }
     
-    public BigDecimal getValoresPendentesDoCliente(Proprietario proprietario) {
+    //FIXME Migrar Stream p/ critério na consulta    
+    public BigDecimal buscarValorPendenteDoCliente(Proprietario proprietario) {
     	List<Atendimento> atendimentosAnimaisCliente = getAtendimentosRealizadosPorCliente(proprietario.getPessoaId());
-    	List<ProntuarioVacina> vacinasAnimaisCliente = getVacinasAplicadasPorCliente(proprietario.getPessoaId());
+    	List<ProntuarioVacina> vacinasAnimaisCliente = buscarVacinasParaOCliente(proprietario.getPessoaId());
     	BigDecimal totalPendente;
     	double totalPendenteAtendimentos = atendimentosAnimaisCliente.stream()
     			.filter(at -> !at.isPago())
@@ -120,20 +129,20 @@ public class ProprietarioDAO implements IDAO<Proprietario> {
     	return totalPendente;
     }
 
-	public List<Proprietario> getClientesEmDebito() {
+	public List<Proprietario> buscarClientesEmDebito() {
 		String query = "SELECT p FROM Proprietario p "
-		+ "JOIN p.animais a "
-		+ "JOIN a.prontuario pr "
-		+ "LEFT JOIN pr.vacinas v "
-		+ "LEFT JOIN pr.atendimentos a "
-		+ "WHERE v.pago = false OR a.pago = false";
+			+ "JOIN p.animais a "
+			+ "JOIN a.prontuario pr "
+			+ "LEFT JOIN pr.vacinas v "
+			+ "LEFT JOIN pr.atendimentos a "
+			+ "WHERE v.pago = false OR a.pago = false";
 		List<Proprietario> clientesComDebito = entityManager
 												.createQuery(query, Proprietario.class)
 												.getResultList();
 		return clientesComDebito;
 	}
 	
-	public Set<Proprietario> getClientesInativosAdimplentes() {
+	public Set<Proprietario> buscarClientesInativosAdimplentes() {
 		List<Prontuario> prontuariosDeClientesInativos = entityManager
 				.createQuery("SELECT p FROM Prontuario p JOIN p.animal a JOIN a.proprietario cli WHERE cli.ativo = FALSE", Prontuario.class)
 				.getResultList();

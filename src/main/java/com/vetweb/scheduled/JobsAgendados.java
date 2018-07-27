@@ -48,14 +48,14 @@ public class JobsAgendados {
 	
     @Scheduled(fixedDelay = MINUTO)
     public void verificacaoClientesEmDebito() {
-    	List<Proprietario> proprietariosComDebito = proprietarioDAO.getClientesEmDebito(); 
+    	List<Proprietario> proprietariosComDebito = proprietarioDAO.buscarClientesEmDebito(); 
     	proprietariosComDebito
     		.stream()
     		.filter(prop -> prop.isAtivo())
     		.peek(prop -> LOGGER.info("INATIVANDO CLIENTE " + prop.getNome()))
     		.forEach(prop ->  {prop.setAtivo(false); proprietarioDAO.salvar(prop);});
     	
-    	Set<Proprietario> proprietariosInativosAdimplentes = proprietarioDAO.getClientesInativosAdimplentes();
+    	Set<Proprietario> proprietariosInativosAdimplentes = proprietarioDAO.buscarClientesInativosAdimplentes();
     	proprietariosInativosAdimplentes
     		.stream()
     		.peek(prop -> LOGGER.info("REATIVANDO CLIENTE " + prop.getNome()))
@@ -65,7 +65,7 @@ public class JobsAgendados {
     @Scheduled(fixedDelay = HORA)
     public void verificacaoRetornoAtendimento() {
     	atendimentoDAO
-    		.listar()
+    		.listarTodos()
     		.stream()
     		.filter(ate -> 
     			LocalDate.parse(ate.getDataAtendimento(),DateTimeFormatter.ofPattern("dd/MM/yyyy")).plus(ate.getTipoDeAtendimento().getFrequencia())

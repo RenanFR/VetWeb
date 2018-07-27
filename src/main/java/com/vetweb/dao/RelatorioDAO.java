@@ -17,7 +17,8 @@ public class RelatorioDAO {
 	@PersistenceContext
 	private EntityManager entityManager;
 	
-	public double contasAReceber() {
+	//FIXME Migrar Stream p/ critério de consulta
+	public double buscarTotalAReceber() {
 		List<Prontuario> prontuarios = entityManager
 				.createQuery("SELECT p FROM Prontuario p", Prontuario.class)
 				.getResultList();

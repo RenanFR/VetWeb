@@ -25,13 +25,13 @@ public class VacinaDAO implements IDAO<Vacina>{
     }
 
     @Override
-    public List<Vacina> listar() {
+    public List<Vacina> listarTodos() {
         return entityManager.createQuery("SELECT v FROM Vacina v", Vacina.class)
                 .getResultList();
     }
 
     @Override
-    public Vacina consultarPorId(long vacinaId) {
+    public Vacina buscarPorId(long vacinaId) {
         return entityManager.find(Vacina.class, vacinaId);
     }
 
@@ -40,15 +40,11 @@ public class VacinaDAO implements IDAO<Vacina>{
         entityManager.remove(vacina);
     }
 
-    @Override
-    public Vacina consultarPorNome(String nomeVacina) {
-        return entityManager.createQuery("SELECT v FROM Vacina v WHERE v.nome = :nomeVacina", Vacina.class)
-                .setParameter("nomeVacina", nomeVacina).getSingleResult();
-    }
-
-    @Override
-    public long quantidadeRegistros() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Vacina buscarPorNome(String nomeVacina) {
+        return entityManager
+        		.createQuery("SELECT v FROM Vacina v WHERE v.nome = :nomeVacina", Vacina.class)
+                .setParameter("nomeVacina", nomeVacina)
+                .getSingleResult();
     }
 
 }

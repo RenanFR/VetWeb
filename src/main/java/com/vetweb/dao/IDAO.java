@@ -7,14 +7,10 @@ public interface IDAO<E> {
 	
     public void salvar(E e);
     
-    public List<E> listar();
+    public List<E> listarTodos();
     
-    public E consultarPorId(long id);
+    public E buscarPorId(long id);
     
     public void remover(E e);
-    
-    public E consultarPorNome(String nome);
-    
-    public long quantidadeRegistros();
     
 }
