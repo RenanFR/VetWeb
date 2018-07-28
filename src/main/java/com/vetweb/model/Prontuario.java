@@ -25,7 +25,7 @@ public class Prontuario implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	@Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long prontuarioId;
 	
     @OneToMany(fetch = FetchType.LAZY)
@@ -40,19 +40,19 @@ public class Prontuario implements Serializable {
 	    inverseJoinColumns = {@JoinColumn(name = "vacinaId", referencedColumnName = "prontuarioVacinaId")  })
     private List<ProntuarioVacina> vacinas;
     
-    @OneToMany
+    @OneToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "tbl_prontuario_documento", 
 	    joinColumns = {@JoinColumn(name = "prontuarioId", referencedColumnName = "prontuarioId")   },
 	    inverseJoinColumns = {	@JoinColumn(name = "documentoId", referencedColumnName = "documentoId") })
     private List<Documento> documentos;
     
-    @OneToMany
+    @OneToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "tbl_prontuario_exame",
 	    joinColumns = {@JoinColumn(name = "prontuarioId", referencedColumnName = "prontuarioId") },
 	    inverseJoinColumns = {@JoinColumn(name = "exameId", referencedColumnName = "exameId")})
     private List<Exame> exames;
     
-    @OneToMany
+    @OneToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "tbl_prontuario_prescricao", 
 	    joinColumns = {@JoinColumn(name = "prontuarioId", referencedColumnName = "prontuarioId")},
 	    inverseJoinColumns = {@JoinColumn(name = "prescricaoId", referencedColumnName = "prescricaoId")})

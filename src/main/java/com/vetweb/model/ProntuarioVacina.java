@@ -1,17 +1,17 @@
 package com.vetweb.model;
 //@author renan.rodrigues@metasix.com.br
 
-import java.time.LocalDate;
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-
-import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -21,17 +21,18 @@ public class ProntuarioVacina implements Serializable, ElementoProntuario {
 	
 	private static final long serialVersionUID = 1L;
 	
-	@Id @GeneratedValue
+	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long prontuarioVacinaId;
 	
 	@JsonIgnore
-	@JoinColumn(name="prontuarioId")
+	@ManyToOne
+	@JoinColumn(name="prontuarioId", referencedColumnName = "prontuarioId")
 	private Prontuario prontuario;
 	
-	@JoinColumn(name="vacinaId")
+	@ManyToOne
+	@JoinColumn(name="vacinaId", referencedColumnName = "vacinaId")
 	private Vacina vacina;
 	
-	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private LocalDate inclusaoVacina;
 	
 	private boolean pago;

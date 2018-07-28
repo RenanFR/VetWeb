@@ -7,14 +7,12 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.vetweb.model.Atendimento;
 import com.vetweb.model.Prontuario;
 import com.vetweb.model.ProntuarioPatologia;
 import com.vetweb.model.ProntuarioVacina;
-import com.vetweb.model.Proprietario;
 import com.vetweb.model.Vacina;
 
 @Repository
@@ -22,9 +20,6 @@ public class ProntuarioDAO implements IDAO<Prontuario>{
 	
     @PersistenceContext
     private EntityManager entityManager;
-
-    @Autowired
-    private ProprietarioDAO proprietarioDAO;
     
     @Override
     public void salvar(Prontuario prontuario) {
@@ -171,28 +166,6 @@ public class ProntuarioDAO implements IDAO<Prontuario>{
     			.setParameter("preenchimento", preenchimentoAtendimento)
     			.getSingleResult();
     }
-    
-    //FIXME Migrar consulta nativa
-    public Proprietario buscarClienteParaOAtendimento(Atendimento atendimento) {
-    	Object pessoaid = entityManager.createNativeQuery("SELECT cli.pessoaid FROM proprietarios cli\n" + 
-    			"JOIN animais a ON cli.pessoaid = a.proprietario_pessoaid\n" + 
-    			"JOIN prontuarios p ON a.prontuario_prontuarioid = p.prontuarioid\n" + 
-    			"JOIN prontuarios_atendimento ate ON ate.prontuario_prontuarioid = p.prontuarioid\n" + 
-    			"WHERE ate.atendimentos_atendimentoid = :id LIMIT 1;")
-    			.setParameter(1, atendimento.getAtendimentoId()).getSingleResult();
-    	return proprietarioDAO.buscarPorId(Long.parseLong(pessoaid.toString()));
-    }
-    
-    //FIXME Migrar consulta nativa
-	public Proprietario buscarClienteParaAVacina(ProntuarioVacina vacina) {
-    	Object pessoaid = entityManager.createNativeQuery("SELECT cli.pessoaid FROM proprietarios cli\n" + 
-    			"JOIN animais a ON cli.pessoaid = a.proprietario_pessoaid\n" + 
-    			"JOIN prontuarios p ON a.prontuario_prontuarioid = p.prontuarioid\n" + 
-    			"JOIN prontuarios_prontuariovacina vac ON vac.prontuario_prontuarioid = p.prontuarioid\n" + 
-    			"WHERE vac.vacinas_prontuariovacinaid = 15 LIMIT 1;")
-    			.setParameter(1, vacina.getProntuarioVacinaId()).getSingleResult();
-    	return proprietarioDAO.buscarPorId(Long.parseLong(pessoaid.toString()));
-	}
 	
 	public Prontuario buscarProntuarioDoAtendimento(Atendimento atendimento) {
 		return entityManager

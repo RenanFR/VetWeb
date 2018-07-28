@@ -2,12 +2,13 @@ package com.vetweb.model;
 
 import java.io.Serializable;
 
+import javax.persistence.Column;
+
 //@author renan.rodrigues@metasix.com.br
 
 import javax.persistence.Embeddable;
 
 @Embeddable
-
 public class Endereco implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
@@ -20,6 +21,7 @@ public class Endereco implements Serializable {
     
     private String estado;
     
+    @Column(columnDefinition = "VARCHAR(30)")
     private String cep;
     
     private int numero;

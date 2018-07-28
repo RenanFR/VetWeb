@@ -47,7 +47,7 @@
         <table class="table table-striped table-bordered table-hover" id="animais">
             <thead>
                 <tr>
-                    <th><spring:message code="nomeAnimal"></spring:message>  </th>
+                    <th><spring:message code="nomeAnimal"/>  </th>
                 </tr>
             </thead>
             <tbody>

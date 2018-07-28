@@ -1,20 +1,20 @@
 package com.vetweb.model;
 
+import java.io.Serializable;
+
 //@author renan.rodrigues@metasix.com.br
 
 import java.time.LocalDate;
-
-import java.io.Serializable;
-
 import java.time.format.DateTimeFormatter;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-
-import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
 @Table(name = "tbl_atendimento")
@@ -23,14 +23,16 @@ public class Atendimento implements Serializable, ElementoProntuario {
 	private static final long serialVersionUID = 1L;
 	
 	@Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long atendimentoId;
 	
+	@ManyToOne
+	@JoinColumn(name = "tipoDeAtendimentoId", referencedColumnName = "tipoDeAtendimentoId")
     private TipoDeAtendimento tipoDeAtendimento;
     
+	@Column(columnDefinition = "TEXT")
     private StringBuilder preenchimentoModeloAtendimento;
     
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate dataAtendimento;
     
     public boolean pago;

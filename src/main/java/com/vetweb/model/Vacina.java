@@ -18,7 +18,7 @@ public class Vacina implements Serializable, ElementoProntuario {
 	private static final long serialVersionUID = 1L;
 	
 	@Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long vacinaId;
 	
     private String nome;

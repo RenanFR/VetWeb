@@ -50,7 +50,7 @@ public class AnimalController {
     public static String modelDML = null;
     
     @RequestMapping(value = "/listar", method = RequestMethod.GET)
-    public ModelAndView animais() {
+    public ModelAndView listarTodos() {
         ModelAndView modelAndView = new ModelAndView("animal/animais");
         modelAndView.addObject("animais", animalDAO.listarTodos());
         return modelAndView;
@@ -67,7 +67,7 @@ public class AnimalController {
     }
     
     @RequestMapping(value = "/cadastrar", method = RequestMethod.POST)
-    public synchronized ModelAndView cadastrar(@Valid @ModelAttribute("animal") Animal animal,
+    public synchronized ModelAndView salvar(@Valid @ModelAttribute("animal") Animal animal,
     		BindingResult bindingResult,
     		MultipartFile imagemFile) {
         if (bindingResult.hasErrors()) {
@@ -136,16 +136,16 @@ public class AnimalController {
         return modelAndView;
     }
     
-    @RequestMapping(value = "/atualizarPatologia/{nome}", method = RequestMethod.GET)
-    public ModelAndView atualizarPatologia(@PathVariable("nome") String nome) {
+    @RequestMapping(value = "/atualizarPatologia/{patologiaId}", method = RequestMethod.GET)
+    public ModelAndView atualizarPatologia(@PathVariable("patologiaId") Long patologiaId) {
         ModelAndView modelAndView = new ModelAndView("animal/cadastroPatologia");
-        Patologia patologia = animalDAO.buscarPatologiaPorDescricao(nome);
+        Patologia patologia = animalDAO.buscarPatologiaPorId(patologiaId);
         modelAndView.addObject("patologia", patologia);
         return modelAndView;
     }
     
     @RequestMapping(value = "/detalhesAnimal/{nomeAnimal}", method = RequestMethod.GET)
-    public ModelAndView detalhesAnimal(@PathVariable("nomeAnimal") String nomeAnimal) {
+    public ModelAndView paginaDetalhes(@PathVariable("nomeAnimal") String nomeAnimal) {
         ModelAndView modelAndView = new ModelAndView("animal/detalhesAnimal");
         try{
         	LOGGER.info(("Animal " + nomeAnimal + " encontrado na base de dados. ").toUpperCase());
@@ -156,7 +156,7 @@ public class AnimalController {
     }
     
     @RequestMapping(value = "/especies", method = RequestMethod.GET)
-    public ModelAndView especies(){
+    public ModelAndView buscarEspecies(){
         ModelAndView modelAndView = new ModelAndView("animal/especies");
         modelAndView.addObject("especies", animalDAO.buscarEspecies());
         return modelAndView;
@@ -217,21 +217,21 @@ public class AnimalController {
     }
     
     @RequestMapping(value = "/pelagens", method = RequestMethod.GET)
-    public ModelAndView pelagens(){
+    public ModelAndView buscarPelagens(){
         ModelAndView modelAndView = new ModelAndView("animal/pelagens");
         modelAndView.addObject("pelagens", animalDAO.buscarPelagens());
         return modelAndView;
     }
     
     @RequestMapping(value = "/racas", method = RequestMethod.GET)
-    public ModelAndView racas(){
+    public ModelAndView buscarRacas(){
         ModelAndView modelAndView = new ModelAndView("animal/racas");
         modelAndView.addObject("racas", animalDAO.buscarRacas());
         return modelAndView;
     }
     
     @RequestMapping(value = "/patologias", method = RequestMethod.GET)
-    public ModelAndView patologias(){
+    public ModelAndView buscarPatologias(){
         ModelAndView modelAndView = new ModelAndView("animal/patologias");
         modelAndView.addObject("patologias", animalDAO.buscarPatologias());
         return modelAndView;
@@ -262,10 +262,10 @@ public class AnimalController {
         return modelAndView;
     }
     
-    @RequestMapping(value = "/removerPatologia/{nome}", method = RequestMethod.GET)
-    public ModelAndView delPatologia(@PathVariable("nome") String nome){
+    @RequestMapping(value = "/removerPatologia/{patologiaId}", method = RequestMethod.GET)
+    public ModelAndView delPatologia(@PathVariable("patologiaId") Long patologiaId){
         modelDML = "Patologia";
-        Patologia p = animalDAO.buscarPatologiaPorDescricao(nome);
+        Patologia p = animalDAO.buscarPatologiaPorId(patologiaId);
         ModelAndView modelAndView = new ModelAndView("redirect:/animais/patologias");
         animalDAO.removerPatologia(p);
         return modelAndView;

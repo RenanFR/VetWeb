@@ -4,6 +4,7 @@ package com.vetweb.model;
 import java.io.Serializable;
 import java.time.LocalDate;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -14,8 +15,6 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-
-import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
 @Table(name = "tbl_animal")
@@ -29,12 +28,12 @@ public class Animal implements Serializable {
 	private static final long serialVersionUID = 5772156689530639119L;
 
 	@Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long animalId;
     
+	@Column(columnDefinition = "VARCHAR(30)")
     private String nome;
     
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate dtNascimento;
     
     private boolean esteril;
@@ -55,7 +54,7 @@ public class Animal implements Serializable {
     @JoinColumn(name = "proprietarioId", referencedColumnName = "pessoaId")
     private Proprietario proprietario;
     
-    @OneToOne
+    @OneToOne(mappedBy = "animal")
     @JoinColumn(name = "prontuarioid", referencedColumnName = "prontuarioId")
     private Prontuario prontuario;
     

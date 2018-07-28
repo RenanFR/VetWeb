@@ -62,6 +62,7 @@ public class ExceptionController {
     public ModelAndView handleGeneric(Exception exception) {
     	ModelAndView modelAndView = new ModelAndView("exception/500");
     	modelAndView.addObject("mensagemErro", exception.getMessage());
+    	exception.printStackTrace();
 		return modelAndView;
     }
     

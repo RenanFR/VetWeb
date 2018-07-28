@@ -6,13 +6,20 @@ import java.math.BigDecimal;
 import java.io.Serializable;
 import java.time.Duration;
 import java.time.Period;
+import java.util.List;
+
+import javax.persistence.Column;
+import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import com.vetweb.dao.converter.FrequenciaConverter;
 
 @Entity
 @Table(name = "tbl_tipo_atendimento")
@@ -23,25 +30,30 @@ public class TipoDeAtendimento implements Serializable {
 	private static final long serialVersionUID = -686226545519235798L;
 	
 	@Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long tipoDeAtendimentoId;
 	
     private String nome;
     
     private Duration duracao;
     
+    @Convert(converter = FrequenciaConverter.class)
     private Period frequencia;
     
     private boolean status;
     
-    private StringBuilder modeloAtendimento;
+    @Column(columnDefinition = "TEXT")
+    private String modeloAtendimento;
     
     private BigDecimal custo;
+    
+    @OneToMany(mappedBy = "tipoDeAtendimento")
+    private List<Atendimento> atendimentos;
 
     public TipoDeAtendimento() {
     }
     
-    public TipoDeAtendimento(String nome, Duration duracao, Period frequencia, boolean status, StringBuilder modeloAtendimento) {
+    public TipoDeAtendimento(String nome, Duration duracao, Period frequencia, boolean status, String modeloAtendimento) {
         this.nome = nome;
         this.duracao = duracao;
         this.frequencia = frequencia;
@@ -89,11 +101,11 @@ public class TipoDeAtendimento implements Serializable {
         this.status = status;
     }
 
-    public StringBuilder getModeloAtendimento() {
+    public String getModeloAtendimento() {
         return modeloAtendimento;
     }
 
-    public void setModeloAtendimento(StringBuilder modeloAtendimento) {
+    public void setModeloAtendimento(String modeloAtendimento) {
         this.modeloAtendimento = modeloAtendimento;
     }
 

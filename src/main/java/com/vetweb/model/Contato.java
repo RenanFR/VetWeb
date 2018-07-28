@@ -1,6 +1,7 @@
 package com.vetweb.model;
 //@author renan.rodrigues@metasix.com.br
 
+import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
 import java.io.Serializable;
@@ -14,11 +15,14 @@ public class Contato implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Pattern(regexp = "^\\(\\d{2}\\)\\d{4}-\\d{4}$")
+	@Column(columnDefinition = "VARCHAR(30)")
     private String telefone;
     
+	@Column(columnDefinition = "VARCHAR(30)")
     private String celular;
     
     @Email
+    @Column(columnDefinition = "VARCHAR")
     private String email;
 
     public Contato() {

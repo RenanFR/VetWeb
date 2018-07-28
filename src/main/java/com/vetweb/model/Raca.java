@@ -5,6 +5,7 @@ import java.io.Serializable;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -19,9 +20,10 @@ public class Raca implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 
-	@Id @GeneratedValue(strategy = GenerationType.AUTO)
+	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long racaId;
-    
+	
+	@Column(columnDefinition = "VARCHAR(30)")
     private String descricao;
     
     @JsonBackReference

@@ -1,5 +1,7 @@
 package com.vetweb.model;
 
+import javax.persistence.Column;
+
 //@author renan.rodrigues@metasix.com.br
 
 import javax.persistence.Entity;
@@ -17,6 +19,7 @@ public class ModeloDocumento implements Serializable {
     
     private boolean infoCliente;
     
+    @Column(columnDefinition = "TEXT")
     private StringBuilder modelo;
     
     public ModeloDocumento() {

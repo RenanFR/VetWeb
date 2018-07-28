@@ -6,15 +6,16 @@ import java.io.Serializable;
 
 import java.time.LocalDate;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.Table;
-
-import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
 @Table(name = "tbl_pessoa")
@@ -26,25 +27,26 @@ public class Pessoa implements Serializable {
     public enum TipoPessoa { FISICA, JURIDICA }
     
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long pessoaId;
     
     private String nome;
     
+    @Column(columnDefinition = "VARCHAR(30)")
     private String rg;
     
+    @Column(columnDefinition = "VARCHAR(30)")
     private String cpf;
     
     private char sexo;
     
+    @Enumerated(EnumType.STRING)
     private TipoPessoa tipoPessoa;
     
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate inclusao;
     
     private String nacionalidade;
     
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate nascimento; 
     
     private Endereco endereco;

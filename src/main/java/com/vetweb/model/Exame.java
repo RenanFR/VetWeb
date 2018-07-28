@@ -1,5 +1,7 @@
 package com.vetweb.model;
 
+import javax.persistence.Column;
+
 //@author renan.rodrigues@metasix.com.br
 
 import javax.persistence.Entity;
@@ -18,11 +20,13 @@ public class Exame implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 
-	@Id @GeneratedValue(strategy = GenerationType.AUTO)
+	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long exameId;
     
+	@Column(columnDefinition = "TEXT")
     private StringBuilder apresentacao;
-    
+	
+	@Column(columnDefinition = "TEXT")
     private StringBuilder encerramento;
 
     public Exame() {

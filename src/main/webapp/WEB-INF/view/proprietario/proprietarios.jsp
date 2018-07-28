@@ -47,8 +47,8 @@
         <table class="table table-striped table-bordered table-hover" id="proprietarios">
             <thead>
                 <tr>
-                    <th><spring:message code="proprietario"></spring:message></th>
-                    <th><spring:message code="animais"></spring:message></th>
+                    <th><spring:message code="proprietario"/></th>
+                    <th><spring:message code="animais"/></th>
                 </tr>
             </thead>
             <tbody>

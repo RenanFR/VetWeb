@@ -60,6 +60,7 @@ public class ProprietarioDAO implements IDAO<Proprietario> {
         entityManager.remove(proprietario);
     }
     
+    //FIXME Remover tratamento opcional
     public void removerAnimal(long animalId) {
         Animal animal = animalDAO.buscarPorId(animalId);
         Proprietario proprietario = buscarPorId(animal.getProprietario().getPessoaId());
@@ -72,6 +73,7 @@ public class ProprietarioDAO implements IDAO<Proprietario> {
         proprietario.getAnimais().remove(a);
         animalDAO.remover(a);
     }
+    
     //FIXME Remover tratamento opcional
     public Proprietario buscarPorNome(String nome) {
         Optional<Proprietario> o = Optional

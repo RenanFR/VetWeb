@@ -124,22 +124,22 @@ public class AnimalDAO implements IDAO<Animal>{
     
     public Especie buscarEspeciePorDescricao(String especie){
         return entityManager
-        		.createQuery("SELECT e FROM Especie e WHERE e.descricao = :desc", Especie.class)
-                .setParameter("desc", especie)
+        		.createQuery("SELECT e FROM Especie e WHERE e.descricao LIKE :desc", Especie.class)
+                .setParameter("desc", "%" + especie + "%")
                 .getSingleResult();
     }
     
     public List<Raca> buscarRacasPorEspecie(String especie){
         return entityManager
-        		.createQuery("SELECT r FROM Raca r WHERE r.especie.descricao = :especie", Raca.class)
-                .setParameter("especie", especie)
+        		.createQuery("SELECT r FROM Raca r WHERE r.especie.descricao LIKE :especie", Raca.class)
+                .setParameter("especie", "%" + especie + "%")
                 .getResultList();
     }
     
     public Raca buscarRacaPorDescricao(String raca){
         return entityManager
-        		.createQuery("SELECT r FROM Raca r WHERE r.descricao = :descricao", Raca.class)
-                .setParameter("descricao", raca)
+        		.createQuery("SELECT r FROM Raca r WHERE r.descricao LIKE :descricao", Raca.class)
+                .setParameter("descricao", "%" + raca + "%")
                 .getSingleResult();
     }
     
@@ -187,5 +187,10 @@ public class AnimalDAO implements IDAO<Animal>{
     public void removerPatologia(Patologia patologia) {
         entityManager.remove(patologia);
     }
+
+	public Patologia buscarPatologiaPorId(Long patologiaId) {
+		return entityManager
+				.find(Patologia.class, patologiaId);
+	}
     
 }

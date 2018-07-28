@@ -43,23 +43,23 @@
     <jsp:body>
         <button class="btn btn-primary">
             <i class="fa fa-save"></i>
-            <a href="<c:url value="/animais/cadastroPatologia"></c:url>" style="color: white">   <spring:message code="cadastro"></spring:message></a>
+            <a href="<c:url value="/animais/cadastroPatologia"></c:url>" style="color: white">   <spring:message code="cadastro"/></a>
         </button>    
         <table class="table table-responsive" id="patologias">
             <thead>
                 <tr>
-                    <th><spring:message code="patologias"></spring:message></th>
+                    <th><spring:message code="patologias"/></th>
                 </tr>
             </thead>
             <tbody>
                 <c:forEach items="${patologias}" var="patologia">
                     <tr>
                         <td>
-                            ${patologia.descricao}
-                            <a href="<c:url value="/animais/atualizarPatologia/${patologia.nome}"></c:url>">
+                            ${patologia.nome}
+                            <a href="<c:url value="/animais/atualizarPatologia/${patologia.patologiaId}"></c:url>">
                                 <i class="fa fa-pencil-square-o fa-2x"></i>
                             </a>
-                            <a href="<c:url value="/animais/removerPatologia/${patologia.nome}"></c:url>">
+                            <a href="<c:url value="/animais/removerPatologia/${patologia.patologiaId}"></c:url>">
                                 <i class="fa fa-trash-o fa-2x"></i>
                             </a>                            
                         </td>

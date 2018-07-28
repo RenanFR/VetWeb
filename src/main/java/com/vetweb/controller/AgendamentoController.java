@@ -23,7 +23,7 @@ public class AgendamentoController {
 	
 	@ResponseBody
 	@RequestMapping("/eventos")
-	public List<Atendimento> todosOsAtendimentos() {
+	public List<Atendimento> todosOsEventos() {
 		return null;
 	}
 

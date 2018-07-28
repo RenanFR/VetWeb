@@ -1,5 +1,7 @@
 package com.vetweb.model;
 
+import javax.persistence.Column;
+
 //@author renan.rodrigues@metasix.com.br
 
 import javax.persistence.Entity;
@@ -16,9 +18,10 @@ public class Medicamento implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer medicamentoId;
     
+	@Column(columnDefinition = "TEXT")
     private String descricao;
     
     private boolean usoControlado;

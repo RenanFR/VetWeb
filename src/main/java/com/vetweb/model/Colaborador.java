@@ -3,6 +3,7 @@ package com.vetweb.model;
 //@author renan.rodrigues@metasix.com.br
 
 import javax.persistence.Table;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 
 @Entity
@@ -11,6 +12,7 @@ public class Colaborador extends Pessoa {
 	
 	private static final long serialVersionUID = 1L;
 	
+	@Column(columnDefinition = "VARCHAR(30)")
 	private String cargo;
 	
 	private double salario;
