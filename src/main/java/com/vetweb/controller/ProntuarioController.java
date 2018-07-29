@@ -169,23 +169,21 @@ public class ProntuarioController {
 		modelAndView.addObject("patologias", animalDAO.buscarPatologias().stream()
 	    		.map(pat -> pat.getNome()).collect(Collectors.toList()));
 		List<ElementoHistorico> elementosHistorico = new ArrayList<>();
-		DateTimeFormatter formatoData = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 		prontuario.getAtendimentos()
 			.forEach(at -> elementosHistorico
-					.add(new ElementoHistorico(at.getAtendimentoId(), at.getTipoDeAtendimento().getNome(), LocalDate.parse(at.getDataAtendimento(), formatoData).format(formatoData), TipoElementoHistorico.ATENDIMENTO)));
+					.add(new ElementoHistorico(at.getAtendimentoId(), at.getTipoDeAtendimento().getNome(), at.getDataAtendimento(), TipoElementoHistorico.ATENDIMENTO)));
 		prontuario.getPatologias()
 			.forEach(pat -> elementosHistorico
-					.add(new ElementoHistorico(pat.getProntuarioPatologiaId(), pat.getPatologia().getNome(), LocalDate.parse(pat.getInclusaoPatologia(), formatoData).format(formatoData), TipoElementoHistorico.PATOLOGIA)));
+					.add(new ElementoHistorico(pat.getProntuarioPatologiaId(), pat.getPatologia().getNome(), pat.getInclusaoPatologia(), TipoElementoHistorico.PATOLOGIA)));
 		prontuario.getVacinas()
 			.forEach(vac -> elementosHistorico
-					.add(new ElementoHistorico(vac.getProntuarioVacinaId(), vac.getVacina().getNome(), LocalDate.parse(vac.getInclusaoVacina(), formatoData).format(formatoData), TipoElementoHistorico.VACINA)));
+					.add(new ElementoHistorico(vac.getProntuarioVacinaId(), vac.getVacina().getNome(), vac.getInclusaoVacina(), TipoElementoHistorico.VACINA)));
 		modelAndView.addObject("historico", elementosHistorico);
         return modelAndView;
     }
     
     @RequestMapping(value = "/adicionarAtendimento", method = RequestMethod.POST)
     public ModelAndView adcAtendimento(@ModelAttribute("atendimento") Atendimento atendimento,
-    		@RequestParam("dataAtendimento") final String dataAtendimento,
     		@RequestParam("prontuarioId") final Long prontuarioId) {
     	Prontuario prontuario = prontuarioDAO.buscarPorId(prontuarioId);
         prontuarioDAO.salvarAtendimento(atendimento);
@@ -217,7 +215,7 @@ public class ProntuarioController {
 		prontuarioPatologia.setPatologia(pat);
 		Prontuario prontuario = prontuarioDAO.buscarPorId(prontuarioId);
 		prontuarioPatologia.setProntuario(prontuario);
-		prontuarioPatologia.setInclusaoPatologia(inclusaoPatologia);
+		prontuarioPatologia.setInclusaoPatologia(LocalDate.parse(inclusaoPatologia, DateTimeFormatter.ofPattern("yyyy-MM-dd")));
     	prontuarioDAO.adicionarPatologia(prontuarioPatologia, prontuarioId);
     	notificaCliente(prontuarioPatologia, prontuario);
     	return new ModelAndView("redirect:prontuarioDoAnimal/" + prontuario.getAnimal().getAnimalId());
@@ -237,7 +235,7 @@ public class ProntuarioController {
 		prontuarioVacina.setVacina(vacina);
 		Prontuario prontuario = prontuarioDAO.buscarPorId(prontuarioId);
 		prontuarioVacina.setProntuario(prontuario);
-		prontuarioVacina.setInclusaoVacina(inclusaoVacina);
+		prontuarioVacina.setInclusaoVacina(LocalDate.parse(inclusaoVacina, DateTimeFormatter.ofPattern("yyyy-MM-dd")));
     	prontuarioDAO.adicionarVacina(prontuarioVacina, prontuarioId);
     	notificaCliente(prontuarioVacina, prontuario);
     	return new ModelAndView("redirect:prontuarioDoAnimal/" + prontuarioDAO.buscarPorId(prontuarioId).getAnimal().getAnimalId());

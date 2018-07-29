@@ -19,8 +19,7 @@ var ajaxService = {
 			    	var day = date.getDate();
 			    	var month = date.getMonth() + 1;
 			    	var year = date.getFullYear();
-			    	if (day < 10) { day = '0'+ day} if (month < 10) { month = '0' + month} date = day + '/' + month + '/' + year;
-			    	dataAtendimento.attr('type', 'text');
+			    	if (day < 10) { day = '0'+ day} if (month < 10) { month = '0' + month} date = year + '-' + month + '-' + day;
 			    	dataAtendimento.val(date);
 			    },
 			    error: function (jqXHR, textStatus, errorThrown) {
@@ -45,8 +44,7 @@ var ajaxService = {
 		    	var day = date.getDate();
 		    	var month = date.getMonth() + 1;
 		    	var year = date.getFullYear();
-		    	if (day < 10) { day = '0'+ day} if (month < 10) { month = '0' + month} date = day + '/' + month + '/' + year;
-		    	$('#inclusaoVacina').attr('type', 'text');
+		    	if (day < 10) { day = '0'+ day} if (month < 10) { month = '0' + month} date = year + '-' + month + '-' + day;
 		    	$('#inclusaoVacina').val(date);
 		    },
 		    error: function (jqXHR, textStatus, errorThrown) {
@@ -72,8 +70,7 @@ var ajaxService = {
 		    	var day = date.getDate();
 		    	var month = date.getMonth() + 1;
 		    	var year = date.getFullYear();
-		    	if (day < 10) { day = '0'+ day} if (month < 10) { month = '0' + month} date = day + '/' + month + '/' + year;
-		    	inclusaoPatologia.attr('type', 'text');
+		    	if (day < 10) { day = '0'+ day} if (month < 10) { month = '0' + month} date = year + '-' + month + '-' + day;
 		    	inclusaoPatologia.val(date);
 		    },
 		    error: function (jqXHR, textStatus, errorThrown) {

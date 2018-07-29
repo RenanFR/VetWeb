@@ -150,6 +150,7 @@ public class ProprietarioController {
     	modelAndView.addObject("atendimentosFeitos", proprietarioDAO.getAtendimentosRealizadosPorCliente(proprietario.getPessoaId()));
     	modelAndView.addObject("vacinasAplicadas", proprietarioDAO.buscarVacinasParaOCliente(proprietario.getPessoaId()));
     	modelAndView.addObject("totalPendente", totalPendente);
+    	modelAndView.addObject("proprietario", proprietario);
     	return modelAndView;
     }
     

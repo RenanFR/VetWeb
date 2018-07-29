@@ -1,10 +1,6 @@
 package com.vetweb.scheduled;
 
 import java.time.LocalDate;
-
-//@author renan.rodrigues@metasix.com.br
-
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Set;
 
@@ -26,7 +22,7 @@ import com.vetweb.service.EmailService;
 @Component
 @Transactional
 @EnableScheduling
-public class JobsAgendados {
+public class Scheduler {
 	
 	@Autowired
 	private ProprietarioDAO proprietarioDAO;
@@ -40,7 +36,7 @@ public class JobsAgendados {
 	@Autowired
 	private EmailService emailService;
 	
-	private static final Logger LOGGER = Logger.getLogger(JobsAgendados.class);
+	private static final Logger LOGGER = Logger.getLogger(Scheduler.class);
 	
 	private static final long MINUTO = 60000;
 	
@@ -68,7 +64,7 @@ public class JobsAgendados {
     		.listarTodos()
     		.stream()
     		.filter(ate -> 
-    			LocalDate.parse(ate.getDataAtendimento(),DateTimeFormatter.ofPattern("dd/MM/yyyy")).plus(ate.getTipoDeAtendimento().getFrequencia())
+    			ate.getDataAtendimento()
     			.isEqual(LocalDate.now()))
     		.forEach(ate -> this.notificaRetornoAtendimento(ate));
     }

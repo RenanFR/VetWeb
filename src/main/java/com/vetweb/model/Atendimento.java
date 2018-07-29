@@ -5,7 +5,6 @@ import java.io.Serializable;
 //@author renan.rodrigues@metasix.com.br
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -31,7 +30,7 @@ public class Atendimento implements Serializable, ElementoProntuario {
     private TipoDeAtendimento tipoDeAtendimento;
     
 	@Column(columnDefinition = "TEXT")
-    private StringBuilder preenchimentoModeloAtendimento;
+    private String preenchimentoModeloAtendimento;
     
     private LocalDate dataAtendimento;
     
@@ -40,7 +39,7 @@ public class Atendimento implements Serializable, ElementoProntuario {
     public Atendimento() {
     }
     
-    public Atendimento(Long atendimentoId, TipoDeAtendimento tipoDeAtendimento, StringBuilder preenchimentoModeloAtendimento) {
+    public Atendimento(Long atendimentoId, TipoDeAtendimento tipoDeAtendimento, String preenchimentoModeloAtendimento) {
     	this.atendimentoId = atendimentoId;
     	this.tipoDeAtendimento = tipoDeAtendimento;
     	this.preenchimentoModeloAtendimento = preenchimentoModeloAtendimento;
@@ -62,26 +61,20 @@ public class Atendimento implements Serializable, ElementoProntuario {
         this.tipoDeAtendimento = tipoDeAtendimento;
     }
 
-    public StringBuilder getPreenchimentoModeloAtendimento() {
+    public String getPreenchimentoModeloAtendimento() {
         return preenchimentoModeloAtendimento;
     }
 
-    public void setPreenchimentoModeloAtendimento(StringBuilder preenchimentoModeloAtendimento) {
+    public void setPreenchimentoModeloAtendimento(String preenchimentoModeloAtendimento) {
         this.preenchimentoModeloAtendimento = preenchimentoModeloAtendimento;
     }
     
-    public String getDataAtendimento() {
-		return dataAtendimento.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+    public LocalDate getDataAtendimento() {
+		return dataAtendimento;
 	}
 
-	public void setDataAtendimento(String dataAtendimento) {
-		if (dataAtendimento.contains("-")) {
-			this.dataAtendimento = LocalDate.parse(dataAtendimento, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-		} else if (dataAtendimento.contains("/")) {
-			this.dataAtendimento = LocalDate.parse(dataAtendimento, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
-		} else {
-			throw new RuntimeException("FORMATO DESCONHECIDO DE DATA. ");
-		}
+	public void setDataAtendimento(LocalDate dataAtendimento) {
+		this.dataAtendimento = dataAtendimento;
 	}
 
 	public boolean isPago() {

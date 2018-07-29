@@ -16,14 +16,27 @@ public class RelatorioDAO {
 	@PersistenceContext
 	private EntityManager entityManager;
 	
-	//FIXME Migrar Stream p/ critério de consulta
 	public BigDecimal buscarTotalAReceber() {
-		String consultaTotalPendente = "SELECT SUM (at.tipoDeAtendimento.custo) FROM Atendimento at "
-										+ "JOIN at.tipoDeAtendimento tipo "
-										+ "WHERE at.pago = FALSE";
-		TypedQuery<BigDecimal> queryTotalPendente = entityManager
-				.createQuery(consultaTotalPendente, BigDecimal.class);
-		return queryTotalPendente.getSingleResult();
+		String consultaTotalPendenteEmAtendimentos = "SELECT SUM (tipo.custo) "
+				+ "FROM TipoDeAtendimento tipo "
+				+ "JOIN tipo.atendimentos atendimento "
+				+ "WHERE atendimento.pago = false";
+		String consultaTotalPendenteEmVacinas = "SELECT SUM (vacina.preco) "
+				+ "FROM Vacina vacina "
+				+ "JOIN vacina.ocorrenciasVacina prontuarioVac "
+				+ "WHERE prontuarioVac.pago = false";
+		TypedQuery<BigDecimal> queryTotalPendenteEmAtendimentos = entityManager
+				.createQuery(consultaTotalPendenteEmAtendimentos, BigDecimal.class);
+		TypedQuery<BigDecimal> queryTotalPendenteEmVacinas = entityManager
+				.createQuery(consultaTotalPendenteEmVacinas, BigDecimal.class);
+		BigDecimal totalPendenteEmAtendimentos = queryTotalPendenteEmAtendimentos.getSingleResult();
+		BigDecimal totalPendenteEmVacinas = queryTotalPendenteEmVacinas.getSingleResult();
+		BigDecimal totalPendenteGeral = new BigDecimal(0);
+		if (totalPendenteEmAtendimentos != null && consultaTotalPendenteEmVacinas != null) {
+			totalPendenteGeral = totalPendenteEmAtendimentos
+					.add(totalPendenteEmVacinas);
+		}
+		return totalPendenteGeral;
 	}
 
 }

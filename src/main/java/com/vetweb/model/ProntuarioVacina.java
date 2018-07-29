@@ -3,7 +3,6 @@ package com.vetweb.model;
 
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -61,18 +60,12 @@ public class ProntuarioVacina implements Serializable, ElementoProntuario {
 		this.vacina = vacina;
 	}
 
-	public String getInclusaoVacina() {
-		return inclusaoVacina.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+	public LocalDate getInclusaoVacina() {
+		return inclusaoVacina;
 	}
 
-	public void setInclusaoVacina(String inclusaoVacina) {
-		if (inclusaoVacina.contains("-")) {
-			this.inclusaoVacina = LocalDate.parse(inclusaoVacina, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-		} else if (inclusaoVacina.contains("/")) {
-			this.inclusaoVacina = LocalDate.parse(inclusaoVacina, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
-		} else {
-			throw new RuntimeException("FORMATO DESCONHECIDO DE DATA. ");
-		}
+	public void setInclusaoVacina(LocalDate inclusaoVacina) {
+		this.inclusaoVacina = inclusaoVacina;
 	}
 
 	public boolean isPago() {

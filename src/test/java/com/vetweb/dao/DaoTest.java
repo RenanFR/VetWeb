@@ -4,6 +4,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 import org.junit.Ignore;
 import org.junit.Test;
@@ -38,13 +40,18 @@ public class DaoTest {
 	private AnimalDAO animalDAO;
 	
 	@Test
+	public void verificaConversaoTextoParaData() {
+		assertTrue(LocalDate.parse("28/07/2018", DateTimeFormatter.ofPattern("dd/MM/yyyy")).isEqual(LocalDate.of(2018, 07, 28)));
+	}
+	
+	@Test
 	public void verificaConsultaDeRacaPorDescricao() {
 		assertEquals(" Tucano", animalDAO.buscarRacaPorDescricao("Tucano").getDescricao());
 	}
 	
-	@Ignore
+	@Test
 	public void verificaConsultaDeValoresPendentes() {
-		assertEquals(new BigDecimal(10.0), relatorioDAO.buscarTotalAReceber());
+		assertTrue(relatorioDAO.buscarTotalAReceber().compareTo(new BigDecimal(120.00)) == 0);
 	}
 	
 	@Ignore

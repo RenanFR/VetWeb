@@ -5,7 +5,6 @@ import java.io.Serializable;
 //@author renan.rodrigues@metasix.com.br
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -61,23 +60,17 @@ public class ProntuarioPatologia implements Serializable, ElementoProntuario {
 		this.patologia = patologia;
 	}
 
-	public String getInclusaoPatologia() {
-		return inclusaoPatologia.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+	public LocalDate getInclusaoPatologia() {
+		return inclusaoPatologia;
+	}
+	
+	public void setInclusaoPatologia(LocalDate inclusaoPatologia) {
+		this.inclusaoPatologia = inclusaoPatologia;
 	}
 	
 	@Override
 	public String toString() {
 		return patologia.getNome();
-	}
-
-	public void setInclusaoPatologia(String inclusaoPatologia) {
-		if (inclusaoPatologia.contains("-")) {
-			this.inclusaoPatologia = LocalDate.parse(inclusaoPatologia, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-		} else if (inclusaoPatologia.contains("/")) {
-			this.inclusaoPatologia = LocalDate.parse(inclusaoPatologia, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
-		} else {
-			throw new RuntimeException("FORMATO DESCONHECIDO DE DATA. ");
-		}		
 	}
 
 	@Override

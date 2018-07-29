@@ -1,19 +1,21 @@
 package com.vetweb.model.pojo;
 
+import java.time.LocalDate;
+
 public class ElementoHistorico {
 	
 	private Long elementohistoricoId;
 	
 	private String descricao;
 	
-	private String data;
+	private LocalDate data;
 	
 	private TipoElementoHistorico tipo;
 
 	public ElementoHistorico() {
 	}
 
-	public ElementoHistorico(Long elementohistoricoId, String descricao, String data, TipoElementoHistorico tipo) {
+	public ElementoHistorico(Long elementohistoricoId, String descricao, LocalDate data, TipoElementoHistorico tipo) {
 		this.elementohistoricoId = elementohistoricoId;
 		this.descricao = descricao;
 		this.data = data;
@@ -36,11 +38,11 @@ public class ElementoHistorico {
 		this.descricao = descricao;
 	}
 
-	public String getData() {
+	public LocalDate getData() {
 		return data;
 	}
 
-	public void setData(String data) {
+	public void setData(LocalDate data) {
 		this.data = data;
 	}
 

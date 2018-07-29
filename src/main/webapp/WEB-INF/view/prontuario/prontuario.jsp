@@ -70,9 +70,9 @@
 				<table class="table table-bordered" id="historicos">
 					<thead>
 						<tr>
-							<th><spring:message code="tipo"></spring:message>	<i class="fa fa-plus-square fa-2x" aria-hidden="true"></i></th>
-							<th><spring:message code="historico"></spring:message>	<i class="fa fa-calendar fa-2x" aria-hidden="true"></i></th>
-							<th><spring:message code="data"></spring:message>	<i class="fa fa-calendar-check-o fa-2x" aria-hidden="true"></i></th>
+							<th><spring:message code="tipo"/>	<i class="fa fa-plus-square fa-2x" aria-hidden="true"></i></th>
+							<th><spring:message code="historico"/>	<i class="fa fa-calendar fa-2x" aria-hidden="true"></i></th>
+							<th><spring:message code="data"/><i class="fa fa-calendar-check-o fa-2x" aria-hidden="true"></i></th>
 						</tr>
 					</thead>
 					<tbody>
@@ -119,7 +119,7 @@
           <div class="modal-dialog" role="document">
             <div class="modal-content">
               <div class="modal-header">
-                <h5 class="modal-title" id="labelmodalAtendimento"><strong><spring:message code="adcAtendimento" arguments="${prontuario.animal.nome}"></spring:message></strong></h5>
+                <h5 class="modal-title" id="labelmodalAtendimento"><strong><spring:message code="adcAtendimento" arguments="${prontuario.animal.nome}"/></strong></h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                   <span aria-hidden="true">&times;</span>
                 </button>
@@ -127,12 +127,12 @@
               <div class="modal-body">
               <form:form servletRelativeAction="/prontuario/adicionarAtendimento?prontuarioId=${prontuario.prontuarioId}"
 				method="POST" modelAttribute="atendimento" id="formAtendimento">
-                    <caption><spring:message code="adcAtendimento" arguments="${prontuario.animal.nome}"></spring:message></caption>
+                    <caption><spring:message code="adcAtendimento" arguments="${prontuario.animal.nome}"/></caption>
                     <tbody>
                     	<input type="text" name="atendimentoId" id="atendimentoId" hidden="hidden"  />
                         <br>
                         <tr>
-                            <th><spring:message code="tipoDeAtendimento"></spring:message>: </th>
+                            <th><spring:message code="tipoDeAtendimento"/>: </th>
                             <td>
                                 <form:select id="tipoDeAtendimento" path="tipoDeAtendimento" items="${tiposDeAtendimento}" onchange="ajaxService.buscaModeloPorTipoDeAtendimento()">
                                 </form:select>
@@ -140,12 +140,13 @@
                         </tr>
                         <br>
                         <tr>
-                            <th><spring:message code="modeloAtendimento"></spring:message>: </th>
+                            <th><spring:message code="modeloAtendimento"/>: </th>
                             <td id="modelo"><form:textarea path="preenchimentoModeloAtendimento" name="preenchimentoModeloAtendimento" id="preenchimentoModeloAtendimento"></form:textarea></td>
                         </tr>
                         <tr>
-                        	<th><spring:message code="dataAtendimento"></spring:message>:	</th>
+                        	<th><spring:message code="dataAtendimento"/>:	</th>
                         	<td id="campoDataAtendimento"><input type="date" name="dataAtendimento" id="dataAtendimento"></input></td>
+                        	<td><input type="date" name="dataEdicaoAtendimento" id="dataEdicaoAtendimento" hidden></input></td>
                         </tr>
                     </tbody>
                     
@@ -163,17 +164,17 @@
           <div class="modal-dialog" role="document">
             <div class="modal-content">
               <div class="modal-header">
-                <h5 class="modal-title" id="labelmodalPatologia"><strong><spring:message code="adcPatologia" arguments="${prontuario.animal.nome}"></spring:message></strong></h5>
+                <h5 class="modal-title" id="labelmodalPatologia"><strong><spring:message code="adcPatologia" arguments="${prontuario.animal.nome}"/></strong></h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                   <span aria-hidden="true">&times;</span>
                 </button>
               </div>
               <div class="modal-body">
               <form:form servletRelativeAction="/prontuario/adicionarPatologia?prontuarioId=${prontuario.prontuarioId}" method="POST">
-                    <caption><spring:message code="adcAtendimento" arguments="${prontuario.animal.nome}"></spring:message></caption>
+                    <caption><spring:message code="adcAtendimento" arguments="${prontuario.animal.nome}"/></caption>
                     <tbody>
-                        <input type="text" name="prontuarioId" id="prontuarioId" hidden="hidden"  />
-                        <input type="text" name="prontuarioPatologiaId" id="prontuarioPatologiaId" hidden="hidden"  />
+                        <input type="text" name="prontuarioId" id="prontuarioId" hidden  />
+                        <input type="text" name="prontuarioPatologiaId" id="prontuarioPatologiaId" hidden  />
                         <br>
                         <tr>
                             <th><spring:message code="patologia"></spring:message>: </th>
@@ -187,7 +188,7 @@
                         </tr>
                         <br>
                         <tr>
-                        	<th><spring:message code="dataAtendimento"></spring:message>:	</th>
+                        	<th><spring:message code="dataAtendimento"/>:	</th>
                         	<td><input type="date" name="inclusaoPatologia" id="inclusaoPatologia" /></td>
                         </tr>                        
                     </tbody>
@@ -219,7 +220,7 @@
                         <input type="text" name="prontuarioVacinaId" id="prontuarioVacinaId" hidden="hidden"  />
                         <br>
                         <tr>
-                            <th><spring:message code="vacina"></spring:message>: </th>
+                            <th><spring:message code="vacina"/>: </th>
                             <td>
                             	<select name="vacina" id="vacinas">
 	                            	<c:forEach items="${vacinas}" var="vacina">
@@ -230,7 +231,7 @@
                         </tr>
                         <br>
                         <tr>
-                        	<th><spring:message code="dataAtendimento"></spring:message>:	</th>
+                        	<th><spring:message code="dataAtendimento"/>:	</th>
                         	<td><input type="date" name="inclusaoVacina" id="inclusaoVacina" /></td>
                         </tr>                        
                     </tbody>

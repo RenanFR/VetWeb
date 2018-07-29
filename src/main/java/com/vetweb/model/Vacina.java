@@ -2,12 +2,14 @@ package com.vetweb.model;
 //@author renan.rodrigues@metasix.com.br
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.io.Serializable;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
@@ -28,6 +30,9 @@ public class Vacina implements Serializable, ElementoProntuario {
     private boolean status;
     
     private String laboratorio;
+    
+    @OneToMany(mappedBy = "vacina")
+    private List<ProntuarioVacina> ocorrenciasVacina;
     
     @Transient
     private Protocolo protocolo;
@@ -105,6 +110,14 @@ public class Vacina implements Serializable, ElementoProntuario {
 
 	public void setPreco(BigDecimal preco) {
 		this.preco = preco;
+	}
+
+	public List<ProntuarioVacina> getOcorrenciasVacina() {
+		return ocorrenciasVacina;
+	}
+
+	public void setOcorrenciasVacina(List<ProntuarioVacina> ocorrenciasVacina) {
+		this.ocorrenciasVacina = ocorrenciasVacina;
 	}
 	
 }
