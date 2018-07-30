@@ -147,7 +147,7 @@ public class ProprietarioController {
     	ModelAndView modelAndView = new ModelAndView("proprietario/balancoCliente");
     	Proprietario proprietario = proprietarioDAO.buscarPorId(clienteId);
     	BigDecimal totalPendente = proprietarioDAO.buscarValorPendenteDoCliente(proprietario);
-    	modelAndView.addObject("atendimentosFeitos", proprietarioDAO.getAtendimentosRealizadosPorCliente(proprietario.getPessoaId()));
+    	modelAndView.addObject("atendimentosFeitos", proprietarioDAO.buscarAtendimentosParaOCliente(proprietario.getPessoaId()));
     	modelAndView.addObject("vacinasAplicadas", proprietarioDAO.buscarVacinasParaOCliente(proprietario.getPessoaId()));
     	modelAndView.addObject("totalPendente", totalPendente);
     	modelAndView.addObject("proprietario", proprietario);

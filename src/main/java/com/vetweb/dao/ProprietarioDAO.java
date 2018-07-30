@@ -95,28 +95,46 @@ public class ProprietarioDAO implements IDAO<Proprietario> {
     }
     
     public List<Prontuario> buscarProntuariosParaOCliente(Long proprietarioId) {
-    	return entityManager.createNamedQuery("prontuariosAnimaisDoCliente", Prontuario.class)
-    			.setParameter("Id", proprietarioId)
+    	String consultaProntuariosParaOCliente = "SELECT prontuario FROM Prontuario prontuario "
+    			+ "JOIN prontuario.vacinas ocorrenciaVacina "
+    			+ "JOIN prontuario.patologias ocorrenciaPatologia "
+    			+ "JOIN prontuario.atendimentos ocorrenciaAtendimento "
+    			+ "JOIN prontuario.animal animal "
+    			+ "JOIN animal.proprietario cliente "
+    			+ "WHERE cliente.pessoaId = :codigoCliente";
+    	return entityManager
+    			.createQuery(consultaProntuariosParaOCliente, Prontuario.class)
+    			.setParameter("codigoCliente", proprietarioId)
     			.getResultList();
     }
     
-    //FIXME Migrar Stream p/ critério na consulta
     public List<ProntuarioVacina> buscarVacinasParaOCliente(Long proprietario) {
-    	return buscarProntuariosParaOCliente(proprietario)
-    			.stream()
-    			.flatMap(p -> p.getVacinas().stream()).collect(Collectors.toList());
+    	String consultaVacinasParaOCliente = "SELECT ocorrenciaVacina FROM ProntuarioVacina ocorrenciaVacina "
+    			+ "JOIN ocorrenciaVacina.prontuario prontuario "
+    			+ "JOIN prontuario.animal animal "
+    			+ "JOIN animal.proprietario cliente "
+    			+ "WHERE cliente.pessoaId = :codigoCliente";
+    	return entityManager
+    			.createQuery(consultaVacinasParaOCliente, ProntuarioVacina.class)
+    			.setParameter("codigoCliente", proprietario)
+    			.getResultList();
     }
     
-    //FIXME Migrar Stream p/ critério na consulta    
-    public List<Atendimento> getAtendimentosRealizadosPorCliente(Long proprietario) {
-    	return buscarProntuariosParaOCliente(proprietario)
-    			.stream()
-    			.flatMap(p -> p.getAtendimentos().stream()).collect(Collectors.toList());
+    public List<Atendimento> buscarAtendimentosParaOCliente(Long proprietario) {
+    	String consultaAtendimentosParaOCliente = "SELECT prontuario.atendimentos FROM Prontuario prontuario "
+    			+ "JOIN FETCH prontuario.atendimentos atendimentos "
+    			+ "JOIN prontuario.animal animal "
+    			+ "JOIN animal.proprietario cliente "
+    			+ "WHERE cliente.pessoaId = :codigoCliente";
+    	return entityManager
+    			.createQuery(consultaAtendimentosParaOCliente, Atendimento.class)
+    			.setParameter("codigoCliente", proprietario)
+    			.getResultList();
     }
     
     //FIXME Migrar Stream p/ critério na consulta    
     public BigDecimal buscarValorPendenteDoCliente(Proprietario proprietario) {
-    	List<Atendimento> atendimentosAnimaisCliente = getAtendimentosRealizadosPorCliente(proprietario.getPessoaId());
+    	List<Atendimento> atendimentosAnimaisCliente = buscarAtendimentosParaOCliente(proprietario.getPessoaId());
     	List<ProntuarioVacina> vacinasAnimaisCliente = buscarVacinasParaOCliente(proprietario.getPessoaId());
     	BigDecimal totalPendente;
     	double totalPendenteAtendimentos = atendimentosAnimaisCliente.stream()

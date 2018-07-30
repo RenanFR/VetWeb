@@ -40,6 +40,21 @@ public class DaoTest {
 	private AnimalDAO animalDAO;
 	
 	@Test
+	public void verificaOcorrenciaAtendimentoParaOCliente() {
+		assertTrue(proprietarioDAO.buscarAtendimentosParaOCliente(1L).get(0).getAtendimentoId() == 1L);
+	}
+	
+	@Test
+	public void verificaConsultaDeProntuariosDoCliente() {
+		assertTrue(proprietarioDAO.buscarProntuariosParaOCliente(1L).get(0).getProntuarioId() == 1L);
+	}
+	
+	@Test
+	public void verificaOcorrenciaVacinaParaOCliente() {
+		assertTrue(proprietarioDAO.buscarVacinasParaOCliente(1L).get(0).getProntuarioVacinaId() == 1L);
+	}
+	
+	@Test
 	public void verificaConversaoTextoParaData() {
 		assertTrue(LocalDate.parse("28/07/2018", DateTimeFormatter.ofPattern("dd/MM/yyyy")).isEqual(LocalDate.of(2018, 07, 28)));
 	}
