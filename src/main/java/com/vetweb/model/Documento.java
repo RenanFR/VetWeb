@@ -13,6 +13,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 @Entity
 @Table(name = "tbl_documento")
 public class Documento implements Serializable {
@@ -25,6 +27,11 @@ public class Documento implements Serializable {
 	@ManyToOne
 	@JoinColumn(name = "modeloDocumento", referencedColumnName = "nome")
 	private ModeloDocumento modeloDocumento;
+	
+	@ManyToOne
+	@JsonManagedReference
+	@JoinColumn(name = "prontuarioId", referencedColumnName = "prontuarioId")
+	private Prontuario prontuario;
 	
 	public Documento() {
 	}
@@ -49,6 +56,14 @@ public class Documento implements Serializable {
 
 	public void setModeloDocumento(ModeloDocumento modeloDocumento) {
 		this.modeloDocumento = modeloDocumento;
+	}
+
+	public Prontuario getProntuario() {
+		return prontuario;
+	}
+
+	public void setProntuario(Prontuario prontuario) {
+		this.prontuario = prontuario;
 	}
     
 }

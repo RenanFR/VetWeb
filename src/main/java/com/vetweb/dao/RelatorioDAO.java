@@ -3,6 +3,7 @@ package com.vetweb.dao;
 
 
 import java.math.BigDecimal;
+import java.util.Optional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -29,13 +30,10 @@ public class RelatorioDAO {
 				.createQuery(consultaTotalPendenteEmAtendimentos, BigDecimal.class);
 		TypedQuery<BigDecimal> queryTotalPendenteEmVacinas = entityManager
 				.createQuery(consultaTotalPendenteEmVacinas, BigDecimal.class);
-		BigDecimal totalPendenteEmAtendimentos = queryTotalPendenteEmAtendimentos.getSingleResult();
-		BigDecimal totalPendenteEmVacinas = queryTotalPendenteEmVacinas.getSingleResult();
+		BigDecimal totalPendenteEmAtendimentos = Optional.ofNullable(queryTotalPendenteEmAtendimentos.getSingleResult()).orElse(new BigDecimal(0));
+		BigDecimal totalPendenteEmVacinas = Optional.ofNullable(queryTotalPendenteEmVacinas.getSingleResult()).orElse(new BigDecimal(0));
 		BigDecimal totalPendenteGeral = new BigDecimal(0);
-		if (totalPendenteEmAtendimentos != null && consultaTotalPendenteEmVacinas != null) {
-			totalPendenteGeral = totalPendenteEmAtendimentos
-					.add(totalPendenteEmVacinas);
-		}
+		totalPendenteGeral = totalPendenteEmAtendimentos.add(totalPendenteEmVacinas);
 		return totalPendenteGeral;
 	}
 

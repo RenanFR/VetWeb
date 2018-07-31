@@ -13,9 +13,11 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 @Entity
 @Table(name = "tbl_vacina")
-public class Vacina implements Serializable, ElementoProntuario {
+public class Vacina implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
@@ -32,7 +34,8 @@ public class Vacina implements Serializable, ElementoProntuario {
     private String laboratorio;
     
     @OneToMany(mappedBy = "vacina")
-    private List<ProntuarioVacina> ocorrenciasVacina;
+    @JsonBackReference
+    private List<OcorrenciaVacina> ocorrenciasVacina;
     
     @Transient
     private Protocolo protocolo;
@@ -112,11 +115,11 @@ public class Vacina implements Serializable, ElementoProntuario {
 		this.preco = preco;
 	}
 
-	public List<ProntuarioVacina> getOcorrenciasVacina() {
+	public List<OcorrenciaVacina> getOcorrenciasVacina() {
 		return ocorrenciasVacina;
 	}
 
-	public void setOcorrenciasVacina(List<ProntuarioVacina> ocorrenciasVacina) {
+	public void setOcorrenciasVacina(List<OcorrenciaVacina> ocorrenciasVacina) {
 		this.ocorrenciasVacina = ocorrenciasVacina;
 	}
 	

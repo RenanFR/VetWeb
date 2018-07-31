@@ -11,15 +11,16 @@ import java.util.stream.Collectors;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.vetweb.model.Animal;
-import com.vetweb.model.Atendimento;
+import com.vetweb.model.OcorrenciaAtendimento;
 import com.vetweb.model.Prontuario;
-import com.vetweb.model.ProntuarioVacina;
+import com.vetweb.model.OcorrenciaVacina;
 import com.vetweb.model.Proprietario;
 
 @Repository
@@ -60,28 +61,18 @@ public class ProprietarioDAO implements IDAO<Proprietario> {
         entityManager.remove(proprietario);
     }
     
-    //FIXME Remover tratamento opcional
     public void removerAnimal(long animalId) {
         Animal animal = animalDAO.buscarPorId(animalId);
         Proprietario proprietario = buscarPorId(animal.getProprietario().getPessoaId());
-        Animal a = proprietario
-        		.getAnimais()
-        		.stream()
-        		.filter(animal1 -> animal1.getAnimalId().equals(animalId))
-        		.findFirst()
-        		.get();
-        proprietario.getAnimais().remove(a);
-        animalDAO.remover(a);
+        proprietario.getAnimais().remove(animal);
+        animalDAO.remover(animal);
     }
     
-    //FIXME Remover tratamento opcional
     public Proprietario buscarPorNome(String nome) {
-        Optional<Proprietario> o = Optional
-        		.of(entityManager
-        				.createNamedQuery("proprietarioPorNome", Proprietario.class)
-        				.setParameter("nomeProprietario", nome).getSingleResult());
-        Proprietario p = o.orElseThrow(RuntimeException::new);
-        return p;
+        Proprietario proprietario = entityManager
+			.createNamedQuery("proprietarioPorNome", Proprietario.class)
+			.setParameter("nomeProprietario", nome).getSingleResult();
+        return proprietario;
     }
 
     public void detach(Proprietario proprietario) {
@@ -108,45 +99,55 @@ public class ProprietarioDAO implements IDAO<Proprietario> {
     			.getResultList();
     }
     
-    public List<ProntuarioVacina> buscarVacinasParaOCliente(Long proprietario) {
-    	String consultaVacinasParaOCliente = "SELECT ocorrenciaVacina FROM ProntuarioVacina ocorrenciaVacina "
+    public List<OcorrenciaVacina> buscarVacinasParaOCliente(Long proprietario) {
+    	String consultaVacinasParaOCliente = "SELECT ocorrenciaVacina FROM OcorrenciaVacina ocorrenciaVacina "
     			+ "JOIN ocorrenciaVacina.prontuario prontuario "
     			+ "JOIN prontuario.animal animal "
     			+ "JOIN animal.proprietario cliente "
     			+ "WHERE cliente.pessoaId = :codigoCliente";
     	return entityManager
-    			.createQuery(consultaVacinasParaOCliente, ProntuarioVacina.class)
+    			.createQuery(consultaVacinasParaOCliente, OcorrenciaVacina.class)
     			.setParameter("codigoCliente", proprietario)
     			.getResultList();
     }
     
-    public List<Atendimento> buscarAtendimentosParaOCliente(Long proprietario) {
-    	String consultaAtendimentosParaOCliente = "SELECT prontuario.atendimentos FROM Prontuario prontuario "
-    			+ "JOIN FETCH prontuario.atendimentos atendimentos "
+    public List<OcorrenciaAtendimento> buscarAtendimentosParaOCliente(Long proprietario) {
+    	String consultaAtendimentosParaOCliente = "SELECT ocorrenciaAtendimento FROM OcorrenciaAtendimento ocorrenciaAtendimento "
+    			+ "JOIN ocorrenciaAtendimento.prontuario prontuario "
     			+ "JOIN prontuario.animal animal "
     			+ "JOIN animal.proprietario cliente "
     			+ "WHERE cliente.pessoaId = :codigoCliente";
     	return entityManager
-    			.createQuery(consultaAtendimentosParaOCliente, Atendimento.class)
+    			.createQuery(consultaAtendimentosParaOCliente, OcorrenciaAtendimento.class)
     			.setParameter("codigoCliente", proprietario)
     			.getResultList();
     }
     
-    //FIXME Migrar Stream p/ critério na consulta    
     public BigDecimal buscarValorPendenteDoCliente(Proprietario proprietario) {
-    	List<Atendimento> atendimentosAnimaisCliente = buscarAtendimentosParaOCliente(proprietario.getPessoaId());
-    	List<ProntuarioVacina> vacinasAnimaisCliente = buscarVacinasParaOCliente(proprietario.getPessoaId());
-    	BigDecimal totalPendente;
-    	double totalPendenteAtendimentos = atendimentosAnimaisCliente.stream()
-    			.filter(at -> !at.isPago())
-    			.mapToDouble(a -> a.getTipoDeAtendimento().getCusto().doubleValue())
-    			.sum();
-    	double totalPendenteVacinas = vacinasAnimaisCliente.stream()
-    			.filter(vac -> !vac.isPago())
-    			.mapToDouble(v -> v.getVacina().getPreco().doubleValue())
-    			.sum();
-    	totalPendente = new BigDecimal(totalPendenteAtendimentos + totalPendenteVacinas);    
-    	return totalPendente;
+    	String consultaValorPendenteEmVacinas = "SELECT SUM (vacina.preco) FROM Vacina vacina "
+		    	+ "JOIN vacina.ocorrenciasVacina ocorrenciaVacina "
+		    	+ "JOIN ocorrenciaVacina.prontuario prontuario "
+		    	+ "JOIN prontuario.animal animal "
+		    	+ "JOIN animal.proprietario cliente "
+		    	+ "WHERE cliente.pessoaId = :codigoCliente "
+		    	+ "AND ocorrenciaVacina.pago = false";
+    	String consultaValorPendenteEmAtendimentos = "SELECT SUM (tipo.custo) FROM TipoDeAtendimento tipo "
+    			+ "JOIN tipo.atendimentos atendimento "
+    			+ "JOIN atendimento.prontuario prontuario "
+    			+ "JOIN prontuario.animal animal "
+    			+ "JOIN animal.proprietario cliente "
+    			+ "WHERE cliente.pessoaId = :codigoCliente "
+    			+ "AND atendimento.pago = false";
+    	TypedQuery<BigDecimal> queryValorPendenteEmVacinas = entityManager
+    			.createQuery(consultaValorPendenteEmVacinas, BigDecimal.class)
+    			.setParameter("codigoCliente", proprietario.getPessoaId());
+    	TypedQuery<BigDecimal> queryValorPendenteEmAtendimentos = entityManager
+    			.createQuery(consultaValorPendenteEmAtendimentos, BigDecimal.class)
+    			.setParameter("codigoCliente", proprietario.getPessoaId());;
+    	BigDecimal totalPendenteEmAtendimentos = Optional.ofNullable(queryValorPendenteEmAtendimentos.getSingleResult()).orElse(new BigDecimal(0));
+    	BigDecimal totalPendenteEmVacinas = Optional.ofNullable(queryValorPendenteEmVacinas.getSingleResult()).orElse(new BigDecimal(0));
+    	return totalPendenteEmAtendimentos.add(totalPendenteEmVacinas);
+    	
     }
 
 	public List<Proprietario> buscarClientesEmDebito() {

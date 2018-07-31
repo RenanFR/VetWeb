@@ -4,6 +4,7 @@ package com.vetweb.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.vetweb.dao.AnimalDAO;
@@ -12,6 +13,7 @@ import com.vetweb.dao.ProprietarioDAO;
 import com.vetweb.dao.RelatorioDAO;
 
 @Controller
+@SessionAttributes({"urlClinica"})
 public class HomeController {
 	
     @Autowired

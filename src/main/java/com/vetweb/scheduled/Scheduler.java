@@ -14,7 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.vetweb.dao.AtendimentoDAO;
 import com.vetweb.dao.ProntuarioDAO;
 import com.vetweb.dao.ProprietarioDAO;
-import com.vetweb.model.Atendimento;
+import com.vetweb.model.OcorrenciaAtendimento;
 import com.vetweb.model.Pessoa;
 import com.vetweb.model.Proprietario;
 import com.vetweb.service.EmailService;
@@ -38,11 +38,12 @@ public class Scheduler {
 	
 	private static final Logger LOGGER = Logger.getLogger(Scheduler.class);
 	
+	@SuppressWarnings("unused")
 	private static final long MINUTO = 60000;
 	
 	private static final long HORA = 3600000;
 	
-    @Scheduled(fixedDelay = MINUTO)
+    @Scheduled(fixedDelay = HORA)
     public void verificacaoClientesEmDebito() {
     	List<Proprietario> proprietariosComDebito = proprietarioDAO.buscarClientesEmDebito(); 
     	proprietariosComDebito
@@ -64,13 +65,13 @@ public class Scheduler {
     		.listarTodos()
     		.stream()
     		.filter(ate -> 
-    			ate.getDataAtendimento()
+    			LocalDate.of(ate.getDataAtendimento().getYear(), ate.getDataAtendimento().getMonthValue(), ate.getDataAtendimento().getDayOfMonth())
     			.isEqual(LocalDate.now()))
     		.forEach(ate -> this.notificaRetornoAtendimento(ate));
     }
     
     @SuppressWarnings("static-access")
-	private void notificaRetornoAtendimento(Atendimento atendimento) {
+	private void notificaRetornoAtendimento(OcorrenciaAtendimento atendimento) {
     	Pessoa pessoaDestinatario = prontuarioDAO.buscarProntuarioDoAtendimento(atendimento).getAnimal().getProprietario();
     	StringBuilder mensagemRetorno = new StringBuilder();
     	mensagemRetorno.append("O RETORNO DO ATENDIMENTO "

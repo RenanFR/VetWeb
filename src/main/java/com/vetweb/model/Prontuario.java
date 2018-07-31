@@ -12,10 +12,11 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 
 @Entity
@@ -28,43 +29,32 @@ public class Prontuario implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long prontuarioId;
 	
-    @OneToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "tbl_prontuario_atendimento", 
-	    joinColumns = {@JoinColumn(name = "prontuarioId", referencedColumnName = "prontuarioId") }, 
-	    inverseJoinColumns = {	@JoinColumn(name = "atendimentoId", referencedColumnName = "atendimentoId") })
-    private List<Atendimento> atendimentos;
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "prontuario")
+    @JsonBackReference
+    private List<OcorrenciaAtendimento> atendimentos;
     
-    @OneToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "tbl_prontuario_vacina",
-	    joinColumns = {@JoinColumn(name = "prontuarioId", referencedColumnName = "prontuarioId")}, 
-	    inverseJoinColumns = {@JoinColumn(name = "vacinaId", referencedColumnName = "prontuarioVacinaId")  })
-    private List<ProntuarioVacina> vacinas;
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "prontuario")
+    @JsonBackReference
+    private List<OcorrenciaVacina> vacinas;
     
-    @OneToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "tbl_prontuario_documento", 
-	    joinColumns = {@JoinColumn(name = "prontuarioId", referencedColumnName = "prontuarioId")   },
-	    inverseJoinColumns = {	@JoinColumn(name = "documentoId", referencedColumnName = "documentoId") })
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "prontuario")
+    @JsonBackReference
     private List<Documento> documentos;
     
-    @OneToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "tbl_prontuario_exame",
-	    joinColumns = {@JoinColumn(name = "prontuarioId", referencedColumnName = "prontuarioId") },
-	    inverseJoinColumns = {@JoinColumn(name = "exameId", referencedColumnName = "exameId")})
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "prontuario")
+    @JsonBackReference
     private List<Exame> exames;
     
-    @OneToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "tbl_prontuario_prescricao", 
-	    joinColumns = {@JoinColumn(name = "prontuarioId", referencedColumnName = "prontuarioId")},
-	    inverseJoinColumns = {@JoinColumn(name = "prescricaoId", referencedColumnName = "prescricaoId")})
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "prontuario")
+    @JsonBackReference
     private List<Prescricao> prescricoes;
     
-    @OneToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "tbl_prontuario_patologia",
-	    joinColumns = {@JoinColumn(name = "prontuarioId", referencedColumnName = "prontuarioId") }, 
-	    inverseJoinColumns = {@JoinColumn(name = "patologiaId", referencedColumnName = "prontuarioPatologiaId") })
-    private List<ProntuarioPatologia> patologias;
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "prontuario")
+    @JsonBackReference
+    private List<OcorrenciaPatologia> patologias;
     
     @OneToOne
+    @JsonBackReference
     @JoinColumn(name = "animalId", referencedColumnName = "animalId")
     private Animal animal;
 
@@ -83,19 +73,19 @@ public class Prontuario implements Serializable {
 		this.prontuarioId = prontuarioId;
 	}
 
-	public List<Atendimento> getAtendimentos() {
+	public List<OcorrenciaAtendimento> getAtendimentos() {
 		return atendimentos;
 	}
 
-	public void setAtendimentos(List<Atendimento> atendimentos) {
+	public void setAtendimentos(List<OcorrenciaAtendimento> atendimentos) {
 		this.atendimentos = atendimentos;
 	}
 
-	public List<ProntuarioVacina> getVacinas() {
+	public List<OcorrenciaVacina> getVacinas() {
 		return vacinas;
 	}
 
-	public void setVacinas(List<ProntuarioVacina> vacinas) {
+	public void setVacinas(List<OcorrenciaVacina> vacinas) {
 		this.vacinas = vacinas;
 	}
 
@@ -123,11 +113,11 @@ public class Prontuario implements Serializable {
 		this.prescricoes = prescricoes;
 	}
 
-	public List<ProntuarioPatologia> getPatologias() {
+	public List<OcorrenciaPatologia> getPatologias() {
 		return patologias;
 	}
 
-	public void setPatologias(List<ProntuarioPatologia> patologias) {
+	public void setPatologias(List<OcorrenciaPatologia> patologias) {
 		this.patologias = patologias;
 	}
 

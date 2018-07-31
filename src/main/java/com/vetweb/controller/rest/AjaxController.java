@@ -15,9 +15,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.vetweb.dao.AnimalDAO;
 import com.vetweb.dao.AtendimentoDAO;
 import com.vetweb.dao.ProntuarioDAO;
-import com.vetweb.model.Atendimento;
-import com.vetweb.model.ProntuarioPatologia;
-import com.vetweb.model.ProntuarioVacina;
+import com.vetweb.model.OcorrenciaAtendimento;
+import com.vetweb.model.OcorrenciaPatologia;
+import com.vetweb.model.OcorrenciaVacina;
 import com.vetweb.model.Raca;
 
 @RestController
@@ -35,26 +35,26 @@ public class AjaxController {
     private AnimalDAO animalDAO;
     
     @RequestMapping(value = "/editarAtendimento/{atendimentoId}", method = RequestMethod.GET)
-    public Atendimento atendimentoParaEdicao(@PathVariable("atendimentoId") final Long atendimentoId) {
-    	Atendimento atendimento = atendimentoDAO.buscarPorId(atendimentoId);
+    public OcorrenciaAtendimento atendimentoParaEdicao(@PathVariable("atendimentoId") final Long atendimentoId) {
+    	OcorrenciaAtendimento atendimento = atendimentoDAO.buscarPorId(atendimentoId);
     	return atendimento;
     }
     
     @RequestMapping(value = "/editarProntuarioPatologia/{prontuarioPatologiaId}", method = RequestMethod.GET)
-    public ProntuarioPatologia prontuarioPatologiaParaEdicao(@PathVariable("prontuarioPatologiaId") final Long prontuarioPatologiaId) {
-    	ProntuarioPatologia prontuarioPatologia = prontuarioDAO.buscarOcorrenciaDaPatologia(prontuarioPatologiaId);
+    public OcorrenciaPatologia prontuarioPatologiaParaEdicao(@PathVariable("prontuarioPatologiaId") final Long prontuarioPatologiaId) {
+    	OcorrenciaPatologia prontuarioPatologia = prontuarioDAO.buscarOcorrenciaDaPatologia(prontuarioPatologiaId);
     	return prontuarioPatologia;
     }
     
     @RequestMapping(value = "/editarProntuarioVacina/{prontuarioVacinaId}", method = RequestMethod.GET)
-    public ProntuarioVacina ProntuarioVacinaParaEdicao(@PathVariable("prontuarioVacinaId") final Long prontuarioVacinaId) {
-    	ProntuarioVacina prontuarioVacina = prontuarioDAO.buscarOcorrenciaDaVacina(prontuarioVacinaId);
+    public OcorrenciaVacina ProntuarioVacinaParaEdicao(@PathVariable("prontuarioVacinaId") final Long prontuarioVacinaId) {
+    	OcorrenciaVacina prontuarioVacina = prontuarioDAO.buscarOcorrenciaVacina(prontuarioVacinaId);
     	return prontuarioVacina;
     }
     
     @RequestMapping(value = "/atualizaStatusPagoAtendimento/{atendimentoId}", method = RequestMethod.GET)
     public boolean atualizaStatusPagamento(@PathVariable("atendimentoId") final Long atendimentoId) {
-    	Atendimento atendimento = atendimentoDAO.buscarPorId(atendimentoId);
+    	OcorrenciaAtendimento atendimento = atendimentoDAO.buscarPorId(atendimentoId);
     	atendimento.setPago(!atendimento.isPago());
     	atendimentoDAO.salvar(atendimento);
     	return atendimento.isPago();
@@ -62,7 +62,7 @@ public class AjaxController {
     
     @RequestMapping(value = "/atualizaStatusPagoVacina/{prontuarioVacinaId}", method = RequestMethod.GET)
     public boolean atualizaStatusPagamentoVacina(@PathVariable("prontuarioVacinaId") final Long prontuarioVacinaId) {
-    	ProntuarioVacina vacina = prontuarioDAO.buscarOcorrenciaDaVacina(prontuarioVacinaId);
+    	OcorrenciaVacina vacina = prontuarioDAO.buscarOcorrenciaVacina(prontuarioVacinaId);
     	vacina.setPago(!vacina.isPago());
     	return vacina.isPago();    	
     }

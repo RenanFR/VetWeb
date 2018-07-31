@@ -2,7 +2,7 @@ package com.vetweb.model;
 //@author renan.rodrigues@metasix.com.br
 
 import java.io.Serializable;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -12,27 +12,31 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.vetweb.model.pojo.OcorrenciaProntuario;
+import com.vetweb.model.pojo.TipoOcorrenciaProntuario;
 
 @Entity
 @Table(name = "tbl_vacina_event")
-public class ProntuarioVacina implements Serializable, ElementoProntuario {
+public class OcorrenciaVacina implements OcorrenciaProntuario, Serializable {
 	
-	private static final long serialVersionUID = 1L;
 	
+	private static final long serialVersionUID = -552033988596086866L;
+
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long prontuarioVacinaId;
 	
-	@JsonIgnore
 	@ManyToOne
-	@JoinColumn(name="prontuarioId", referencedColumnName = "prontuarioId")
+	@JsonManagedReference
+	@JoinColumn(name = "prontuarioId", referencedColumnName = "prontuarioId")
 	private Prontuario prontuario;
 	
 	@ManyToOne
+	@JsonManagedReference
 	@JoinColumn(name="vacinaId", referencedColumnName = "vacinaId")
 	private Vacina vacina;
 	
-	private LocalDate inclusaoVacina;
+	private LocalDateTime inclusaoVacina;
 	
 	private boolean pago;
 
@@ -60,11 +64,11 @@ public class ProntuarioVacina implements Serializable, ElementoProntuario {
 		this.vacina = vacina;
 	}
 
-	public LocalDate getInclusaoVacina() {
+	public LocalDateTime getInclusaoVacina() {
 		return inclusaoVacina;
 	}
 
-	public void setInclusaoVacina(LocalDate inclusaoVacina) {
+	public void setInclusaoVacina(LocalDateTime inclusaoVacina) {
 		this.inclusaoVacina = inclusaoVacina;
 	}
 
@@ -95,13 +99,33 @@ public class ProntuarioVacina implements Serializable, ElementoProntuario {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		ProntuarioVacina other = (ProntuarioVacina) obj;
+		OcorrenciaVacina other = (OcorrenciaVacina) obj;
 		if (prontuarioVacinaId == null) {
 			if (other.prontuarioVacinaId != null)
 				return false;
 		} else if (!prontuarioVacinaId.equals(other.prontuarioVacinaId))
 			return false;
 		return true;
+	}
+
+	@Override
+	public Long getOcorrenciaId() {
+		return this.getProntuarioVacinaId();
+	}
+
+	@Override
+	public String getDescricao() {
+		return this.vacina.getNome();
+	}
+
+	@Override
+	public LocalDateTime getData() {
+		return this.getInclusaoVacina();
+	}
+
+	@Override
+	public TipoOcorrenciaProntuario getTipo() {
+		return TipoOcorrenciaProntuario.VACINA;
 	}
 	
 	

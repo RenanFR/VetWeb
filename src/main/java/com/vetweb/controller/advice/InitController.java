@@ -22,7 +22,7 @@ import com.vetweb.dao.ProntuarioDAO;
 import com.vetweb.dao.ProprietarioDAO;
 import com.vetweb.dao.VacinaDAO;
 import com.vetweb.model.Animal;
-import com.vetweb.model.Atendimento;
+import com.vetweb.model.OcorrenciaAtendimento;
 import com.vetweb.model.Clinica;
 import com.vetweb.model.Especie;
 import com.vetweb.model.Patologia;
@@ -207,13 +207,13 @@ public class InitController {
         binder.registerCustomEditor(Patologia.class, "patologia", new PropertyEditorSupport(){
             @Override
             public void setAsText(String text) throws IllegalArgumentException {
-                Atendimento atendimento = prontuarioDAO.buscarAtendimentoPorPreenchimento(text);
+                OcorrenciaAtendimento atendimento = prontuarioDAO.buscarAtendimentoPorPreenchimento(text);
                 this.setValue(atendimento);
             }
 
             @Override
             public String getAsText() {
-            	Atendimento atendimento = (Atendimento)this.getValue();
+            	OcorrenciaAtendimento atendimento = (OcorrenciaAtendimento)this.getValue();
                 if (atendimento != null) return atendimento.getTipoDeAtendimento().getNome();
                 else return "atendimento";
             }

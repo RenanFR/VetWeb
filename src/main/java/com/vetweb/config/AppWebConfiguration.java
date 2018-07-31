@@ -60,6 +60,7 @@ public class AppWebConfiguration extends WebMvcConfigurerAdapter implements WebA
         FormattingConversionService formattingConversionService = new DefaultFormattingConversionService(true);
         DateTimeFormatterRegistrar formatter = new DateTimeFormatterRegistrar();
         formatter.setDateFormatter((DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+        formatter.setDateTimeFormatter(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm"));
         formatter.registerFormatters(formattingConversionService);
         return formattingConversionService;
     }

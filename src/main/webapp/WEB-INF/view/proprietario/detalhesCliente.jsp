@@ -6,7 +6,7 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib prefix="vetweb" tagdir="/WEB-INF/tags"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %><!--    Importação JSTL -->
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 
 <vetweb:layout title="Cliente ${proprietario.nome}">
@@ -123,6 +123,6 @@
         </tbody>
     </table>
     
-    <vetweb:animaisDoCliente proprietario="${proprietario}"></vetweb:animaisDoCliente>
+    <vetweb:animaisCliente proprietario="${proprietario}"></vetweb:animaisCliente>
     
 </vetweb:layout>

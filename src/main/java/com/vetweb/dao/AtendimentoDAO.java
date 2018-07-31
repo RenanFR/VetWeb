@@ -2,7 +2,7 @@ package com.vetweb.dao;
 //	@author renan.rodrigues@metasix.com.br
 
 import com.vetweb.model.TipoDeAtendimento;
-import com.vetweb.model.Atendimento;
+import com.vetweb.model.OcorrenciaAtendimento;
 
 import java.util.List;
 
@@ -12,13 +12,13 @@ import javax.persistence.PersistenceContext;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class AtendimentoDAO implements IDAO<Atendimento> {
+public class AtendimentoDAO implements IDAO<OcorrenciaAtendimento> {
 	
     @PersistenceContext
     private EntityManager entityManager;
     
     @Override
-    public void salvar(Atendimento atendimento) {
+    public void salvar(OcorrenciaAtendimento atendimento) {
     	if(atendimento.getAtendimentoId() == null)
     		entityManager.persist(atendimento);
     	else 
@@ -26,20 +26,20 @@ public class AtendimentoDAO implements IDAO<Atendimento> {
     }
 
     @Override
-    public List<Atendimento> listarTodos() {
+    public List<OcorrenciaAtendimento> listarTodos() {
         return entityManager
-        		.createQuery("SELECT a FROM Atendimento a", Atendimento.class)
+        		.createQuery("SELECT ocorrencia FROM OcorrenciaAtendimento ocorrencia", OcorrenciaAtendimento.class)
         		.getResultList();
     }
 
     @Override
-    public Atendimento buscarPorId(long id) {
+    public OcorrenciaAtendimento buscarPorId(long id) {
     	return entityManager
-    			.find(Atendimento.class, id);
+    			.find(OcorrenciaAtendimento.class, id);
     }
 
     @Override
-    public void remover(Atendimento atendimento) {
+    public void remover(OcorrenciaAtendimento atendimento) {
         entityManager.remove(atendimento);
     }
     

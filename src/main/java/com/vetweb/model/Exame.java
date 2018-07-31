@@ -11,7 +11,11 @@ import java.io.Serializable;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 @Table(name = "tbl_exame")
@@ -28,6 +32,11 @@ public class Exame implements Serializable {
 	
 	@Column(columnDefinition = "TEXT")
     private StringBuilder encerramento;
+	
+	@ManyToOne
+	@JsonManagedReference
+	@JoinColumn(name = "prontuarioId", referencedColumnName = "prontuarioId")
+	private Prontuario prontuario;
 
     public Exame() {
 	}
@@ -64,6 +73,18 @@ public class Exame implements Serializable {
 
 	public void setEncerramento(StringBuilder encerramento) {
 		this.encerramento = encerramento;
+	}
+
+
+
+	public Prontuario getProntuario() {
+		return prontuario;
+	}
+
+
+
+	public void setProntuario(Prontuario prontuario) {
+		this.prontuario = prontuario;
 	}
     
 }

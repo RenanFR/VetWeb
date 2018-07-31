@@ -1,6 +1,6 @@
 package com.vetweb.model.pojo;
 
-public enum TipoElementoHistorico {
+public enum TipoOcorrenciaProntuario {
 	
 	VACINA, ATENDIMENTO, PATOLOGIA;
 	

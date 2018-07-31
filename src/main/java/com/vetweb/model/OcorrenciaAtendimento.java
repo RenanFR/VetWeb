@@ -1,10 +1,7 @@
 package com.vetweb.model;
 
 import java.io.Serializable;
-
-//@author renan.rodrigues@metasix.com.br
-
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -15,31 +12,42 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.vetweb.model.pojo.OcorrenciaProntuario;
+import com.vetweb.model.pojo.TipoOcorrenciaProntuario;
+
 @Entity
 @Table(name = "tbl_atendimento")
-public class Atendimento implements Serializable, ElementoProntuario {
+public class OcorrenciaAtendimento implements OcorrenciaProntuario, Serializable {
 	
-	private static final long serialVersionUID = 1L;
 	
+	private static final long serialVersionUID = 3695573793611769516L;
+
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long atendimentoId;
 	
 	@ManyToOne
+	@JsonManagedReference
 	@JoinColumn(name = "tipoDeAtendimentoId", referencedColumnName = "tipoDeAtendimentoId")
     private TipoDeAtendimento tipoDeAtendimento;
     
 	@Column(columnDefinition = "TEXT")
     private String preenchimentoModeloAtendimento;
     
-    private LocalDate dataAtendimento;
+    private LocalDateTime dataAtendimento;
+    
+    @ManyToOne
+    @JsonManagedReference
+    @JoinColumn(name = "prontuarioId", referencedColumnName = "prontuarioId")
+    private Prontuario prontuario;
     
     public boolean pago;
     
-    public Atendimento() {
+    public OcorrenciaAtendimento() {
     }
     
-    public Atendimento(Long atendimentoId, TipoDeAtendimento tipoDeAtendimento, String preenchimentoModeloAtendimento) {
+    public OcorrenciaAtendimento(Long atendimentoId, TipoDeAtendimento tipoDeAtendimento, String preenchimentoModeloAtendimento) {
     	this.atendimentoId = atendimentoId;
     	this.tipoDeAtendimento = tipoDeAtendimento;
     	this.preenchimentoModeloAtendimento = preenchimentoModeloAtendimento;
@@ -69,11 +77,11 @@ public class Atendimento implements Serializable, ElementoProntuario {
         this.preenchimentoModeloAtendimento = preenchimentoModeloAtendimento;
     }
     
-    public LocalDate getDataAtendimento() {
+    public LocalDateTime getDataAtendimento() {
 		return dataAtendimento;
 	}
 
-	public void setDataAtendimento(LocalDate dataAtendimento) {
+	public void setDataAtendimento(LocalDateTime dataAtendimento) {
 		this.dataAtendimento = dataAtendimento;
 	}
 
@@ -85,15 +93,23 @@ public class Atendimento implements Serializable, ElementoProntuario {
 		this.pago = pago;
 	}
     
-    @Override
+    public Prontuario getProntuario() {
+		return prontuario;
+	}
+
+	public void setProntuario(Prontuario prontuario) {
+		this.prontuario = prontuario;
+	}
+
+	@Override
     public String toString() {
     	return this.getTipoDeAtendimento().getNome();
     }
     
     @Override
     public boolean equals(Object obj) {
-    	if(!(obj instanceof Atendimento)) return false;
-    	Atendimento atendimentoComparar = (Atendimento)obj;
+    	if(!(obj instanceof OcorrenciaAtendimento)) return false;
+    	OcorrenciaAtendimento atendimentoComparar = (OcorrenciaAtendimento)obj;
     	return this.getAtendimentoId().equals(atendimentoComparar.getAtendimentoId());
     }
     
@@ -101,5 +117,25 @@ public class Atendimento implements Serializable, ElementoProntuario {
     public int hashCode() {
     	return this.atendimentoId.intValue();
     }
+
+	@Override
+	public Long getOcorrenciaId() {
+		return this.getAtendimentoId();
+	}
+
+	@Override
+	public String getDescricao() {
+		return this.getTipoDeAtendimento().getNome();
+	}
+
+	@Override
+	public LocalDateTime getData() {
+		return this.getDataAtendimento();
+	}
+
+	@Override
+	public TipoOcorrenciaProntuario getTipo() {
+		return TipoOcorrenciaProntuario.ATENDIMENTO;
+	}
     
 }

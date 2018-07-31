@@ -67,7 +67,7 @@
                             </a>     
                         </td>
                         <td>
-                            <vetweb:animaisDoCliente proprietario="${proprietario}"></vetweb:animaisDoCliente>
+                            <vetweb:animaisCliente proprietario="${proprietario}"></vetweb:animaisCliente>
                         </td>
                     </tr>                
                 </c:forEach>

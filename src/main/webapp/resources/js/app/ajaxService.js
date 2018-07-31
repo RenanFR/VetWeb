@@ -19,7 +19,12 @@ var ajaxService = {
 			    	var day = date.getDate();
 			    	var month = date.getMonth() + 1;
 			    	var year = date.getFullYear();
-			    	if (day < 10) { day = '0'+ day} if (month < 10) { month = '0' + month} date = year + '-' + month + '-' + day;
+			    	var hours = date.getHours();
+			    	var minutes = date.getMinutes();
+			    	if (day < 10) { day = '0'+ day} 
+			    	if (month < 10) { month = '0' + month} 
+			    	if (minutes < 10) { minutes = '0' + minutes} 
+			    	date = year + '-' + month + '-' + day + 'T' + hours + ':' + minutes;
 			    	dataAtendimento.val(date);
 			    },
 			    error: function (jqXHR, textStatus, errorThrown) {
@@ -44,7 +49,12 @@ var ajaxService = {
 		    	var day = date.getDate();
 		    	var month = date.getMonth() + 1;
 		    	var year = date.getFullYear();
-		    	if (day < 10) { day = '0'+ day} if (month < 10) { month = '0' + month} date = year + '-' + month + '-' + day;
+		    	var hours = date.getHours();
+		    	var minutes = date.getMinutes();
+		    	if (day < 10) { day = '0'+ day} 
+		    	if (month < 10) { month = '0' + month} 
+		    	if (minutes < 10) { minutes = '0' + minutes} 
+		    	date = year + '-' + month + '-' + day + 'T' + hours + ':' + minutes;
 		    	$('#inclusaoVacina').val(date);
 		    },
 		    error: function (jqXHR, textStatus, errorThrown) {
@@ -70,7 +80,12 @@ var ajaxService = {
 		    	var day = date.getDate();
 		    	var month = date.getMonth() + 1;
 		    	var year = date.getFullYear();
-		    	if (day < 10) { day = '0'+ day} if (month < 10) { month = '0' + month} date = year + '-' + month + '-' + day;
+		    	var hours = date.getHours();
+		    	var minutes = date.getMinutes();
+		    	if (day < 10) { day = '0'+ day} 
+		    	if (month < 10) { month = '0' + month} 
+		    	if (minutes < 10) { minutes = '0' + minutes} 
+		    	date = year + '-' + month + '-' + day + 'T' + hours + ':' + minutes;
 		    	inclusaoPatologia.val(date);
 		    },
 		    error: function (jqXHR, textStatus, errorThrown) {
@@ -151,6 +166,21 @@ var ajaxService = {
             }
         });
         
+	},
+	
+	buscaOcorrenciaProntuario: function(type, id) {
+		
+		$.ajax({ 
+			url: '/vetweb/agendamento/ocorrencia/' + type + '/' + id,
+			type: 'GET', 
+			sucess: function(data, textStatus, jqXHR) {
+				
+			},
+	        error: function (jqXHR, textStatus, errorThrown) {
+	        	
+	        }		
+		});
+		
 	},
 	
 	carregaEnderecoPeloCEP: function() {

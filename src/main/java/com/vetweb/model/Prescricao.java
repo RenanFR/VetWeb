@@ -1,13 +1,11 @@
 package com.vetweb.model;
 
+import java.io.Serializable;
+
 //@author renan.rodrigues@metasix.com.br
 
 import java.time.LocalDate;
-
-import java.io.Serializable;
-
 import java.time.Period;
-
 import java.util.List;
 
 import javax.persistence.Convert;
@@ -17,9 +15,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
-import javax.persistence.OneToMany;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.vetweb.dao.converter.FrequenciaConverter;
 
 @Entity
@@ -36,10 +36,15 @@ public class Prescricao implements Serializable {
     
 	@Convert(converter = FrequenciaConverter.class)
 	private Period tomarACada;
+	
+	@ManyToOne
+	@JsonManagedReference
+	@JoinColumn(name = "prontuarioId", referencedColumnName = "prontuarioId")
+	private Prontuario prontuario;
     
 	private LocalDate tomarAte;
     
-    @OneToMany
+    @ManyToMany
     @JoinTable(name = "tbl_prescricao_medicamento", 
 	    joinColumns = {@JoinColumn(name = "prescricaoId", referencedColumnName = "prescricaoId")}, 
 	    inverseJoinColumns = {@JoinColumn(name = "medicamentoId", referencedColumnName = "medicamentoId")})
@@ -95,6 +100,14 @@ public class Prescricao implements Serializable {
 
 	public void setMedicamentos(List<Medicamento> medicamentos) {
 		this.medicamentos = medicamentos;
+	}
+
+	public Prontuario getProntuario() {
+		return prontuario;
+	}
+
+	public void setProntuario(Prontuario prontuario) {
+		this.prontuario = prontuario;
 	}
     
 }

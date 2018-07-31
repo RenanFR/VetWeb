@@ -19,12 +19,13 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.vetweb.dao.converter.FrequenciaConverter;
 
 @Entity
 @Table(name = "tbl_tipo_atendimento")
 @NamedQueries({@NamedQuery(name = "tiposDeAtendimentoQuery", query = "SELECT tipo FROM TipoDeAtendimento tipo"),
-                @NamedQuery(name = "tipoDeAtendimentoPorNomeQuery", query = "SELECT tp FROM TipoDeAtendimento tp WHERE tp.nome = :tipoDeAtendimento")})
+                @NamedQuery(name = "tipoDeAtendimentoPorNomeQuery", query = "SELECT tipo FROM TipoDeAtendimento tipo WHERE tipo.nome = :tipoDeAtendimento")})
 public class TipoDeAtendimento implements Serializable {
 	
 	private static final long serialVersionUID = -686226545519235798L;
@@ -48,7 +49,8 @@ public class TipoDeAtendimento implements Serializable {
     private BigDecimal custo;
     
     @OneToMany(mappedBy = "tipoDeAtendimento")
-    private List<Atendimento> atendimentos;
+    @JsonBackReference
+    private List<OcorrenciaAtendimento> atendimentos;
 
     public TipoDeAtendimento() {
     }
