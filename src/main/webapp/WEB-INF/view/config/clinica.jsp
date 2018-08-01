@@ -14,7 +14,11 @@
     ${clinica.fundadaEm}
     ${clinica.cnpj}
     ${clinica.proprietario}
-    <button class="btn btn-default">
-        <a href="<c:url value="/config/atualizarClinica/${clinica.cnpj}"></c:url>"><i class="fa fa-edit"></i></a>
-    </button>
+
+    <a href="<c:url value="/config/atualizarClinica/${clinica.cnpj}"></c:url>">
+	    <button class="btn btn-default">
+	        <i class="fa fa-edit"></i>
+	    </button>
+    </a>
+    
 </vetweb:layout>

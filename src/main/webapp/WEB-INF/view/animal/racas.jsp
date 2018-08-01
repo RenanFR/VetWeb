@@ -40,10 +40,14 @@
         </script>         
     </jsp:attribute>    
     <jsp:body>
-        <button class="btn btn-primary">
-            <i class="fa fa-save"></i>
-            <a href="<c:url value="/animais/cadastroRaca"></c:url>" style="color: white">   <spring:message code="cadastro"></spring:message></a>
-        </button>    
+    
+         <a href="<c:url value="/animais/cadastroRaca"></c:url>" style="color: white">
+	        <button class="btn btn-primary">
+	            <i class="fa fa-save"></i>
+               <spring:message code="cadastro"></spring:message>
+	        </button>   
+         </a>
+         
         <table class="table table-responsive" id="racas">
             <thead>
                 <tr>

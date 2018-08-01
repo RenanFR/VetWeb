@@ -89,25 +89,31 @@
 										<button data-toggle="modal" data-target="#modalAtendimento" onclick="ajaxService.editarAtendimento(${elementoHistorico.ocorrenciaId})">
 											<i class="fa fa-file-text-o fa-lg"></i>
 										</button>									
-										<button>
-											<a href="<c:url value="/prontuario/removerAtendimentoDoProntuario/${prontuario.prontuarioId}/${elementoHistorico.ocorrenciaId}"></c:url>"><i class="fa fa-trash-o fa-2x"></i></a>
-										</button>									
+										<a href="<c:url value="/prontuario/removerAtendimentoDoProntuario/${prontuario.prontuarioId}/${elementoHistorico.ocorrenciaId}"></c:url>">
+											<button>
+												<i class="fa fa-trash-o fa-2x"></i>
+											</button>
+										</a>									
 									</c:if>
 									<c:if test="${elementoHistorico.tipo == 'VACINA'}">
 										<button data-toggle="modal" data-target="#modalVacina" onclick="ajaxService.editarVacina(${elementoHistorico.ocorrenciaId})">
 											<i class="fa fa-file-text-o fa-lg"></i>
 										</button>
-									  	<button>
-									  		<a href="<c:url value="/prontuario/removerVacinaDoProntuario/${prontuario.prontuarioId}/${elementoHistorico.ocorrenciaId}?inclusaoOcorrenciaVacina=${elementoHistorico.data}"></c:url>"><i class="fa fa-trash-o fa-2x"></i></a>
-									  	</button>
+										<a href="<c:url value="/prontuario/removerVacinaDoProntuario/${prontuario.prontuarioId}/${elementoHistorico.ocorrenciaId}?inclusaoOcorrenciaVacina=${elementoHistorico.data}"></c:url>">
+										  	<button>
+										  		<i class="fa fa-trash-o fa-2x"></i>
+										  	</button>
+										</a>
 									</c:if>
 									<c:if test="${elementoHistorico.tipo == 'PATOLOGIA'}">
 										<button data-toggle="modal" data-target="#modalPatologia" onclick="ajaxService.editarPatologia(${elementoHistorico.ocorrenciaId})">
 											<i class="fa fa-file-text-o fa-lg"></i>
 										</button>
-									  	<button>
-										  	<a href="<c:url value="/prontuario/removerPatologiaDoProntuario/${prontuario.prontuarioId}/${elementoHistorico.ocorrenciaId}"></c:url>"><i class="fa fa-trash-o fa-2x"></i></a>
-									  	</button>
+										<a href="<c:url value="/prontuario/removerPatologiaDoProntuario/${prontuario.prontuarioId}/${elementoHistorico.ocorrenciaId}"></c:url>">
+										  	<button>
+											  	<i class="fa fa-trash-o fa-2x"></i>
+										  	</button>
+										</a>
 									</c:if>
 									${elementoHistorico.tipo}
 								</td>

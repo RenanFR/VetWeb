@@ -40,10 +40,14 @@
         </script>                 
     </jsp:attribute>
     <jsp:body>
-        <button class="btn btn-primary">
-            <i class="fa fa-save"></i>
-            <a href="<c:url value="/clientes/cadastro"></c:url>" style="color: white">   <spring:message code="cadastrar"></spring:message>	</a>
-        </button>
+
+    	<a href="<c:url value="/clientes/cadastro"></c:url>" style="color: white">
+	        <button class="btn btn-primary">
+	            	<i class="fa fa-save"></i>
+	               <spring:message code="cadastrar"></spring:message>	
+	        </button>
+        </a>
+        
         <table class="table table-striped table-bordered table-hover" id="proprietarios">
             <thead>
                 <tr>

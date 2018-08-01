@@ -4,11 +4,15 @@
     Author     : 11151504898
 --%>
 <%@ taglib prefix="vetweb" tagdir="/WEB-INF/tags"%>
+
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring" %>
 
 <vetweb:layout title="Balanço Financeiro ${proprietario.nome}">
+
     <jsp:attribute name="js">
 		<script src="<c:url value="/resources/js/app/ajaxService.js"></c:url>" type="text/javascript"></script>
         <script>
@@ -17,17 +21,16 @@
             });
         </script>                 
     </jsp:attribute>
+    
     <jsp:body>
         <table class="table table-striped table-bordered table-hover" id="balancoFinanceiro">
         <caption>
-        	<h3>
-        		<spring:message code="totalPendente"></spring:message> ${totalPendente}
-        	</h3>
+       		<spring:message code="totalPendente"/> ${totalPendente}
         </caption>
             <thead>
                 <tr>
-                    <th><spring:message code="atendimentoMedico"></spring:message></th>
-                    <th><spring:message code="vacinas"></spring:message></th>
+                    <th><spring:message code="atendimentoMedico"/></th>
+                    <th><spring:message code="vacinas"/></th>
                 </tr>
             </thead>
             <tbody>
@@ -36,16 +39,16 @@
                         	<table>
                         		<tr>
                         			<th>
-                        				<spring:message code="tipoDeAtendimento"></spring:message>
+                        				<spring:message code="tipoDeAtendimento"/>
                         			</th>
                         			<th>
-                        				<spring:message code="custo"></spring:message>
+                        				<spring:message code="custo"/>
                         			</th>
                         			<th>
-                        				<spring:message code="pago"></spring:message>
+                        				<spring:message code="pago"/>
                         			</th>
                         			<th>
-                        				<spring:message code="dataAtendimento"></spring:message>
+                        				<spring:message code="dataAtendimento"/>
                         			</th>
                         		</tr>
 				                <c:forEach items="${atendimentosFeitos}" var="atendimento">
@@ -64,16 +67,16 @@
                         	<table>
                         		<tr>
                         			<th>
-                        				<spring:message code="nome"></spring:message>
+                        				<spring:message code="nome"/>
                         			</th>
                         			<th>
-                        				<spring:message code="preco"></spring:message>
+                        				<spring:message code="preco"/>
                         			</th>
                         			<th>
-                        				<spring:message code="inclusaoVacina"></spring:message>
+                        				<spring:message code="inclusaoVacina"/>
                         			</th>
                         			<th>
-                        				<spring:message code="pago"></spring:message>
+                        				<spring:message code="pago"/>
                         			</th>
                         		</tr>
 				                <c:forEach items="${vacinasAplicadas}" var="vacina">
@@ -86,7 +89,7 @@
 	                        			</td>
 	                        		</tr>
 				                </c:forEach>
-                        	</table>                        
+                        	</table>
                         </td>
                     </tr>                
             </tbody>

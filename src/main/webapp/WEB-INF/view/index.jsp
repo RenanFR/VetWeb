@@ -18,7 +18,7 @@
             <div class="div-square">
                 <a href="#">                    
                     <i class="fa fa-users fa-5x"></i>
-                    <h4>${quantidadeClientes} <spring:message code="clientes"></spring:message></h4>
+                    <h4>${quantidadeClientes} <spring:message code="clientes"/></h4>
                 </a>
             </div>
         </div>
@@ -27,7 +27,7 @@
             <div class="div-square">
                 <a href="#">                    
                     <i class="fa fa-github-alt fa-5x"></i>
-                    <h4>${quantidadeAnimais} <spring:message code="animais"></spring:message></h4>
+                    <h4>${quantidadeAnimais} <spring:message code="animais"/></h4>
                 </a>
             </div>
         </div>
@@ -36,7 +36,7 @@
             <div class="div-square">
                 <a href="#">                    
                     <i class="fa fa-credit-card fa-5x"></i>
-                    <h4>R$ ${totalPendente} <spring:message code="debitos"></spring:message></h4>
+                    <h4>R$ ${totalPendente} <spring:message code="debitos"/></h4>
                 </a>
             </div>
         </div>
@@ -46,11 +46,11 @@
                 <a href="#">                    
                     <i class="fa fa-ban fa-5x"></i>
                     <ul>
-                    	<h4>${clientesDevedores} <spring:message code="usuarioBloqueado"></spring:message></h4>
+                    	<h4>${clientesDevedores} <spring:message code="usuarioBloqueado"/></h4>
                     </ul>
                 </a>
             </div>
         </div>
-                        
     </div>
+    
 </vetweb:layout>
