@@ -9,7 +9,6 @@ import java.util.Collection;
 import java.util.List;
 
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -35,9 +34,10 @@ public class Usuario implements UserDetails {
     public Usuario(String username, String password, String name) {
     	this.username = username;
     	this.name = name;
-    	this.password = new BCryptPasswordEncoder().encode(decodePassword(password));
+    	this.password = password;
     }
     
+    @Deprecated
     public String decodePassword(String password ) {
     	return new String(Base64.getDecoder().decode(password.getBytes()));
     }
@@ -81,7 +81,7 @@ public class Usuario implements UserDetails {
     }
 
     public void setPassword(String password) {
-        this.password = new BCryptPasswordEncoder().encode(decodePassword(password));
+        this.password = password;
     }
 
     public String getName() {

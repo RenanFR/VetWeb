@@ -25,9 +25,11 @@
 	    		  $('#calendar').fullCalendar({
 	    			  events: 'http://localhost:8080/vetweb/agendamento/eventos',
 	    			  eventClick: function(calEvent, jsEvent, view) {
-	    				  	ajaxService.buscaOcorrenciaProntuario(calEvent.type, calEvent.id)
+							$('#modalOcorrenciaProntuario #id').text(calEvent.id);
+							$('#modalOcorrenciaProntuario #type').text(calEvent.type);
+							$('#modalOcorrenciaProntuario #title').text(calEvent.title);
+							$('#modalOcorrenciaProntuario #start').text(calEvent.start.format('DD/MM/YYYY HH:mm:ss'));
 	    				    $('#modalOcorrenciaProntuario').modal('show');
-
 						}
 	    		  });
 	        });

@@ -13,7 +13,7 @@
     <jsp:attribute name="script">
         <script src="<c:url value="/resources/js/app/ajaxService.js"></c:url>" type="text/javascript"></script>
         <script>
-        	$(document).ready(ajaxService.buscaRacasPorEspecie());
+        	$(document).ready(ajaxService.buscarRacasPorEspecie());
         </script>
     </jsp:attribute>
     <jsp:body>
@@ -68,7 +68,7 @@
                             <tr>
                                 <th><label for="especie"><spring:message code="especie"/></label></th>
                                 <td>
-                                    <select id="especies" onchange="ajaxService.buscaRacasPorEspecie()">
+                                    <select id="especies" onchange="ajaxService.buscarRacasPorEspecie()">
                                         <c:forEach items="${especies}" var="especie">
                                             <option>${especie}</option>
                                         </c:forEach>

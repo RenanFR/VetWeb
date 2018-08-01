@@ -58,7 +58,7 @@
     
 			<div class="row">
 				<div class="col-md-12">
-					<button data-toggle="modal" data-target="#modalAtendimento" onclick="ajaxService.buscaModeloPorTipoDeAtendimento()" class="btn btn-info">
+					<button data-toggle="modal" data-target="#modalAtendimento" onclick="ajaxService.buscarModeloPorTipoDeAtendimento()" class="btn btn-info">
 						<i class="fa fa-medkit fa-5x" aria-hidden="true"></i>
 					</button>
 					<button data-toggle="modal" data-target="#modalVacina" class="btn btn-warning">

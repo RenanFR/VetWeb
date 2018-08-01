@@ -95,7 +95,7 @@ var ajaxService = {
 		
 	},
 	
-	alteraStatusPagamentoAtendimento: function(atendimentoId) {
+	alterarStatusPagamentoAtendimento: function(atendimentoId) {
 		
 		$.ajax({
 		    type: 'GET',
@@ -111,7 +111,7 @@ var ajaxService = {
 		
 	},
 	
-	alteraStatusPagamentoVacina: function(prontuarioVacinaId) {
+	alterarStatusPagamentoVacina: function(prontuarioVacinaId) {
 		
 		$.ajax({
 		    type: 'GET',
@@ -127,7 +127,7 @@ var ajaxService = {
 		
 	},
 	
-	buscaModeloPorTipoDeAtendimento: function() {
+	buscarModeloPorTipoDeAtendimento: function() {
 		
 	    var ta = $('#tipoDeAtendimento').val();
 	    $.ajax({
@@ -144,7 +144,7 @@ var ajaxService = {
 	    
 	},
 	
-	buscaRacasPorEspecie: function() {
+	buscarRacasPorEspecie: function() {
 		
         var esp = $('#especies').val();
         $.ajax({
@@ -168,7 +168,7 @@ var ajaxService = {
         
 	},
 	
-	buscaOcorrenciaProntuario: function(type, id) {
+	buscarOcorrenciaProntuario: function(type, id) {
 		
 		$.ajax({ 
 			url: '/vetweb/agendamento/ocorrencia/' + type + '/' + id,
@@ -183,7 +183,7 @@ var ajaxService = {
 		
 	},
 	
-	carregaEnderecoPeloCEP: function() {
+	carregarEnderecoPeloCEP: function() {
 		
        var cep = $('#cep').val().replace(/\D/g, '');
        if(cep !== ''){

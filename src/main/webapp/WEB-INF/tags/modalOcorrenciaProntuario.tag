@@ -20,7 +20,18 @@
           </div>
           
           <div class="modal-body">
-          
+				<dl class="dl-horizontal">
+					<dt><spring:message code="codigoEvento" /></dt>
+					<dd id="id"></dd>
+					<dt><spring:message code="tipoEvento" /></dt>
+					<dd id="type"></dd>
+					<dt><spring:message code="tituloEvento" /></dt>
+					<dd id="title"></dd>
+					<dt><spring:message code="dataOcorrencia" /></dt>
+					<dd id="start"></dd>
+					<dt><spring:message code="irParaProntuario" /></dt>
+					<dd id="promptuary"><i class="fa fa-stethoscope fa-3x" aria-hidden="true"></i></dd>
+				</dl>          
           </div>
           
         </div>

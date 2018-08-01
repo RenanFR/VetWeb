@@ -67,7 +67,7 @@ public class AgendamentoController {
 			.filter(ocorrenciaVacina -> aplicarFiltroDeData(dataInicialFiltro, dataFinalFiltro, ocorrenciaVacina))
 			.forEach(ocorrenciaVacina -> {
 				EventFullCalendar event = new EventFullCalendar();
-				event.setId(String.valueOf(ocorrenciaVacina.getData()));
+				event.setId(String.valueOf(ocorrenciaVacina.getProntuarioVacinaId()));
 				event.setTitle(ocorrenciaVacina.getDescricao());
 				event.setStart(DateTimeFormatter.ISO_DATE_TIME.format(ocorrenciaVacina.getData()));
 				event.setType(ocorrenciaVacina.getTipo().name());
@@ -88,6 +88,7 @@ public class AgendamentoController {
 				(dataDoAtendimento.isEqual(dataFinalFiltro) || dataDoAtendimento.isBefore(dataFinalFiltro));
 	}
 	
+	@Deprecated
 	@ResponseBody
 	@RequestMapping("/ocorrencia/{type}/{id}")
 	public OcorrenciaProntuario buscarOcorrencia(@PathVariable("type") String tpOcorrencia, @PathVariable("id") Long idOcorrencia) {

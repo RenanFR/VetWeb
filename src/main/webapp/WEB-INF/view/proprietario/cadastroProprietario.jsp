@@ -82,7 +82,7 @@
                 <tbody>
                     <tr>
                         <th><label for="endereco.cep"><spring:message code="endereco.cep"/></label></th>
-                        <td><form:input path="endereco.cep" id="cep" onblur="ajaxService.carregaEnderecoPeloCEP()"></form:input></td>
+                        <td><form:input path="endereco.cep" id="cep" onblur="ajaxService.carregarEnderecoPeloCEP()"></form:input></td>
                         <td><form:errors path="endereco.cep" cssClass="errors"></form:errors></td>
                     </tr>
                     <tr>
