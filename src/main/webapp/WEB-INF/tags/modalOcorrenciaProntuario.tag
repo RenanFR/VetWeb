@@ -35,7 +35,11 @@
 					<dd id="start"></dd>
 					<dt><spring:message code="irParaProntuario" /></dt>
 					<dd id="promptuary">
-					<i class="fa fa-stethoscope fa-3x" aria-hidden="true"></i>
+						<a id="irParaOProntuario" href="">
+							<button id="btnProntuario">
+								<i class="fa fa-stethoscope fa-3x" aria-hidden="true"></i>
+							</button>
+						</a>
 					</dd>
 				</dl>          
           </div>

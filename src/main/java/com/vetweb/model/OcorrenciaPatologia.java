@@ -43,7 +43,8 @@ public class OcorrenciaPatologia implements OcorrenciaProntuario, Serializable {
 	public void setProntuarioPatologiaId(Long prontuarioPatologiaId) {
 		this.prontuarioPatologiaId = prontuarioPatologiaId;
 	}
-
+	
+	@Override
 	public Prontuario getProntuario() {
 		return prontuario;
 	}

@@ -93,7 +93,7 @@
 											<button>
 												<i class="fa fa-trash-o fa-2x"></i>
 											</button>
-										</a>									
+										</a>
 									</c:if>
 									<c:if test="${elementoHistorico.tipo == 'VACINA'}">
 										<button data-toggle="modal" data-target="#modalVacina" onclick="ajaxService.editarVacina(${elementoHistorico.ocorrenciaId})">

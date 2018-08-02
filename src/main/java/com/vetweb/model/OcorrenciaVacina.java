@@ -47,7 +47,8 @@ public class OcorrenciaVacina implements OcorrenciaProntuario, Serializable {
 	public void setProntuarioVacinaId(Long prontuarioVacinaId) {
 		this.prontuarioVacinaId = prontuarioVacinaId;
 	}
-
+	
+	@Override
 	public Prontuario getProntuario() {
 		return prontuario;
 	}

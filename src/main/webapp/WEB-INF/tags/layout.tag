@@ -1,11 +1,19 @@
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring" %>
+
 <%@ taglib prefix="vetweb" tagdir="/WEB-INF/tags"%>
+
 <%@ attribute name="title" required="true" %>
+
 <%@ attribute name="script" fragment="true" %>
+
 <%@ attribute name="mascaras" fragment="true" %>
+
 <%@ attribute name="js" fragment="true" %>
+
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+
 <%@	taglib	prefix="security"	uri="http://www.springframework.org/security/tags"	%>
+
 <security:authentication	property="principal"	var="user"/>
 
 <!DOCTYPE html>
@@ -17,6 +25,10 @@
         <meta charset="UTF-8">
         
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+		<meta name="_csrf" content="${_csrf.token}"/>
+	  
+		<meta name="_csrf_header" content="${_csrf.headerName}"/>            
                 
         <link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/style.css"></c:url>"   />
         

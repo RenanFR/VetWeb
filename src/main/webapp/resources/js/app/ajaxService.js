@@ -168,21 +168,6 @@ var ajaxService = {
         
 	},
 	
-	buscarOcorrenciaProntuario: function(type, id) {
-		
-		$.ajax({ 
-			url: '/vetweb/agendamento/ocorrencia/' + type + '/' + id,
-			type: 'GET', 
-			sucess: function(data, textStatus, jqXHR) {
-				
-			},
-	        error: function (jqXHR, textStatus, errorThrown) {
-	        	
-	        }		
-		});
-		
-	},
-	
 	carregarEnderecoPeloCEP: function() {
 		
        var cep = $('#cep').val().replace(/\D/g, '');

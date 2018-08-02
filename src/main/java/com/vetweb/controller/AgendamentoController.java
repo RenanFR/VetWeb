@@ -15,9 +15,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.vetweb.dao.AtendimentoDAO;
 import com.vetweb.dao.ProntuarioDAO;
+import com.vetweb.model.OcorrenciaAtendimento;
+import com.vetweb.model.OcorrenciaVacina;
 import com.vetweb.model.pojo.EventFullCalendar;
 import com.vetweb.model.pojo.OcorrenciaProntuario;
 import com.vetweb.model.pojo.TipoOcorrenciaProntuario;
@@ -42,7 +45,7 @@ public class AgendamentoController {
 	
 	@ResponseBody
 	@RequestMapping("/eventos")
-	public List<EventFullCalendar> todosOsEventos(@RequestParam("start") String start, @RequestParam("end") String end) {
+	public List<EventFullCalendar> todosOsEventos(@RequestParam(value = "start", required = false) String start, @RequestParam(value = "end", required = false) String end) {
 		LOGGER.debug("Recebendo data inicial " + start + " e final " + end + " para exibição dos eventos");
 		LocalDate dataInicialFiltro = LocalDate.parse(start, DateTimeFormatter.ISO_DATE);
 		LocalDate dataFinalFiltro = LocalDate.parse(end, DateTimeFormatter.ISO_DATE);
@@ -88,26 +91,27 @@ public class AgendamentoController {
 				(dataDoAtendimento.isEqual(dataFinalFiltro) || dataDoAtendimento.isBefore(dataFinalFiltro));
 	}
 	
-	@Deprecated
-	@ResponseBody
-	@RequestMapping("/ocorrencia/{type}/{id}")
-	public OcorrenciaProntuario buscarOcorrencia(@PathVariable("type") String tpOcorrencia, @PathVariable("id") Long idOcorrencia) {
+	@GetMapping("/ocorrencia/{type}/{id}")
+	public ModelAndView buscarOcorrencia(@PathVariable("type") String tpOcorrencia, @PathVariable("id") Long idOcorrencia) {
 		TipoOcorrenciaProntuario tipoOcorrencia = TipoOcorrenciaProntuario.valueOf(tpOcorrencia);
 		OcorrenciaProntuario ocorrencia = null;
 		switch (tipoOcorrencia) {
 			case ATENDIMENTO: {
 				ocorrencia = atendimentoDAO.buscarPorId(idOcorrencia);
+				ocorrencia = (OcorrenciaAtendimento)ocorrencia;
 				break;
 			}
 			case VACINA: {
 				ocorrencia = prontuarioDAO.buscarOcorrenciaVacina(idOcorrencia);
+				ocorrencia = (OcorrenciaVacina)ocorrencia;
 				break;
 			}
 			case PATOLOGIA: {
 				throw new RuntimeException("Patologia não é um tipo de evento suportado p/ agendamento");
 			}
 		}
-		return ocorrencia;
+		ModelAndView modelAndView = new ModelAndView("forward:/prontuario/prontuarioDoAnimal/" + ocorrencia.getProntuario().getAnimal().getAnimalId());
+		return modelAndView;
 	}
 	
 }

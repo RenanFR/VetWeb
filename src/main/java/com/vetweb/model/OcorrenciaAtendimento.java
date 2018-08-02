@@ -20,7 +20,6 @@ import com.vetweb.model.pojo.TipoOcorrenciaProntuario;
 @Table(name = "tbl_atendimento")
 public class OcorrenciaAtendimento implements OcorrenciaProntuario, Serializable {
 	
-	
 	private static final long serialVersionUID = 3695573793611769516L;
 
 	@Id
@@ -92,7 +91,8 @@ public class OcorrenciaAtendimento implements OcorrenciaProntuario, Serializable
 	public void setPago(boolean pago) {
 		this.pago = pago;
 	}
-    
+	
+	@Override
     public Prontuario getProntuario() {
 		return prontuario;
 	}
@@ -137,5 +137,5 @@ public class OcorrenciaAtendimento implements OcorrenciaProntuario, Serializable
 	public TipoOcorrenciaProntuario getTipo() {
 		return TipoOcorrenciaProntuario.ATENDIMENTO;
 	}
-    
+	
 }
