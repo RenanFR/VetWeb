@@ -3,10 +3,14 @@ package com.vetweb.config;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.concurrent.TimeUnit;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 
+import org.springframework.cache.CacheManager;
+import org.springframework.cache.annotation.EnableCaching;
+import org.springframework.cache.guava.GuavaCacheManager;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -30,8 +34,11 @@ import org.springframework.web.servlet.i18n.CookieLocaleResolver;
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
+import com.google.common.cache.CacheBuilder;
+
 @EnableWebMvc
 @Configuration
+@EnableCaching
 @ComponentScan(basePackages = {"com.vetweb.controller", "com.vetweb.dao", "com.vetweb.scheduled",
     "com.vetweb.model", "com.vetweb.dao.auth", "com.vetweb.model.auth", "com.vetweb.controller.advice",
     "com.vetweb.model.error", "com.vetweb.model.pojo", "com.vetweb.service", "com.vetweb.controller.rest",
@@ -95,6 +102,18 @@ public class AppWebConfiguration extends WebMvcConfigurerAdapter implements WebA
     @Bean
     public RestTemplate restTemplate() {
     	return new RestTemplate();
+    }
+    
+    @Bean
+    public CacheManager cacheManager() {
+    	CacheBuilder<Object, Object> cacheBuilder = 
+    			CacheBuilder.newBuilder()
+    			.maximumSize(100)
+    			.expireAfterAccess(5, TimeUnit.MINUTES);
+    	GuavaCacheManager cacheManager = new GuavaCacheManager();
+    	cacheManager.setCacheBuilder(cacheBuilder);
+    	return cacheManager;
+    			
     }
     
 	@Override

@@ -15,6 +15,7 @@ import java.util.stream.Stream;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -155,6 +156,7 @@ public class ProntuarioController {
         return modelAndView;
     }
     
+    @Cacheable(cacheNames = "prontuario")
     @RequestMapping(value = "/prontuarioDoAnimal/{animalId}", method = RequestMethod.GET)
     public ModelAndView prontuarioDoAnimal(@PathVariable("animalId") final Long animalId, @ModelAttribute("atendimento") OcorrenciaAtendimento atendimento,
     		@ModelAttribute("prontuarioPatologia") Patologia patologia, @ModelAttribute("prontuarioVacina") Vacina vacina) {

@@ -102,20 +102,33 @@ public class OcorrenciaAtendimento implements OcorrenciaProntuario, Serializable
 	}
 
 	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((atendimentoId == null) ? 0 : atendimentoId.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		OcorrenciaAtendimento other = (OcorrenciaAtendimento) obj;
+		if (atendimentoId == null) {
+			if (other.atendimentoId != null)
+				return false;
+		} else if (!atendimentoId.equals(other.atendimentoId))
+			return false;
+		return true;
+	}
+
+	@Override
     public String toString() {
     	return this.getTipoDeAtendimento().getNome();
-    }
-    
-    @Override
-    public boolean equals(Object obj) {
-    	if(!(obj instanceof OcorrenciaAtendimento)) return false;
-    	OcorrenciaAtendimento atendimentoComparar = (OcorrenciaAtendimento)obj;
-    	return this.getAtendimentoId().equals(atendimentoComparar.getAtendimentoId());
-    }
-    
-    @Override
-    public int hashCode() {
-    	return this.atendimentoId.intValue();
     }
 
 	@Override
