@@ -56,7 +56,7 @@ public class AgendamentoController {
 			.filter(atendimento -> aplicarFiltroDeData(dataInicialFiltro, dataFinalFiltro, atendimento))
 			.forEach(atendimento -> {
 				EventFullCalendar event = new EventFullCalendar();
-				event.setId(String.valueOf(atendimento.getAtendimentoId()));
+				event.setId(String.valueOf(atendimento.getOcorrenciaId()));
 				event.setTitle(atendimento.getTipoDeAtendimento().getNome());
 				event.setStart(DateTimeFormatter.ISO_DATE_TIME.format(atendimento.getDataAtendimento()));
 				event.setEnd(DateTimeFormatter.ISO_DATE_TIME.format(atendimento.getDataAtendimento().plus(atendimento.getTipoDeAtendimento().getDuracao())));
@@ -70,7 +70,7 @@ public class AgendamentoController {
 			.filter(ocorrenciaVacina -> aplicarFiltroDeData(dataInicialFiltro, dataFinalFiltro, ocorrenciaVacina))
 			.forEach(ocorrenciaVacina -> {
 				EventFullCalendar event = new EventFullCalendar();
-				event.setId(String.valueOf(ocorrenciaVacina.getProntuarioVacinaId()));
+				event.setId(String.valueOf(ocorrenciaVacina.getOcorrenciaId()));
 				event.setTitle(ocorrenciaVacina.getDescricao());
 				event.setStart(DateTimeFormatter.ISO_DATE_TIME.format(ocorrenciaVacina.getData()));
 				event.setType(ocorrenciaVacina.getTipo().name());

@@ -2,7 +2,7 @@ var ajaxService = {
 		
 	editarAtendimento: function(atendimentoId) {
 		
-		var inputAtendimentoId = $('#atendimentoId');
+		var inputAtendimentoId = $('#ocorrenciaId');
 		var select = $("select[id='tipoDeAtendimento']");
 		var preenchimentoModeloAtendimento = tinymce.get('preenchimentoModeloAtendimento');
 		var dataAtendimento = $('#dataAtendimento');
@@ -12,7 +12,7 @@ var ajaxService = {
 			    contentType: 'text/html',
 			    success: function (data, textStatus, jqXHR) {
 			    	var formAtendimento = $('#formAtendimento');
-			    	inputAtendimentoId.val(data.atendimentoId);
+			    	inputAtendimentoId.val(data.ocorrenciaId);
 			    	select.val(data.tipoDeAtendimento.nome);
 			    	preenchimentoModeloAtendimento.setContent(data.preenchimentoModeloAtendimento);
 			    	var date = new Date();
@@ -43,7 +43,7 @@ var ajaxService = {
 		    url: '/vetweb/ajax/prontuario/editarProntuarioVacina/' + vacinaId,
 		    contentType: 'text/html',
 		    success: function (data, textStatus, jqXHR) {
-		    	inputVacinaId.val(data.prontuarioVacinaId);
+		    	inputVacinaId.val(data.ocorrenciaId);
 		    	select.val(data.vacina.nome);
 		    	var date = new Date();
 		    	var day = date.getDate();
@@ -74,7 +74,7 @@ var ajaxService = {
 		    url: '/vetweb/ajax/prontuario/editarProntuarioPatologia/' + prontuarioPatologiaId,
 		    contentType: 'text/html',
 		    success: function (data, textStatus, jqXHR) {
-		    	inputProntuarioPatologiaId.val(data.prontuarioPatologiaId);
+		    	inputProntuarioPatologiaId.val(data.ocorrenciaId);
 		    	select.val(data.patologia.nome);
 		    	var date = new Date();
 		    	var day = date.getDate();

@@ -48,7 +48,7 @@ public class ProprietarioDAO implements IDAO<Proprietario> {
 
     @Override
     public List<Proprietario> listarTodos() {
-        return entityManager.createQuery("select p from Proprietario p", Proprietario.class).getResultList();
+        return entityManager.createQuery("SELECT p FROM Proprietario p", Proprietario.class).getResultList();
     }
 
     @Override

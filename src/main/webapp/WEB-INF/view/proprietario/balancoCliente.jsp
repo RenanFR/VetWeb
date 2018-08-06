@@ -56,7 +56,7 @@
 	                        			<td>${atendimento.tipoDeAtendimento.nome}</td>
 	                        			<td>${atendimento.tipoDeAtendimento.custo}</td>
 	                        			<td>
-	                        				<input type="checkbox" class="flagPago" ${atendimento.pago? 'checked' : ''} onclick="ajaxService.alterarStatusPagamentoAtendimento(${atendimento.atendimentoId})"	/>
+	                        				<input type="checkbox" class="flagPago" ${atendimento.pago? 'checked' : ''} onclick="ajaxService.alterarStatusPagamentoAtendimento(${atendimento.ocorrenciaId})"	/>
 	                        			</td>
 	                        			<td>${atendimento.dataAtendimento}</td>
 	                        		</tr>
@@ -85,7 +85,7 @@
 	                        			<td>${vacina.vacina.preco}</td>
 	                        			<td>${vacina.inclusaoVacina}</td>
 	                        			<td>
-	                        				<input type="checkbox" class="flagPago" ${vacina.pago? 'checked' : ''} onclick="ajaxService.alterarStatusPagamentoVacina(${vacina.prontuarioVacinaId})"	/>
+	                        				<input type="checkbox" class="flagPago" ${vacina.pago? 'checked' : ''} onclick="ajaxService.alterarStatusPagamentoVacina(${vacina.ocorrenciaId})"	/>
 	                        			</td>
 	                        		</tr>
 				                </c:forEach>

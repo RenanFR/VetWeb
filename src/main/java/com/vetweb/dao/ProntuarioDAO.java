@@ -67,7 +67,7 @@ public class ProntuarioDAO implements IDAO<Prontuario>{
     }
     
 	public void salvarOcorrenciaPatologia(OcorrenciaPatologia patologia) {
-		if (patologia.getProntuarioPatologiaId() == null) {
+		if (patologia.getOcorrenciaId() == null) {
     		entityManager.persist(patologia);
     	}
     	else {
@@ -76,7 +76,7 @@ public class ProntuarioDAO implements IDAO<Prontuario>{
 	}
 
 	public void salvarOcorrenciaVacina(OcorrenciaVacina vacina) {
-		if (vacina.getProntuarioVacinaId() == null)
+		if (vacina.getOcorrenciaId() == null)
     		entityManager.persist(vacina);
     	else
     		entityManager.merge(vacina);
@@ -112,7 +112,7 @@ public class ProntuarioDAO implements IDAO<Prontuario>{
     }
     
     public void salvarAtendimento(OcorrenciaAtendimento atendimento) {
-        if(atendimento.getAtendimentoId() == null)
+        if(atendimento.getOcorrenciaId() == null)
             entityManager.persist(atendimento);
         else
             entityManager.merge(atendimento);

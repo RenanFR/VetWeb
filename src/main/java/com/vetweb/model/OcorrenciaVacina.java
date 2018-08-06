@@ -5,9 +5,6 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -18,13 +15,10 @@ import com.vetweb.model.pojo.TipoOcorrenciaProntuario;
 
 @Entity
 @Table(name = "tbl_vacina_event")
-public class OcorrenciaVacina implements OcorrenciaProntuario, Serializable {
+public class OcorrenciaVacina extends OcorrenciaProntuario implements Serializable {
 	
 	
 	private static final long serialVersionUID = -552033988596086866L;
-
-	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long prontuarioVacinaId;
 	
 	@ManyToOne
 	@JsonManagedReference
@@ -39,14 +33,6 @@ public class OcorrenciaVacina implements OcorrenciaProntuario, Serializable {
 	private LocalDateTime inclusaoVacina;
 	
 	private boolean pago;
-
-	public Long getProntuarioVacinaId() {
-		return prontuarioVacinaId;
-	}
-
-	public void setProntuarioVacinaId(Long prontuarioVacinaId) {
-		this.prontuarioVacinaId = prontuarioVacinaId;
-	}
 	
 	@Override
 	public Prontuario getProntuario() {
@@ -84,34 +70,6 @@ public class OcorrenciaVacina implements OcorrenciaProntuario, Serializable {
 	@Override
 	public String toString() {
 		return vacina.getNome();
-	}
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((prontuarioVacinaId == null) ? 0 : prontuarioVacinaId.hashCode());
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		OcorrenciaVacina other = (OcorrenciaVacina) obj;
-		if (prontuarioVacinaId == null) {
-			if (other.prontuarioVacinaId != null)
-				return false;
-		} else if (!prontuarioVacinaId.equals(other.prontuarioVacinaId))
-			return false;
-		return true;
-	}
-
-	@Override
-	public Long getOcorrenciaId() {
-		return this.getProntuarioVacinaId();
 	}
 
 	@Override

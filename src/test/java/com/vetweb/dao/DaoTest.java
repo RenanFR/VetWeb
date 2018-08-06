@@ -41,7 +41,7 @@ public class DaoTest {
 	
 	@Test
 	public void verificaOcorrenciaAtendimentoParaOCliente() {
-		assertTrue(proprietarioDAO.buscarAtendimentosParaOCliente(1L).get(0).getAtendimentoId() == 1L);
+		assertTrue(proprietarioDAO.buscarAtendimentosParaOCliente(1L).get(0).getOcorrenciaId() == 1L);
 	}
 	
 	@Test
@@ -51,7 +51,7 @@ public class DaoTest {
 	
 	@Test
 	public void verificaOcorrenciaVacinaParaOCliente() {
-		assertTrue(proprietarioDAO.buscarVacinasParaOCliente(1L).get(0).getProntuarioVacinaId() == 1L);
+		assertTrue(proprietarioDAO.buscarVacinasParaOCliente(1L).get(0).getOcorrenciaId() == 1L);
 	}
 	
 	@Test

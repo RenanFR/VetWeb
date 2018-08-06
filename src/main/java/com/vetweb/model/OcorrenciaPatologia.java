@@ -4,9 +4,6 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -17,13 +14,10 @@ import com.vetweb.model.pojo.TipoOcorrenciaProntuario;
 
 @Entity
 @Table(name = "tbl_patologia_event")
-public class OcorrenciaPatologia implements OcorrenciaProntuario, Serializable {
+public class OcorrenciaPatologia extends OcorrenciaProntuario implements Serializable {
 
 
 	private static final long serialVersionUID = 1651108074834160258L;
-
-	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long prontuarioPatologiaId;
 	
 	@ManyToOne
 	@JsonManagedReference
@@ -35,14 +29,6 @@ public class OcorrenciaPatologia implements OcorrenciaProntuario, Serializable {
 	private Patologia patologia;
 	
 	private LocalDateTime inclusaoPatologia;
-
-	public Long getProntuarioPatologiaId() {
-		return prontuarioPatologiaId;
-	}
-
-	public void setProntuarioPatologiaId(Long prontuarioPatologiaId) {
-		this.prontuarioPatologiaId = prontuarioPatologiaId;
-	}
 	
 	@Override
 	public Prontuario getProntuario() {
@@ -72,34 +58,6 @@ public class OcorrenciaPatologia implements OcorrenciaProntuario, Serializable {
 	@Override
 	public String toString() {
 		return patologia.getNome();
-	}
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((prontuarioPatologiaId == null) ? 0 : prontuarioPatologiaId.hashCode());
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		OcorrenciaPatologia other = (OcorrenciaPatologia) obj;
-		if (prontuarioPatologiaId == null) {
-			if (other.prontuarioPatologiaId != null)
-				return false;
-		} else if (!prontuarioPatologiaId.equals(other.prontuarioPatologiaId))
-			return false;
-		return true;
-	}
-
-	@Override
-	public Long getOcorrenciaId() {
-		return this.getProntuarioPatologiaId();
 	}
 
 	@Override

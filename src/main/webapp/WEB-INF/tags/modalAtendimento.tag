@@ -24,7 +24,7 @@
              <form:form servletRelativeAction="/prontuario/adicionarAtendimento?prontuarioId=${prontuario.prontuarioId}"
 					method="POST" modelAttribute="atendimento" id="formAtendimento">
                    <tbody>
-                   	<form:hidden path="atendimentoId" id="atendimentoId"	/>
+                   	<form:hidden path="ocorrenciaId" id="ocorrenciaId"	/>
                        <tr>
                            <th><spring:message code="tipoDeAtendimento"/>: </th>
                            <td>
