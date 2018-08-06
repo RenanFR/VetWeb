@@ -123,6 +123,16 @@ public class ProprietarioDAO implements IDAO<Proprietario> {
     			.getResultList();
     }
     
+    public List<Animal> buscarAnimaisDoCliente(Long proprietario) {
+    	String consultaAnimaisDoCliente = "SELECT DISTINCT(animal) FROM Animal animal "
+    			+ "JOIN animal.proprietario proprietario "
+    			+ "WHERE proprietario.pessoaId = :codigoCliente";
+    	return entityManager
+    			.createQuery(consultaAnimaisDoCliente, Animal.class)
+    			.setParameter("codigoCliente", proprietario)
+    			.getResultList();
+    }
+    
     public BigDecimal buscarValorPendenteDoCliente(Proprietario proprietario) {
     	String consultaValorPendenteEmVacinas = "SELECT SUM (vacina.preco) FROM Vacina vacina "
 		    	+ "JOIN vacina.ocorrenciasVacina ocorrenciaVacina "

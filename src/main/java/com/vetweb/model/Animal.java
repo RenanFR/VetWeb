@@ -16,6 +16,8 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 @Entity
 @Table(name = "tbl_animal")
 @NamedQueries({@NamedQuery(name = "animalPorNome", query = "SELECT a FROM Animal a WHERE a.nome = :nomeAnimal"),
@@ -51,6 +53,7 @@ public class Animal implements Serializable {
     private Raca raca;
     
     @ManyToOne
+    @JsonManagedReference
     @JoinColumn(name = "proprietarioId", referencedColumnName = "pessoaId")
     private Proprietario proprietario;
     

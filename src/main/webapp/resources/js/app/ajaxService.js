@@ -168,6 +168,35 @@ var ajaxService = {
         
 	},
 	
+	buscarAnimaisPorCliente: function() {
+		
+		var codigoCliente = $('#slcProprietarios').val();
+		
+		$.ajax({
+			type: 'GET',
+			url: '/vetweb/ajax/prontuario/animaisPorCliente/' + codigoCliente,
+			contentType: 'application/json',
+			success: function (data, textStatus, jqXHR) {
+				var listaAnimais = $('#slcAnimal');
+				listaAnimais.empty();
+				if (data.length === 0) {
+					alert('O CLIENTE NÃO TEM ANIMAIS CADASTRADOS. ');
+					listaAnimais.attr('hidden', 'hidden');
+				} else {
+					$.each(data, function (i, animal) {
+						listaAnimais
+							.append($('<option>', { value: animal.animalId, text: animal.nome }));
+					});
+					listaAnimais.removeAttr('hidden');
+				}
+			},
+			error: function (jqXHR, textStatus, errorThrown) {
+				alert('ERRO AO CARREGAR LISTA DE ANIMAIS PARA O CLIENTE. ');
+			}
+		});
+		
+	},
+	
 	carregarEnderecoPeloCEP: function() {
 		
        var cep = $('#cep').val().replace(/\D/g, '');

@@ -64,6 +64,9 @@
                             </a>     
                             <a href="<c:url value="/animais/remover/${animal.animalId}"></c:url>">
                                 <i class="fa fa-trash-o fa-2x"></i>
+                            </a>
+                            <a href="<c:url value="/prontuario/prontuarioDoAnimal/${animal.animalId}"></c:url>">
+                            	<i class="fa fa-stethoscope fa-2x" aria-hidden="true"></i>
                             </a>                        
                         </td>
                     </tr>

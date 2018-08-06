@@ -19,6 +19,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.vetweb.dao.AtendimentoDAO;
 import com.vetweb.dao.ProntuarioDAO;
+import com.vetweb.dao.ProprietarioDAO;
 import com.vetweb.model.OcorrenciaAtendimento;
 import com.vetweb.model.OcorrenciaVacina;
 import com.vetweb.model.pojo.EventFullCalendar;
@@ -38,9 +39,16 @@ public class AgendamentoController {
 	@Autowired
 	private ProntuarioDAO prontuarioDAO;
 	
+	@Autowired
+	private ProprietarioDAO proprietarioDAO;
+	
 	@GetMapping
-	public String agenda() {
-		return "agendamento/agendamento";
+	public ModelAndView agenda() {
+		ModelAndView modelAndView = new ModelAndView("agendamento/agendamento");
+		modelAndView.addObject("todosOsClientes", proprietarioDAO.listarTodos());
+		modelAndView.addObject("tiposDeAtendimento", atendimentoDAO.buscarTiposDeAtendimento());
+		modelAndView.addObject("todasAsVacinas", prontuarioDAO.buscarVacinas());
+		return modelAndView;
 	}
 	
 	@ResponseBody
@@ -112,6 +120,10 @@ public class AgendamentoController {
 		}
 		ModelAndView modelAndView = new ModelAndView("forward:/prontuario/prontuarioDoAnimal/" + ocorrencia.getProntuario().getAnimal().getAnimalId());
 		return modelAndView;
+	}
+	
+	public ModelAndView adicionarOcorrencia() {
+		return null;
 	}
 	
 }

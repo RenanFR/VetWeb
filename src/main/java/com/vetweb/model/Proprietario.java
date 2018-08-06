@@ -14,6 +14,8 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.ColumnDefault;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 @Entity
 @Table(name = "tbl_cliente")
 @NamedQueries({@NamedQuery(name = "quantidadeClientes", query = "SELECT COUNT(p) FROM Proprietario p"),
@@ -38,6 +40,7 @@ public class Proprietario extends Pessoa {
     private boolean ativo;
     
     @OneToMany(mappedBy = "proprietario", fetch = FetchType.LAZY)
+    @JsonBackReference
     private List<Animal> animais;
     
     @Column(columnDefinition = "TEXT")

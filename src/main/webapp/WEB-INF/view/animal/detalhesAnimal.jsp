@@ -12,7 +12,7 @@
 
 <vetweb:layout title="Animal ${animal.nome}">
     <table class="table table-responsive" id="detalhesAnimal">
-        <caption>Animal ${animal.nome}   <a href="<c:url value="/prontuario/prontuarioDoAnimal/${animal.animalId}"></c:url>"><i class="fa fa-clipboard fa-2x"></i></a></caption>
+        <caption>Animal ${animal.nome}	</caption>
         <tbody>
             <tr>
                 <th><spring:message code="fotoAnimal"/></th>

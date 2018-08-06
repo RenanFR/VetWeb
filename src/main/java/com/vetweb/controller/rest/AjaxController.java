@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.vetweb.dao.AnimalDAO;
 import com.vetweb.dao.AtendimentoDAO;
 import com.vetweb.dao.ProntuarioDAO;
+import com.vetweb.dao.ProprietarioDAO;
+import com.vetweb.model.Animal;
 import com.vetweb.model.OcorrenciaAtendimento;
 import com.vetweb.model.OcorrenciaPatologia;
 import com.vetweb.model.OcorrenciaVacina;
@@ -33,6 +35,9 @@ public class AjaxController {
     
     @Autowired
     private AnimalDAO animalDAO;
+    
+    @Autowired
+    private ProprietarioDAO proprietarioDAO;
     
     @RequestMapping(value = "/editarAtendimento/{atendimentoId}", method = RequestMethod.GET)
     public OcorrenciaAtendimento atendimentoParaEdicao(@PathVariable("atendimentoId") final Long atendimentoId) {
@@ -75,6 +80,12 @@ public class AjaxController {
     @RequestMapping(value = "/modeloPorTipoDeAtendimento/{tipoDeAtendimento}", method = RequestMethod.GET)
     public @ResponseBody String modeloDoTipoDeAtendimento(@PathVariable("tipoDeAtendimento") String nomeTipoAtendimento) {
         return atendimentoDAO.buscarModeloDoTipoDeAtendimento(nomeTipoAtendimento);
+    }
+    
+    @RequestMapping(value = "/animaisPorCliente/{codigoCliente}", method = RequestMethod.GET)
+    public @ResponseBody List<Animal> buscarAnimaisDoCliente(@PathVariable("codigoCliente") Long codigoCliente) {
+    	return proprietarioDAO
+    			.buscarAnimaisDoCliente(codigoCliente);
     }    
     
 }

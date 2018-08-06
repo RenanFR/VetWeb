@@ -27,7 +27,9 @@
     	<script src="<c:url value="/resources/js/app/ajaxService.js"></c:url>" type="text/javascript"></script>
         
         <script>
+        
 	        $(document).ready(function() {
+	        	ajaxService.buscarAnimaisPorCliente();
 	    		  $('#calendar').fullCalendar({
 					header: {
 						left: 'prev,next today',
@@ -43,6 +45,7 @@
 						$('#modalOcorrenciaProntuario #title').text(calEvent.title);
 						$('#modalOcorrenciaProntuario #start').text(calEvent.start.format('DD/MM/YYYY HH:mm:ss'));
 	   				    $('#modalOcorrenciaProntuario').modal('show');
+	   				 	ajaxService.buscarAnimaisPorCliente();
 	   				    var enderecoProntuario = $('#irParaOProntuario');
 	   				    var url = '/vetweb/agendamento/ocorrencia/';
 	   				    enderecoProntuario.attr('href', url + $('#type').text() + '/' + $('#id').text());
@@ -50,11 +53,33 @@
 					selectable: true,
 					selectHelper: true,
 					select: function(start, end){
-						alert(start + ' | ' + end);
+						$('#modalAgendamento').modal('show');
 					},					
 					events: 'http://localhost:8080/vetweb/agendamento/eventos'
 	    		  });
 	        });
+	        
+			$('#slcProprietarios').on('change', function() {
+				ajaxService.buscarAnimaisPorCliente();
+			});
+			
+			$('.rdoTipo').on('click', function() {
+				var rdoSelecionado = $(this); 
+				if (rdoSelecionado.val() === 'VACINA') {
+					$('#slcVacina').removeAttr('hidden');
+					$('#lblVacina').removeAttr('hidden');
+					$('#slcAtendimento').attr('hidden', 'hidden');
+					$('#lblAtendimento').attr('hidden', 'hidden');
+				}
+				if (rdoSelecionado.val() === 'ATENDIMENTO') {
+					$('#slcAtendimento').removeAttr('hidden');
+					$('#lblAtendimento').removeAttr('hidden');
+					$('#slcVacina').attr('hidden', 'hidden');
+					$('#lblVacina').attr('hidden', 'hidden');
+				} 
+							
+			});
+			
         </script>
         
     </jsp:attribute>
@@ -65,6 +90,11 @@
           </div>
           
           <vetweb:modalOcorrenciaProntuario></vetweb:modalOcorrenciaProntuario>
+          
+          <vetweb:modalAgendamento proprietarios="${todosOsClientes}" 
+				tiposDeAtendimento="${tiposDeAtendimento}" 
+				vacinas="${todasAsVacinas}">
+			</vetweb:modalAgendamento>
           
     </jsp:body>
     
