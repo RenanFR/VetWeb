@@ -35,7 +35,7 @@ public class HomeController {
         modelAndView.addObject("quantidadeAnimais", animalDAO.buscarQuantidade());
         modelAndView.addObject("urlClinica", !configDAO.buscarClinica().isPresent()? "/config/cadastroClinica" : "/config/detalhesClinica/" + configDAO.buscarClinica().get().getRazaoSocial());
         modelAndView.addObject("totalPendente", relatorioDAO.buscarTotalAReceber());
-        modelAndView.addObject("clientesDevedores", proprietarioDAO.buscarClientesEmDebito().stream().count());
+        modelAndView.addObject("clientesDevedores", proprietarioDAO.buscarClientesInativos().stream().count());
         return modelAndView;
     }
     

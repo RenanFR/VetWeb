@@ -26,7 +26,7 @@
                   <tbody>
                       <input type="text" name="prontuarioId" id="prontuarioId" hidden  />
                       <input type="text" name="prontuarioPatologiaId" id="prontuarioPatologiaId" hidden  />
-                      <br>
+                      <br	/>
                       <tr>
                           <th><spring:message code="patologia"></spring:message>: </th>
                           <td>
@@ -37,7 +37,7 @@
                               </select>
                           </td>
                       </tr>
-                      <br>
+                      <br	/>
                       <tr>
                       	<th><spring:message code="dataAtendimento"/>:	</th>
                       	<td><input type="datetime-local" name="inclusaoPatologia" id="inclusaoPatologia" /></td>

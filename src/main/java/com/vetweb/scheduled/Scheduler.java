@@ -43,7 +43,7 @@ public class Scheduler {
 	
 	private static final long HORA = 3600000;
 	
-    @Scheduled(fixedDelay = HORA)
+    @Scheduled(fixedDelay = MINUTO)
     public void verificacaoClientesEmDebito() {
     	List<Proprietario> proprietariosComDebito = proprietarioDAO.buscarClientesEmDebito(); 
     	proprietariosComDebito

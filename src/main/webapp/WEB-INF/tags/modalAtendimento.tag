@@ -32,7 +32,9 @@
                                </form:select>
                            </td>
                        </tr>
+                       
                        <br	/>
+                       
                        <tr>
                            <th><spring:message code="modeloAtendimento"/>: </th>
                            <td id="modelo"><form:textarea path="preenchimentoModeloAtendimento" name="preenchimentoModeloAtendimento" id="preenchimentoModeloAtendimento"></form:textarea></td>

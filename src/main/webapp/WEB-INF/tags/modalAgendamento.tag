@@ -36,13 +36,13 @@
              
              <div class="modal-body">
              
-					<form action="">
+					<form:form servletRelativeAction="/agendamento/ocorrencia" method="post">
 						
 	                   <tbody>
 	                   
 						<label id="lblCliente" for="slcProprietarios"><spring:message code="cliente"/></label>
 						                   
-		                   <select id="slcProprietarios">
+		                   <select id="slcProprietarios" name="slcProprietarios">
 		                   		<c:forEach items="${proprietarios}" var="prop">
 		                   			<option value="${prop.pessoaId}">${prop}</option>
 		                   		</c:forEach>
@@ -51,7 +51,7 @@
 		                   <br	/>
 		                
 						<label id="lblAnimal" for="slcAnimal"><spring:message code="nomeAnimal"/></label>   
-		                   <select id="slcAnimal" style="display: none;"></select><br>
+		                   <select id="slcAnimal" style="display: none;" name="slcAnimal"></select><br>
 		                   
 						<label id="lblTipo" for="tipoOcorrencia"><spring:message code="tipo"/></label>
 						
@@ -60,7 +60,7 @@
 	               		  <input type="radio" name="tipoOcorrencia" value="ATENDIMENTO" class="rdoTipo"> Atendimento<br	/>
 	               		  
 							<label id="lblVacina" for="slcVacina" style="display: none;"><spring:message code="selecioneVacina"/></label>
-		                   <select id="slcVacina" style="display: none;">
+		                   <select id="slcVacina" style="display: none;" name="slcVacina">
 		                   		<c:forEach items="${todasAsVacinas}" var="vacina">
 		                   			<option value="${vacina.vacinaId}">${vacina.nome}</option>
 		                   		</c:forEach>
@@ -69,7 +69,7 @@
 		                   <br	/>
 		                   
 							<label id="lblAtendimento" for="slcAtendimento" style="display: none;"><spring:message code="selecioneAtendimento"/></label>
-		                   <select id="slcAtendimento" style="display: none;">
+		                   <select id="slcAtendimento" style="display: none;" name="slcAtendimento">
 		                   		<c:forEach items="${tiposDeAtendimento}" var="atendimento">
 		                   			<option value="${atendimento.tipoDeAtendimentoId}">${atendimento.nome}</option>
 		                   		</c:forEach>
@@ -92,7 +92,7 @@
 	                       <input type="submit" value="submit" class="btn btn-primary"   />
 	                   </div>
 	                   
-					</form>
+					</form:form>
 					
                
              </div>

@@ -95,6 +95,11 @@ public class ProntuarioDAO implements IDAO<Prontuario>{
     			.find(OcorrenciaVacina.class, prontuarioVacinaId);
     }
     
+    public Vacina buscarVacinaPorId(Long vacinaId) {
+    	return entityManager
+    			.find(Vacina.class, vacinaId);
+    }
+    
     public List<OcorrenciaVacina> buscarTodasOcorrenciasVacina() {
     	String consultaTodasOcorrenciasVacina = "SELECT ocorrenciaVacina FROM OcorrenciaVacina ocorrenciaVacina";
     	return entityManager

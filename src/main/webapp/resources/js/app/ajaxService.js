@@ -14,7 +14,11 @@ var ajaxService = {
 			    	var formAtendimento = $('#formAtendimento');
 			    	inputAtendimentoId.val(data.ocorrenciaId);
 			    	select.val(data.tipoDeAtendimento.nome);
-			    	preenchimentoModeloAtendimento.setContent(data.preenchimentoModeloAtendimento);
+			    	if (data.preenchimentoModeloAtendimento != null) {
+			    		preenchimentoModeloAtendimento.setContent(data.preenchimentoModeloAtendimento);
+			    	} else {
+			    		preenchimentoModeloAtendimento.setContent(data.tipoDeAtendimento.modeloAtendimento);
+			    	}
 			    	var date = new Date();
 			    	var day = date.getDate();
 			    	var month = date.getMonth() + 1;

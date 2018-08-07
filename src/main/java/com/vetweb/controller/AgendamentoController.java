@@ -1,6 +1,7 @@
 package com.vetweb.controller;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,17 +13,22 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.vetweb.dao.AgendamentoDAO;
+import com.vetweb.dao.AnimalDAO;
 import com.vetweb.dao.AtendimentoDAO;
 import com.vetweb.dao.ProntuarioDAO;
 import com.vetweb.dao.ProprietarioDAO;
+import com.vetweb.model.Agendamento;
+import com.vetweb.model.Animal;
 import com.vetweb.model.OcorrenciaAtendimento;
 import com.vetweb.model.OcorrenciaVacina;
+import com.vetweb.model.Prontuario;
 import com.vetweb.model.pojo.EventFullCalendar;
 import com.vetweb.model.pojo.OcorrenciaProntuario;
 import com.vetweb.model.pojo.TipoOcorrenciaProntuario;
@@ -43,6 +49,12 @@ public class AgendamentoController {
 	@Autowired
 	private ProprietarioDAO proprietarioDAO;
 	
+	@Autowired
+	private AnimalDAO animalDAO;
+	
+	@Autowired
+	private AgendamentoDAO agendamentoDAO;
+	
 	@GetMapping
 	public ModelAndView agenda() {
 		ModelAndView modelAndView = new ModelAndView("agendamento/agendamento");
@@ -59,9 +71,11 @@ public class AgendamentoController {
 		LocalDate dataInicialFiltro = LocalDate.parse(start, DateTimeFormatter.ISO_DATE);
 		LocalDate dataFinalFiltro = LocalDate.parse(end, DateTimeFormatter.ISO_DATE);
 		List<EventFullCalendar> events = new ArrayList<>();
+		List<Agendamento> agendamentos = agendamentoDAO.listarTodos();
 		atendimentoDAO
 			.listarTodos()
 			.stream()
+			.filter(atendimento -> atendimento.getDataAtendimento().isBefore(LocalDateTime.now()))
 			.filter(atendimento -> aplicarFiltroDeData(dataInicialFiltro, dataFinalFiltro, atendimento))
 			.forEach(atendimento -> {
 				EventFullCalendar event = new EventFullCalendar();
@@ -70,12 +84,14 @@ public class AgendamentoController {
 				event.setStart(DateTimeFormatter.ISO_DATE_TIME.format(atendimento.getDataAtendimento()));
 				event.setEnd(DateTimeFormatter.ISO_DATE_TIME.format(atendimento.getDataAtendimento().plus(atendimento.getTipoDeAtendimento().getDuracao())));
 				event.setType(atendimento.getTipo().name());
+				event.setColor("#ccf5ff");
 				events
 					.add(event);
 			});
 		prontuarioDAO
 			.buscarTodasOcorrenciasVacina()
 			.stream()
+			.filter(ocorrenciaVacina -> ocorrenciaVacina.getInclusaoVacina().isBefore(LocalDateTime.now()))
 			.filter(ocorrenciaVacina -> aplicarFiltroDeData(dataInicialFiltro, dataFinalFiltro, ocorrenciaVacina))
 			.forEach(ocorrenciaVacina -> {
 				EventFullCalendar event = new EventFullCalendar();
@@ -83,8 +99,23 @@ public class AgendamentoController {
 				event.setTitle(ocorrenciaVacina.getDescricao());
 				event.setStart(DateTimeFormatter.ISO_DATE_TIME.format(ocorrenciaVacina.getData()));
 				event.setType(ocorrenciaVacina.getTipo().name());
+				event.setColor("#fff0b3");
 				events
-				.add(event);
+					.add(event);
+			});
+		agendamentos
+			.stream()
+			.filter(ag -> ag.getDataHoraFinal().isAfter(LocalDateTime.now()))
+			.forEach(ag -> {
+				EventFullCalendar event = new EventFullCalendar();
+				event.setId(String.valueOf(ag.getOcorrencia().getOcorrenciaId()));
+				event.setTitle(ag.getOcorrencia().getDescricao());
+				event.setStart(DateTimeFormatter.ISO_DATE_TIME.format(ag.getDataHoraInicial()));
+				event.setEnd(DateTimeFormatter.ISO_DATE_TIME.format(ag.getDataHoraFinal()));
+				event.setType(ag.getOcorrencia().getTipo().name());
+				event.setColor("#ccffcc");
+				events
+					.add(event);
 			});
 		return events;
 	}
@@ -123,9 +154,46 @@ public class AgendamentoController {
 		return modelAndView;
 	}
 	
-	@RequestMapping(value = "/ocorrencia", method = RequestMethod.POST)
-	public ModelAndView adicionarOcorrencia() {
-		return null;
+	@PostMapping("/ocorrencia")
+	public ModelAndView adicionarOcorrencia(@RequestParam("slcProprietarios") String codigoCliente, 
+			@RequestParam("slcAnimal") String animalSelecionado, 
+			@RequestParam("tipoOcorrencia") String tipoDeOcorrencia, 
+			@RequestParam(value = "slcVacina", required = false) String vacinaSelecionada,
+			@RequestParam(value = "slcAtendimento", required = false) String atendimentoSelecionado, 
+			@RequestParam("dataHoraInicial") String dataEHoraInicial, 
+			@RequestParam("dataHoraFinal") String dataEHoraFinal) {
+		Animal animal = animalDAO.buscarPorId(Long.parseLong(animalSelecionado));
+		Prontuario prontuario = animal.getProntuario();
+		LocalDateTime dataHoraInicio = LocalDateTime.parse(dataEHoraInicial, DateTimeFormatter.ISO_DATE_TIME);
+		LocalDateTime dataHoraFim = LocalDateTime.parse(dataEHoraFinal, DateTimeFormatter.ISO_DATE_TIME);
+		TipoOcorrenciaProntuario tipoOcorrencia = TipoOcorrenciaProntuario.valueOf(tipoDeOcorrencia);
+		Agendamento agendamento = new Agendamento();
+		if (tipoDeOcorrencia.equals("VACINA")) {
+			OcorrenciaVacina vacina = new OcorrenciaVacina();
+			vacina.setProntuario(prontuario);
+			vacina.setVacina(prontuarioDAO.buscarVacinaPorId(Long.parseLong(vacinaSelecionada)));
+			vacina.setInclusaoVacina(dataHoraInicio);
+			vacina.setTipo(tipoOcorrencia);
+			prontuarioDAO.salvarOcorrenciaVacina(vacina);
+			prontuario.getVacinas().add(vacina);
+			agendamento.setOcorrencia(vacina);
+		} else if (tipoDeOcorrencia.equals("ATENDIMENTO")) {
+			OcorrenciaAtendimento atendimento = new OcorrenciaAtendimento();
+			atendimento.setTipoDeAtendimento(atendimentoDAO.buscarTipoDeAtendimentoPorId(Long.parseLong(atendimentoSelecionado)));
+			atendimento.setProntuario(prontuario);
+			atendimento.setDataAtendimento(dataHoraInicio);
+			atendimento.setTipo(tipoOcorrencia);
+			prontuarioDAO.salvarAtendimento(atendimento);
+			prontuario.getAtendimentos().add(atendimento);
+			agendamento.setOcorrencia(atendimento);
+		}
+		prontuarioDAO.salvar(prontuario);
+		agendamento.setDataHoraInicial(dataHoraInicio);
+		agendamento.setDataHoraFinal(dataHoraFim);
+		agendamento.setTipo(tipoOcorrencia);
+		agendamentoDAO.salvar(agendamento);
+		ModelAndView modelAndView = new ModelAndView("redirect:/prontuario/prontuarioDoAnimal/" + prontuario.getAnimal().getAnimalId());
+		return modelAndView;
 	}
 	
 }
