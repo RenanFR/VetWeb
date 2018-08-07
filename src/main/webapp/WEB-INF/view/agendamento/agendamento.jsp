@@ -54,6 +54,8 @@
 					selectHelper: true,
 					select: function(start, end){
 						$('#modalAgendamento').modal('show');
+						$('#dataHoraInicial').val(moment().format('YYYY-MM-DDTHH:mm'));
+						$('#dataHoraFinal').val(moment().format('YYYY-MM-DDTHH:mm'));
 					},					
 					events: 'http://localhost:8080/vetweb/agendamento/eventos'
 	    		  });
@@ -66,17 +68,21 @@
 			$('.rdoTipo').on('click', function() {
 				var rdoSelecionado = $(this); 
 				if (rdoSelecionado.val() === 'VACINA') {
-					$('#slcVacina').removeAttr('hidden');
-					$('#lblVacina').removeAttr('hidden');
-					$('#slcAtendimento').attr('hidden', 'hidden');
-					$('#lblAtendimento').attr('hidden', 'hidden');
+					$('#slcVacina').css('display', 'block');
+					$('#lblVacina').css('display', 'block');
+					$('#slcAtendimento').css('display', 'none');
+					$('#lblAtendimento').css('display', 'none');
 				}
 				if (rdoSelecionado.val() === 'ATENDIMENTO') {
-					$('#slcAtendimento').removeAttr('hidden');
-					$('#lblAtendimento').removeAttr('hidden');
-					$('#slcVacina').attr('hidden', 'hidden');
-					$('#lblVacina').attr('hidden', 'hidden');
+					$('#slcAtendimento').css('display', 'block');
+					$('#lblAtendimento').css('display', 'block');
+					$('#slcVacina').css('display', 'none');
+					$('#lblVacina').css('display', 'none');
 				} 
+				$('#lblDataHoraFinal').css('display', 'inline');
+				$('#lblDataHoraInicial').css('display', 'inline');
+				$('#dataHoraInicial').css('display', 'inline');
+				$('#dataHoraFinal').css('display', 'inline');
 							
 			});
 			

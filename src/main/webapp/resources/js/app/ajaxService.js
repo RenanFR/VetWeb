@@ -181,13 +181,13 @@ var ajaxService = {
 				listaAnimais.empty();
 				if (data.length === 0) {
 					alert('O CLIENTE NÃO TEM ANIMAIS CADASTRADOS. ');
-					listaAnimais.attr('hidden', 'hidden');
+					listaAnimais.css('display', 'none');
 				} else {
 					$.each(data, function (i, animal) {
 						listaAnimais
 							.append($('<option>', { value: animal.animalId, text: animal.nome }));
 					});
-					listaAnimais.removeAttr('hidden');
+					listaAnimais.css('display', 'inline');
 				}
 			},
 			error: function (jqXHR, textStatus, errorThrown) {

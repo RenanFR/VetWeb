@@ -36,57 +36,64 @@
              
              <div class="modal-body">
              
-             <form:form servletRelativeAction="/prontuario/adicionarAtendimento?prontuarioId=${prontuario.prontuarioId}"
-					method="POST" modelAttribute="atendimento" id="formAtendimento">
-					
-                   <tbody>
-                   
-					<label id="lblCliente" for="slcProprietarios"><spring:message code="cliente"/></label>
-					                   
-	                   <select id="slcProprietarios">
-	                   		<c:forEach items="${proprietarios}" var="prop">
-	                   			<option value="${prop.pessoaId}">${prop}</option>
-	                   		</c:forEach>
-	                   </select>
-	                   
-	                   <br	/>
-	                
-					<label id="lblAnimal" for="slcAnimal"><spring:message code="nomeAnimal"/></label>   
-	                   <select id="slcAnimal" hidden="hidden"></select><br>
-	                   
-					<label id="lblTipo" for="tipoOcorrencia"><spring:message code="tipo"/></label>
-					
-               		  <input type="radio" name="tipoOcorrencia" value="VACINA" class="rdoTipo"> Vacina
-               		  
-               		  <input type="radio" name="tipoOcorrencia" value="ATENDIMENTO" class="rdoTipo"> Atendimento<br	/>
-               		  
+					<form action="">
 						
-						<label id="lblVacina" for="slcVacina" hidden="hidden"><spring:message code="selecioneVacina"/></label>
-	                   <select id="slcVacina" hidden="hidden">
-	                   		<c:forEach items="${todasAsVacinas}" var="vacina">
-	                   			<option value="${vacina.vacinaId}">${vacina.nome}</option>
-	                   		</c:forEach>
-	                   </select>
+	                   <tbody>
 	                   
-	                   <br	/>
+						<label id="lblCliente" for="slcProprietarios"><spring:message code="cliente"/></label>
+						                   
+		                   <select id="slcProprietarios">
+		                   		<c:forEach items="${proprietarios}" var="prop">
+		                   			<option value="${prop.pessoaId}">${prop}</option>
+		                   		</c:forEach>
+		                   </select>
+		                   
+		                   <br	/>
+		                
+						<label id="lblAnimal" for="slcAnimal"><spring:message code="nomeAnimal"/></label>   
+		                   <select id="slcAnimal" style="display: none;"></select><br>
+		                   
+						<label id="lblTipo" for="tipoOcorrencia"><spring:message code="tipo"/></label>
+						
+	               		  <input type="radio" name="tipoOcorrencia" value="VACINA" class="rdoTipo"> Vacina
+	               		  
+	               		  <input type="radio" name="tipoOcorrencia" value="ATENDIMENTO" class="rdoTipo"> Atendimento<br	/>
+	               		  
+							<label id="lblVacina" for="slcVacina" style="display: none;"><spring:message code="selecioneVacina"/></label>
+		                   <select id="slcVacina" style="display: none;">
+		                   		<c:forEach items="${todasAsVacinas}" var="vacina">
+		                   			<option value="${vacina.vacinaId}">${vacina.nome}</option>
+		                   		</c:forEach>
+		                   </select>
+		                   
+		                   <br	/>
+		                   
+							<label id="lblAtendimento" for="slcAtendimento" style="display: none;"><spring:message code="selecioneAtendimento"/></label>
+		                   <select id="slcAtendimento" style="display: none;">
+		                   		<c:forEach items="${tiposDeAtendimento}" var="atendimento">
+		                   			<option value="${atendimento.tipoDeAtendimentoId}">${atendimento.nome}</option>
+		                   		</c:forEach>
+		                   </select>
+	                   		
+	                   		<br	/>
+	                   		
+							<label id="lblDataHoraInicial" for="dataHoraInicial" style="display: none;"><spring:message code="dataHoraInicial"/></label>
+							<input type="datetime-local" name="dataHoraInicial" id="dataHoraInicial" style="display: none;">
+							
+		                   <br	/>
+							
+							<label id="lblDataHoraFinal" for="dataHoraFinal" style="display: none;"><spring:message code="dataHoraFinal"/></label>
+							<input type="datetime-local" name="dataHoraFinal" id="dataHoraFinal" style="display: none;">
+	                   		
+	                   </tbody>
 	                   
-						<label id="lblAtendimento" for="slcAtendimento" hidden="hidden"><spring:message code="selecioneAtendimento"/></label>
-	                   <select id="slcAtendimento" hidden="hidden">
-	                   		<c:forEach items="${tiposDeAtendimento}" var="atendimento">
-	                   			<option value="${atendimento.tipoDeAtendimentoId}">${atendimento.nome}</option>
-	                   		</c:forEach>
-	                   </select>
-                   		
-                   		<br	/>
-                   		
-                   </tbody>
-                   
-                   <div class="modal-footer">
-                       <input type="reset" value="reset" class="btn btn-primary"   />
-                       <input type="submit" value="submit" class="btn btn-primary"   />
-                   </div>
-                   
-               </form:form>
+	                   <div class="modal-footer">
+	                       <input type="reset" value="reset" class="btn btn-primary"   />
+	                       <input type="submit" value="submit" class="btn btn-primary"   />
+	                   </div>
+	                   
+					</form>
+					
                
              </div>
              
