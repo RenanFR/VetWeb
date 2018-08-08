@@ -40,7 +40,7 @@
                       <br	/>
                       <tr>
                       	<th><spring:message code="dataAtendimento"/>:	</th>
-                      	<td><input type="datetime-local" name="inclusaoPatologia" id="inclusaoPatologia" /></td>
+                      	<td><input type="datetime-local" name="data" id="inclusaoPatologia" /></td>
                       </tr>                        
                   </tbody>
                   

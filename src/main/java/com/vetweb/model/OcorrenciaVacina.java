@@ -2,7 +2,6 @@ package com.vetweb.model;
 //@author renan.rodrigues@metasix.com.br
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
 
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
@@ -30,8 +29,6 @@ public class OcorrenciaVacina extends OcorrenciaProntuario implements Serializab
 	@JoinColumn(name="vacinaId", referencedColumnName = "vacinaId")
 	private Vacina vacina;
 	
-	private LocalDateTime inclusaoVacina;
-	
 	private boolean pago;
 	
 	@Override
@@ -51,14 +48,6 @@ public class OcorrenciaVacina extends OcorrenciaProntuario implements Serializab
 		this.vacina = vacina;
 	}
 
-	public LocalDateTime getInclusaoVacina() {
-		return inclusaoVacina;
-	}
-
-	public void setInclusaoVacina(LocalDateTime inclusaoVacina) {
-		this.inclusaoVacina = inclusaoVacina;
-	}
-
 	public boolean isPago() {
 		return pago;
 	}
@@ -75,11 +64,6 @@ public class OcorrenciaVacina extends OcorrenciaProntuario implements Serializab
 	@Override
 	public String getDescricao() {
 		return this.vacina.getNome();
-	}
-
-	@Override
-	public LocalDateTime getData() {
-		return this.getInclusaoVacina();
 	}
 
 	@Override

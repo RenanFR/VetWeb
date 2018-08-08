@@ -1,7 +1,6 @@
 package com.vetweb.model;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
 
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
@@ -28,8 +27,6 @@ public class OcorrenciaPatologia extends OcorrenciaProntuario implements Seriali
 	@JoinColumn(name="patologiaId", referencedColumnName = "patologiaId")
 	private Patologia patologia;
 	
-	private LocalDateTime inclusaoPatologia;
-	
 	@Override
 	public Prontuario getProntuario() {
 		return prontuario;
@@ -46,14 +43,6 @@ public class OcorrenciaPatologia extends OcorrenciaProntuario implements Seriali
 	public void setPatologia(Patologia patologia) {
 		this.patologia = patologia;
 	}
-
-	public LocalDateTime getInclusaoPatologia() {
-		return inclusaoPatologia;
-	}
-	
-	public void setInclusaoPatologia(LocalDateTime inclusaoPatologia) {
-		this.inclusaoPatologia = inclusaoPatologia;
-	}
 	
 	@Override
 	public String toString() {
@@ -63,11 +52,6 @@ public class OcorrenciaPatologia extends OcorrenciaProntuario implements Seriali
 	@Override
 	public String getDescricao() {
 		return this.patologia.getNome();
-	}
-
-	@Override
-	public LocalDateTime getData() {
-		return this.getInclusaoPatologia();
 	}
 
 	@Override

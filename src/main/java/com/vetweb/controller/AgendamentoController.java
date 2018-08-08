@@ -75,14 +75,14 @@ public class AgendamentoController {
 		atendimentoDAO
 			.listarTodos()
 			.stream()
-			.filter(atendimento -> atendimento.getDataAtendimento().isBefore(LocalDateTime.now()))
+			.filter(atendimento -> atendimento.getData().isBefore(LocalDateTime.now()))
 			.filter(atendimento -> aplicarFiltroDeData(dataInicialFiltro, dataFinalFiltro, atendimento))
 			.forEach(atendimento -> {
 				EventFullCalendar event = new EventFullCalendar();
 				event.setId(String.valueOf(atendimento.getOcorrenciaId()));
 				event.setTitle(atendimento.getTipoDeAtendimento().getNome());
-				event.setStart(DateTimeFormatter.ISO_DATE_TIME.format(atendimento.getDataAtendimento()));
-				event.setEnd(DateTimeFormatter.ISO_DATE_TIME.format(atendimento.getDataAtendimento().plus(atendimento.getTipoDeAtendimento().getDuracao())));
+				event.setStart(DateTimeFormatter.ISO_DATE_TIME.format(atendimento.getData()));
+				event.setEnd(DateTimeFormatter.ISO_DATE_TIME.format(atendimento.getData().plus(atendimento.getTipoDeAtendimento().getDuracao())));
 				event.setType(atendimento.getTipo().name());
 				event.setColor("#ccf5ff");
 				events
@@ -91,7 +91,7 @@ public class AgendamentoController {
 		prontuarioDAO
 			.buscarTodasOcorrenciasVacina()
 			.stream()
-			.filter(ocorrenciaVacina -> ocorrenciaVacina.getInclusaoVacina().isBefore(LocalDateTime.now()))
+			.filter(ocorrenciaVacina -> ocorrenciaVacina.getData().isBefore(LocalDateTime.now()))
 			.filter(ocorrenciaVacina -> aplicarFiltroDeData(dataInicialFiltro, dataFinalFiltro, ocorrenciaVacina))
 			.forEach(ocorrenciaVacina -> {
 				EventFullCalendar event = new EventFullCalendar();
@@ -172,7 +172,7 @@ public class AgendamentoController {
 			OcorrenciaVacina vacina = new OcorrenciaVacina();
 			vacina.setProntuario(prontuario);
 			vacina.setVacina(prontuarioDAO.buscarVacinaPorId(Long.parseLong(vacinaSelecionada)));
-			vacina.setInclusaoVacina(dataHoraInicio);
+			vacina.setData(dataHoraInicio);
 			vacina.setTipo(tipoOcorrencia);
 			prontuarioDAO.salvarOcorrenciaVacina(vacina);
 			prontuario.getVacinas().add(vacina);
@@ -181,7 +181,7 @@ public class AgendamentoController {
 			OcorrenciaAtendimento atendimento = new OcorrenciaAtendimento();
 			atendimento.setTipoDeAtendimento(atendimentoDAO.buscarTipoDeAtendimentoPorId(Long.parseLong(atendimentoSelecionado)));
 			atendimento.setProntuario(prontuario);
-			atendimento.setDataAtendimento(dataHoraInicio);
+			atendimento.setData(dataHoraInicio);
 			atendimento.setTipo(tipoOcorrencia);
 			prontuarioDAO.salvarAtendimento(atendimento);
 			prontuario.getAtendimentos().add(atendimento);
