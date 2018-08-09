@@ -38,12 +38,11 @@ public class Scheduler {
 	
 	private static final Logger LOGGER = Logger.getLogger(Scheduler.class);
 	
-	@SuppressWarnings("unused")
 	private static final long MINUTO = 60000;
 	
 	private static final long HORA = 3600000;
 	
-    @Scheduled(fixedDelay = HORA)
+    @Scheduled(fixedDelay = MINUTO)
     public void verificacaoClientesEmDebito() {
     	List<Proprietario> proprietariosComDebito = proprietarioDAO.buscarClientesEmDebito(); 
     	proprietariosComDebito
@@ -65,7 +64,7 @@ public class Scheduler {
     		.listarTodos()
     		.stream()
     		.filter(ate -> 
-    			LocalDate.of(ate.getDataAtendimento().getYear(), ate.getDataAtendimento().getMonthValue(), ate.getDataAtendimento().getDayOfMonth())
+    			LocalDate.of(ate.getData().getYear(), ate.getData().getMonthValue(), ate.getData().getDayOfMonth())
     			.isEqual(LocalDate.now()))
     		.forEach(ate -> this.notificaRetornoAtendimento(ate));
     }
@@ -75,7 +74,7 @@ public class Scheduler {
     	Pessoa pessoaDestinatario = prontuarioDAO.buscarProntuarioDoAtendimento(atendimento).getAnimal().getProprietario();
     	StringBuilder mensagemRetorno = new StringBuilder();
     	mensagemRetorno.append("O RETORNO DO ATENDIMENTO "
-    				+ atendimento.getTipoDeAtendimento().getNome() + " FEITO EM " + atendimento.getDataAtendimento() + " E HOJE. FAVOR COMPARECER A CLINICA. ");
+    				+ atendimento.getTipoDeAtendimento().getNome() + " FEITO EM " + atendimento.getData() + " E HOJE. FAVOR COMPARECER A CLINICA. ");
     	emailService.enviar(pessoaDestinatario, mensagemRetorno.toString(), "RETORNO DE ATENDIMENTO");
     }
     

@@ -38,6 +38,7 @@ import com.vetweb.model.Prontuario;
 import com.vetweb.model.TipoDeAtendimento;
 import com.vetweb.model.Vacina;
 import com.vetweb.model.pojo.OcorrenciaProntuario;
+import com.vetweb.model.pojo.TipoOcorrenciaProntuario;
 import com.vetweb.service.EmailService;
 
 @Controller
@@ -186,6 +187,7 @@ public class ProntuarioController {
     public ModelAndView adcAtendimento(@ModelAttribute("atendimento") OcorrenciaAtendimento atendimento,
     		@RequestParam("prontuarioId") final Long prontuarioId) {
     	LOGGER.debug("Inserindo atendimento " + atendimento.getTipoDeAtendimento().getNome() + " no prontuário " + prontuarioId);
+    	atendimento.setTipo(TipoOcorrenciaProntuario.ATENDIMENTO);
     	Prontuario prontuario = prontuarioDAO.buscarPorId(prontuarioId);
     	atendimento.setProntuario(prontuario);
         prontuarioDAO.salvarAtendimento(atendimento);
@@ -205,9 +207,10 @@ public class ProntuarioController {
     public ModelAndView adcPatologia(@RequestParam("prontuarioId") final Long prontuarioId,
     		@RequestParam("patologia") final String patologiaStr, 
     		@RequestParam("prontuarioPatologiaId") final Long prontuarioPatologiaId,
-    	@RequestParam("inclusaoPatologia") final String inclusaoPatologia) {
+    	@RequestParam("data") final String inclusaoPatologia) {
     	LOGGER.debug(("Inserindo patologia " + patologiaStr + " no prontuário " + prontuarioId).toUpperCase());
     	OcorrenciaPatologia prontuarioPatologia = new OcorrenciaPatologia();
+    	prontuarioPatologia.setTipo(TipoOcorrenciaProntuario.PATOLOGIA);
     	Patologia pat = animalDAO.buscarPatologiaPorDescricao(patologiaStr);
 		animalDAO.salvarPatologia(pat);
 		if (prontuarioPatologiaId != null) {
@@ -216,7 +219,7 @@ public class ProntuarioController {
 		prontuarioPatologia.setPatologia(pat);
 		Prontuario prontuario = prontuarioDAO.buscarPorId(prontuarioId);
 		prontuarioPatologia.setProntuario(prontuario);
-		prontuarioPatologia.setInclusaoPatologia(LocalDateTime.parse(inclusaoPatologia, DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm")));
+		prontuarioPatologia.setData(LocalDateTime.parse(inclusaoPatologia, DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm")));
 		prontuarioDAO.salvarOcorrenciaPatologia(prontuarioPatologia);
     	notificaCliente(prontuarioPatologia, prontuario);
     	return new ModelAndView("redirect:prontuarioDoAnimal/" + prontuario.getAnimal().getAnimalId());
@@ -226,9 +229,10 @@ public class ProntuarioController {
     public ModelAndView adcVacina(@RequestParam("prontuarioId") final Long prontuarioId,
     		@RequestParam("vacina") final String vacinaStr,
     		@RequestParam("prontuarioVacinaId") final Long prontuarioVacinaId,
-    		@RequestParam("inclusaoVacina") final String inclusaoVacina) {
+    		@RequestParam("data") final String inclusaoVacina) {
     	LOGGER.info(("Inserindo vacina " + vacinaStr + " no prontuário " + prontuarioId).toUpperCase());
     	OcorrenciaVacina prontuarioVacina = new OcorrenciaVacina();
+    	prontuarioVacina.setTipo(TipoOcorrenciaProntuario.VACINA);
     	Vacina vacina = vacinaDAO.buscarPorNome(vacinaStr);
 		vacinaDAO.salvar(vacina);
 		if (prontuarioVacinaId != null)
@@ -236,7 +240,7 @@ public class ProntuarioController {
 		prontuarioVacina.setVacina(vacina);
 		Prontuario prontuario = prontuarioDAO.buscarPorId(prontuarioId);
 		prontuarioVacina.setProntuario(prontuario);
-		prontuarioVacina.setInclusaoVacina(LocalDateTime.parse(inclusaoVacina, DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm")));
+		prontuarioVacina.setData(LocalDateTime.parse(inclusaoVacina, DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm")));
     	prontuarioDAO.salvarOcorrenciaVacina(prontuarioVacina);
     	notificaCliente(prontuarioVacina, prontuario);
     	return new ModelAndView("redirect:prontuarioDoAnimal/" + prontuarioDAO.buscarPorId(prontuarioId).getAnimal().getAnimalId());

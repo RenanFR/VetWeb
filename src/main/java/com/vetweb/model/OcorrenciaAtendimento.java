@@ -1,7 +1,6 @@
 package com.vetweb.model;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -26,8 +25,6 @@ public class OcorrenciaAtendimento extends OcorrenciaProntuario implements Seria
     
 	@Column(columnDefinition = "TEXT")
     private String preenchimentoModeloAtendimento;
-    
-    private LocalDateTime dataAtendimento;
     
     @ManyToOne
     @JsonManagedReference
@@ -60,14 +57,6 @@ public class OcorrenciaAtendimento extends OcorrenciaProntuario implements Seria
         this.preenchimentoModeloAtendimento = preenchimentoModeloAtendimento;
     }
     
-    public LocalDateTime getDataAtendimento() {
-		return dataAtendimento;
-	}
-
-	public void setDataAtendimento(LocalDateTime dataAtendimento) {
-		this.dataAtendimento = dataAtendimento;
-	}
-
 	public boolean isPago() {
 		return pago;
 	}
@@ -93,11 +82,6 @@ public class OcorrenciaAtendimento extends OcorrenciaProntuario implements Seria
 	@Override
 	public String getDescricao() {
 		return this.getTipoDeAtendimento().getNome();
-	}
-
-	@Override
-	public LocalDateTime getData() {
-		return this.getDataAtendimento();
 	}
 
 	@Override

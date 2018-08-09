@@ -54,9 +54,10 @@
 					selectHelper: true,
 					select: function(start, end){
 						$('#modalAgendamento').modal('show');
-						$('#dataHoraInicial').val(moment().format('YYYY-MM-DDTHH:mm'));
-						$('#dataHoraFinal').val(moment().format('YYYY-MM-DDTHH:mm'));
-					},					
+						$('#dataHoraInicial').val(moment(start._i).format('YYYY-MM-DDTHH:mm'));
+						$('#dataHoraFinal').val(moment(end._i).format('YYYY-MM-DDTHH:mm'));
+					},
+					eventTextColor:	'#000000',
 					events: 'http://localhost:8080/vetweb/agendamento/eventos'
 	    		  });
 	        });
@@ -79,6 +80,7 @@
 					$('#slcVacina').css('display', 'none');
 					$('#lblVacina').css('display', 'none');
 				} 
+				
 				$('#lblDataHoraFinal').css('display', 'inline');
 				$('#lblDataHoraInicial').css('display', 'inline');
 				$('#dataHoraInicial').css('display', 'inline');

@@ -58,7 +58,7 @@
 	                        			<td>
 	                        				<input type="checkbox" class="flagPago" ${atendimento.pago? 'checked' : ''} onclick="ajaxService.alterarStatusPagamentoAtendimento(${atendimento.ocorrenciaId})"	/>
 	                        			</td>
-	                        			<td>${atendimento.dataAtendimento}</td>
+	                        			<td>${atendimento.data}</td>
 	                        		</tr>
 				                </c:forEach>
                         	</table>
@@ -83,7 +83,7 @@
 	                        		<tr>
 	                        			<td>${vacina.vacina.nome}</td>
 	                        			<td>${vacina.vacina.preco}</td>
-	                        			<td>${vacina.inclusaoVacina}</td>
+	                        			<td>${vacina.data}</td>
 	                        			<td>
 	                        				<input type="checkbox" class="flagPago" ${vacina.pago? 'checked' : ''} onclick="ajaxService.alterarStatusPagamentoVacina(${vacina.ocorrenciaId})"	/>
 	                        			</td>

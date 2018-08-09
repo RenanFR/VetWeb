@@ -173,6 +173,15 @@ public class ProprietarioDAO implements IDAO<Proprietario> {
 		return clientesComDebito;
 	}
 	
+	public List<Proprietario> buscarClientesInativos() {
+		String query = "SELECT p FROM Proprietario p "
+				+ "WHERE p.ativo = FALSE";
+		List<Proprietario> clientesComDebito = entityManager
+				.createQuery(query, Proprietario.class)
+				.getResultList();
+		return clientesComDebito;
+	}
+	
 	public Set<Proprietario> buscarClientesInativosAdimplentes() {
 		List<Prontuario> prontuariosDeClientesInativos = entityManager
 				.createQuery("SELECT p FROM Prontuario p JOIN p.animal a JOIN a.proprietario cli WHERE cli.ativo = FALSE", Prontuario.class)

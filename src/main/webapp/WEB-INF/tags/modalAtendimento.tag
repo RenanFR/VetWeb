@@ -32,14 +32,16 @@
                                </form:select>
                            </td>
                        </tr>
+                       
                        <br	/>
+                       
                        <tr>
                            <th><spring:message code="modeloAtendimento"/>: </th>
                            <td id="modelo"><form:textarea path="preenchimentoModeloAtendimento" name="preenchimentoModeloAtendimento" id="preenchimentoModeloAtendimento"></form:textarea></td>
                        </tr>
                        <tr>
                        	<th><spring:message code="dataAtendimento"/>:	</th>
-                       	<td id="campoDataAtendimento"><input type="datetime-local" name="dataAtendimento" id="dataAtendimento"></input></td>
+                       	<td id="campoDataAtendimento"><input type="datetime-local" name="data" id="dataAtendimento"></input></td>
                        </tr>
                    </tbody>
                    
