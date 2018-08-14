@@ -25,7 +25,7 @@ public class Exame implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long exameId;
+	private Long exameId;
     
 	@Column(columnDefinition = "TEXT")
     private StringBuilder apresentacao;
