@@ -2,6 +2,6 @@ package com.vetweb.model.pojo;
 
 public enum TipoOcorrenciaProntuario {
 	
-	VACINA, ATENDIMENTO, PATOLOGIA;
+	VACINA, ATENDIMENTO, PATOLOGIA, EXAME;
 	
 }

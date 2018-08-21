@@ -43,7 +43,7 @@ public class Prontuario implements Serializable {
     
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "prontuario")
     @JsonBackReference
-    private List<Exame> exames;
+    private List<OcorrenciaExame> exames;
     
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "prontuario")
     @JsonBackReference
@@ -97,11 +97,11 @@ public class Prontuario implements Serializable {
 		this.documentos = documentos;
 	}
 
-	public List<Exame> getExames() {
+	public List<OcorrenciaExame> getExames() {
 		return exames;
 	}
 
-	public void setExames(List<Exame> exames) {
+	public void setExames(List<OcorrenciaExame> exames) {
 		this.exames = exames;
 	}
 

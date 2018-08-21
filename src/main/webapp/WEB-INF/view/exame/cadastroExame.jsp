@@ -9,39 +9,32 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
-<vetweb:layout title="Cadastro Vacina">
+<vetweb:layout title="Cadastro Exame">
 
     <jsp:attribute name="js">
+    	<script src="https://cloud.tinymce.com/stable/tinymce.min.js?apiKey=2i80p03koooieys6i5h5yz1n9d4uaxrwt1iaoy9938bmcahs"></script>
+    	<script>tinymce.init({ selector:'textarea' });</script>
     </jsp:attribute>
     
     <jsp:body>
-        <form:form servletRelativeAction="/prontuario/addVacina" method="POST" modelAttribute="vacina">
+        <form:form servletRelativeAction="/exames/submitForm" method="POST" modelAttribute="exame">
             <table class="table table-responsive">
-                <caption><spring:message code="adcVacina"/></caption>
+                <caption><spring:message code="adcExame"/></caption>
                 <tbody>
-                    <form:hidden path="vacinaId" id="vacinaId"></form:hidden>
+                    <form:hidden path="exameId" id="exameId"></form:hidden>
                     <tr>
-                        <th><label for="nome"><spring:message code="nome"/></label></th>
-                        <td><form:input path="nome" id="nome"></form:input></td>
+                        <th><label for="descricao"><spring:message code="descricao"/></label></th>
+                        <td><form:input path="descricao" id="descricao"/></td>
                     </tr>
                     <tr>
-                        <th><label for="grupo"><spring:message code="grupo"/></label></th>
-                        <td><form:input path="grupo" id="grupo"></form:input></td>
+                        <th><label for="apresentacao"><spring:message code="apresentacao"/></label></th>
+                        <td><form:textarea path="apresentacao" id="apresentacao"/></td>
                     </tr>
                     <tr>
-                        <th><label for="status"><spring:message code="ativo"/></label></th>
+                        <th><label for="encerramento"><spring:message code="encerramento"/></label></th>
                         <td>
-                            <form:radiobutton path="status" value="true"></form:radiobutton>true
-                            <form:radiobutton path="status" value="false"></form:radiobutton>false
+                            <form:textarea path="encerramento" id="encerramento"/>
                         </td>
-                    </tr>
-                    <tr>
-                        <th><label for="laboratorio"><spring:message code="laboratorio"/></label></th>
-                        <td><form:input path="laboratorio" id="laboratorio"></form:input></td>
-                    </tr>
-                    <tr>
-                        <th><label for="custo"><spring:message code="custo"/></label></th>
-                        <td><form:input path="preco" id="custo"></form:input></td>
                     </tr>
                 </tbody>
             </table>
