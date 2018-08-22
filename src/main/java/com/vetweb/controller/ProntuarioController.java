@@ -27,10 +27,13 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.vetweb.dao.AnimalDAO;
 import com.vetweb.dao.AtendimentoDAO;
+import com.vetweb.dao.ExameDAO;
 import com.vetweb.dao.ProntuarioDAO;
 import com.vetweb.dao.VacinaDAO;
 import com.vetweb.model.Animal;
+import com.vetweb.model.Exame;
 import com.vetweb.model.OcorrenciaAtendimento;
+import com.vetweb.model.OcorrenciaExame;
 import com.vetweb.model.OcorrenciaPatologia;
 import com.vetweb.model.OcorrenciaVacina;
 import com.vetweb.model.Patologia;
@@ -60,6 +63,9 @@ public class ProntuarioController {
     
     @Autowired
     private EmailService emailService;
+    
+    @Autowired
+    private ExameDAO exameDAO;
     
     public static String modelDML = null;
     
@@ -169,6 +175,8 @@ public class ProntuarioController {
 	    		.map(vac -> vac.getNome()).collect(Collectors.toList()));
 		modelAndView.addObject("patologias", animalDAO.buscarPatologias().stream()
 	    		.map(pat -> pat.getNome()).collect(Collectors.toList()));
+		modelAndView.addObject("exames", exameDAO.listarTodos().stream()
+    			.map(exame -> exame.getDescricao()).collect(Collectors.toList()));
 		List<OcorrenciaProntuario> elementosHistorico = new ArrayList<>();
 		prontuario.getAtendimentos()
 			.forEach(at -> elementosHistorico
@@ -222,6 +230,23 @@ public class ProntuarioController {
 		prontuarioPatologia.setData(LocalDateTime.parse(inclusaoPatologia, DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm")));
 		prontuarioDAO.salvarOcorrenciaPatologia(prontuarioPatologia);
     	notificaCliente(prontuarioPatologia, prontuario);
+    	return new ModelAndView("redirect:prontuarioDoAnimal/" + prontuario.getAnimal().getAnimalId());
+    }
+    
+    @RequestMapping(value="/adicionarExame", method=RequestMethod.POST)
+    public ModelAndView adcExame(@RequestParam("prontuarioId") final Long prontuarioId,
+    		@RequestParam("exame") final String exameDescricao, 
+    		@RequestParam("ocorrenciaId") final Long ocorrenciaId,
+    		@RequestParam("data") final String inclusaoExame) {
+    	Prontuario prontuario = prontuarioDAO.buscarPorId(prontuarioId);
+    	OcorrenciaExame ocorrenciaExame = new OcorrenciaExame();
+    	ocorrenciaExame.setProntuario(prontuario);
+    	ocorrenciaExame.setData(LocalDateTime.parse(inclusaoExame, DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm")));
+    	ocorrenciaExame.setPago(false);
+    	ocorrenciaExame.setTipo(TipoOcorrenciaProntuario.EXAME);
+    	Exame exame = exameDAO.buscarPorDescricao(exameDescricao);
+		ocorrenciaExame.setExame(exame);
+		prontuarioDAO.salvarOcorrenciaExame(ocorrenciaExame);
     	return new ModelAndView("redirect:prontuarioDoAnimal/" + prontuario.getAnimal().getAnimalId());
     }
     
@@ -297,6 +322,8 @@ public class ProntuarioController {
     	listasProntuario.put("patologias", animalDAO.buscarPatologias().stream()
 	    		.map(pat -> pat.getNome()).collect(Collectors.toList()));
     	LOGGER.info("ADICIONANDO POSSÍVEIS PATOLOGIAS QUE PODEM SER ANEXADAS NO HISTÓRICO DO ANIMAL NO PRONTUÁRIO. ");
+    	listasProntuario.put("exames", exameDAO.listarTodos().stream()
+    			.map(exame -> exame.getDescricao()).collect(Collectors.toList()));
     	viewProntuario.addAllObjects(listasProntuario);
     }
     

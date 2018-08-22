@@ -10,6 +10,7 @@ import javax.persistence.PersistenceContext;
 import org.springframework.stereotype.Repository;
 
 import com.vetweb.model.OcorrenciaAtendimento;
+import com.vetweb.model.OcorrenciaExame;
 import com.vetweb.model.Prontuario;
 import com.vetweb.model.OcorrenciaPatologia;
 import com.vetweb.model.OcorrenciaVacina;
@@ -73,6 +74,15 @@ public class ProntuarioDAO implements IDAO<Prontuario>{
     	else {
     		entityManager.merge(patologia);
     	}
+	}
+	
+	public void salvarOcorrenciaExame(OcorrenciaExame exame) {
+		if (exame.getOcorrenciaId() == null) {
+			entityManager.persist(exame);
+		}
+		else {
+			entityManager.merge(exame);
+		}
 	}
 
 	public void salvarOcorrenciaVacina(OcorrenciaVacina vacina) {

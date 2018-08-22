@@ -2,11 +2,11 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring" %>
 
-<vetweb:layout title="Exames">
+<vetweb:layout title="Modelos">
     <jsp:attribute name="js">
         <script>
             $(document).ready(function(){
-               $('#exames').dataTable({
+               $('#modelos').dataTable({
 	           	    language: {
 	        			"sEmptyTable": "Nenhum registro encontrado",
 	        			"sInfo": "Mostrando de _START_ até _END_ de _TOTAL_ registros",
@@ -36,42 +36,38 @@
     </jsp:attribute>    
     <jsp:body>
     
-	    <a href="<c:url value="/exames/form"></c:url>" style="color: white">
+	    <a href="<c:url value="/documentos/form"></c:url>" style="color: white">
 	        <button class="btn btn-primary">
 	    	    <i class="fa fa-save"></i>
 	           <spring:message code="cadastro"></spring:message>
 	        </button>    
 	    </a>
 	    
-        <table class="table table-responsive" id="exames">
+        <table class="table table-responsive" id="modelos">
             <thead>
                 <tr>
-                    <th><spring:message code="descricao"></spring:message></th>
-                    <th><spring:message code="exameId"></spring:message></th>
-                    <th><spring:message code="apresentacao"></spring:message></th>
-                    <th><spring:message code="encerramento"></spring:message></th>
+                    <th><spring:message code="nome"></spring:message></th>
+                    <th><spring:message code="infoCliente"></spring:message></th>
+                    <th><spring:message code="modelo"></spring:message></th>
                 </tr>
             </thead>
             <tbody>
-                <c:forEach items="${exames}" var="exame">
+                <c:forEach items="${modelos}" var="modelo">
                     <tr>
                         <td>
-                            ${exame.descricao}
-							<a href="<c:url value="/exames/atualizar/${exame.exameId}"></c:url>">
+                            ${modelo.nome}
+							<a href="<c:url value="/documentos/atualizarModelo/${modelo.modelodocumentoId}"></c:url>">
                                 <i class="fa fa-pencil-square-o fa-2x"></i>
                             </a>
-                            <a href="<c:url value="/exames/remover/${exame.exameId}"></c:url>">
+                            <a href="<c:url value="/documentos/removerModelo/${modelo.modelodocumentoId}"></c:url>">
                                 <i class="fa fa-trash-o fa-2x"></i>
                             </a>
                         </td>
                         <td>
-                            ${exame.exameId}
+                            ${modelo.infoCliente}
                         </td>
                         <td>
-                            ${exame.apresentacao}
-                        </td>
-                        <td>
-                            ${exame.encerramento}
+                            ${modelo.modelo}
                         </td>
                     </tr>
                 </c:forEach>

@@ -24,15 +24,15 @@ public class Exame implements Serializable {
 	private String descricao;
     
 	@Column(columnDefinition = "TEXT")
-    private StringBuilder apresentacao;
+    private String apresentacao;
 	
 	@Column(columnDefinition = "TEXT")
-    private StringBuilder encerramento;
+    private String encerramento;
 
     public Exame() {
 	}
     
-	public Exame(Long exameId, StringBuilder apresentacao, StringBuilder encerramento) {
+	public Exame(Long exameId, String apresentacao, String encerramento) {
 		this.exameId = exameId;
 		this.apresentacao = apresentacao;
 		this.encerramento = encerramento;
@@ -54,19 +54,19 @@ public class Exame implements Serializable {
 		this.descricao = descricao;
 	}
 
-	public StringBuilder getApresentacao() {
+	public String getApresentacao() {
 		return apresentacao;
 	}
 
-	public void setApresentacao(StringBuilder apresentacao) {
+	public void setApresentacao(String apresentacao) {
 		this.apresentacao = apresentacao;
 	}
 
-	public StringBuilder getEncerramento() {
+	public String getEncerramento() {
 		return encerramento;
 	}
 
-	public void setEncerramento(StringBuilder encerramento) {
+	public void setEncerramento(String encerramento) {
 		this.encerramento = encerramento;
 	}
     

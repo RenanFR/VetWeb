@@ -92,6 +92,7 @@
 	                        <li><a href="<c:url value="/prontuario/tiposDeAtendimento"></c:url>"><spring:message code="tiposAtendimento"/></a></li>
 	                        <li><a href="<c:url value="/prontuario/vacinas"></c:url>"><spring:message code="vacinas"/></a></li>
 	                        <li><a href="<c:url value="/exames"></c:url>"><spring:message code="exames"/></a></li>
+	                        <li><a href="<c:url value="/documentos/modelos"></c:url>"><spring:message code="modelos"/></a></li>
 	                    </ul>
 	                </li>
 	                <li>

@@ -37,6 +37,15 @@ public class ExameDAO implements IDAO<Exame>{
 		return entityManager
 				.find(Exame.class, id);
 	}
+	
+	public Exame buscarPorDescricao(String descricao) {
+		String consultaExamePorDescricao = "SELECT exame FROM Exame exame "
+				+ "WHERE exame.descricao LIKE :descricaoExame";
+		return entityManager
+				.createQuery(consultaExamePorDescricao, Exame.class)
+				.setParameter("descricaoExame", "%" + descricao + "%")
+				.getSingleResult();
+	}
 
 	@Override
 	public void remover(Exame exame) {

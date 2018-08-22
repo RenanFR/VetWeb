@@ -67,6 +67,9 @@
 					<button data-toggle="modal" data-target="#modalPatologia" class="btn btn-danger">
 						<i class="fa  fa-plus-square fa-5x" aria-hidden="true"></i>
 					</button>
+					<button data-toggle="modal" data-target="#modalExame" class="btn btn-secondary">
+						<i class="fa fa-stethoscope fa-5x" aria-hidden="true"></i>
+					</button>
 				</div>
 			</div>
 			
@@ -131,6 +134,8 @@
 		<vetweb:modalPatologia prontuario="${prontuario}" patologias="${patologia}"></vetweb:modalPatologia>
 		
 		<vetweb:modalVacina prontuario="${prontuario}" vacinas="${vacinas}"></vetweb:modalVacina>
+		
+		<vetweb:modalExame prontuario="${prontuario}" exames="${exames}"></vetweb:modalExame>
         
     </jsp:body>
 </vetweb:layout>
