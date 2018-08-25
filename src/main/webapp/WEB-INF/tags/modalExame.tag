@@ -27,14 +27,14 @@
                   
                       <input type="text" name="prontuarioId" id="prontuarioId" hidden  />
                       
-                      <input type="text" name="ocorrenciaId" id="ocorrenciaId" hidden  />
+                      <input type="text" name="ocorrenciaExameId" id="ocorrenciaExameId" hidden  />
                       
                       <br	/>
                       
                       <tr>
                           <th><spring:message code="exame"></spring:message>: </th>
                           <td>
-                          	<select name="exame" id="exame">
+                          	<select name="exame" id="exames">
                                <c:forEach items="${exames}" var="exame">
                                	<option value="${exame}">${exame}</option>
                                </c:forEach>

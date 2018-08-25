@@ -18,6 +18,7 @@ import com.vetweb.dao.ProntuarioDAO;
 import com.vetweb.dao.ProprietarioDAO;
 import com.vetweb.model.Animal;
 import com.vetweb.model.OcorrenciaAtendimento;
+import com.vetweb.model.OcorrenciaExame;
 import com.vetweb.model.OcorrenciaPatologia;
 import com.vetweb.model.OcorrenciaVacina;
 import com.vetweb.model.Raca;
@@ -45,9 +46,15 @@ public class AjaxController {
     	return atendimento;
     }
     
+    @RequestMapping(value = "/editar-ocorrencia/exame/{id}", method = RequestMethod.GET)
+    public OcorrenciaExame editarOcorrenciaExame(@PathVariable("id") final Long codigoExame) {
+    	OcorrenciaExame ocorrenciaExame = prontuarioDAO.buscarOcorrenciaExame(codigoExame);
+    	return ocorrenciaExame;
+    }
+    
     @RequestMapping(value = "/editarProntuarioPatologia/{prontuarioPatologiaId}", method = RequestMethod.GET)
     public OcorrenciaPatologia prontuarioPatologiaParaEdicao(@PathVariable("prontuarioPatologiaId") final Long prontuarioPatologiaId) {
-    	OcorrenciaPatologia prontuarioPatologia = prontuarioDAO.buscarOcorrenciaDaPatologia(prontuarioPatologiaId);
+    	OcorrenciaPatologia prontuarioPatologia = prontuarioDAO.buscarOcorrenciaPatologia(prontuarioPatologiaId);
     	return prontuarioPatologia;
     }
     
