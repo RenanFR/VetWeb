@@ -27,6 +27,13 @@ public class OcorrenciaPatologia extends OcorrenciaProntuario implements Seriali
 	@JoinColumn(name="patologiaId", referencedColumnName = "patologiaId")
 	private Patologia patologia;
 	
+	public OcorrenciaPatologia() {
+	}
+	
+	public OcorrenciaPatologia(Patologia patologia) {
+		this.patologia = patologia;
+	}
+	
 	@Override
 	public Prontuario getProntuario() {
 		return prontuario;

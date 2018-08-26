@@ -26,12 +26,14 @@ import com.vetweb.dao.ProntuarioDAO;
 import com.vetweb.dao.ProprietarioDAO;
 import com.vetweb.model.Agendamento;
 import com.vetweb.model.Animal;
-import com.vetweb.model.OcorrenciaAtendimento;
-import com.vetweb.model.OcorrenciaVacina;
 import com.vetweb.model.Prontuario;
+import com.vetweb.model.Proprietario;
+import com.vetweb.model.TipoDeAtendimento;
+import com.vetweb.model.Vacina;
 import com.vetweb.model.pojo.EventFullCalendar;
 import com.vetweb.model.pojo.OcorrenciaProntuario;
 import com.vetweb.model.pojo.TipoOcorrenciaProntuario;
+import com.vetweb.patterns.OcorrenciaFactory;
 
 @Controller
 @Transactional
@@ -58,10 +60,17 @@ public class AgendamentoController {
 	@GetMapping
 	public ModelAndView agenda() {
 		ModelAndView modelAndView = new ModelAndView("agendamento/agendamento");
-		modelAndView.addObject("todosOsClientes", proprietarioDAO.listarTodos());
-		modelAndView.addObject("tiposDeAtendimento", atendimentoDAO.buscarTiposDeAtendimento());
-		modelAndView.addObject("todasAsVacinas", prontuarioDAO.buscarVacinas());
+		addDependenciasParaNovoEvento(modelAndView);
 		return modelAndView;
+	}
+
+	private void addDependenciasParaNovoEvento(ModelAndView modelAndView) {
+		List<Proprietario> clientesParaSelecionar = proprietarioDAO.listarTodos();
+		modelAndView.addObject("todosOsClientes", clientesParaSelecionar);
+		List<TipoDeAtendimento> tiposDeAtendimentoDisponiveis = atendimentoDAO.buscarTiposDeAtendimento();
+		modelAndView.addObject("tiposDeAtendimento", tiposDeAtendimentoDisponiveis);
+		List<Vacina> vacinasDisponiveis = prontuarioDAO.buscarVacinas();
+		modelAndView.addObject("todasAsVacinas", vacinasDisponiveis);
 	}
 	
 	@ResponseBody
@@ -72,6 +81,50 @@ public class AgendamentoController {
 		LocalDate dataFinalFiltro = LocalDate.parse(end, DateTimeFormatter.ISO_DATE);
 		List<EventFullCalendar> events = new ArrayList<>();
 		List<Agendamento> agendamentos = agendamentoDAO.listarTodos();
+		adicionarEventosDeAtendimento(dataInicialFiltro, dataFinalFiltro, events);
+		adicionarEventosDeVacina(dataInicialFiltro, dataFinalFiltro, events);
+		adicionarEventosAgendados(events, agendamentos);
+		return events;
+	}
+
+	private void adicionarEventosAgendados(List<EventFullCalendar> events, List<Agendamento> agendamentos) {
+		agendamentos
+			.stream()
+			.filter(ag -> ag.getDataHoraFinal().isAfter(LocalDateTime.now()))
+			.forEach(ag -> {
+				EventFullCalendar event = new EventFullCalendar();
+				event.setId(String.valueOf(ag.getOcorrencia().getOcorrenciaId()));
+				event.setTitle(ag.getOcorrencia().getDescricao());
+				event.setStart(DateTimeFormatter.ISO_DATE_TIME.format(ag.getDataHoraInicial()));
+				event.setEnd(DateTimeFormatter.ISO_DATE_TIME.format(ag.getDataHoraFinal()));
+				event.setType(ag.getOcorrencia().getTipo().name());
+				event.setColor("#ccffcc");
+				events
+					.add(event);
+			});
+	}
+
+	private void adicionarEventosDeVacina(LocalDate dataInicialFiltro, LocalDate dataFinalFiltro,
+			List<EventFullCalendar> events) {
+		prontuarioDAO
+			.buscarTodasOcorrenciasVacina()
+			.stream()
+			.filter(ocorrenciaVacina -> ocorrenciaVacina.getData().isBefore(LocalDateTime.now()))
+			.filter(ocorrenciaVacina -> aplicarFiltroDeData(dataInicialFiltro, dataFinalFiltro, ocorrenciaVacina))
+			.forEach(ocorrenciaVacina -> {
+				EventFullCalendar event = new EventFullCalendar();
+				event.setId(String.valueOf(ocorrenciaVacina.getOcorrenciaId()));
+				event.setTitle(ocorrenciaVacina.getDescricao());
+				event.setStart(DateTimeFormatter.ISO_DATE_TIME.format(ocorrenciaVacina.getData()));
+				event.setType(ocorrenciaVacina.getTipo().name());
+				event.setColor("#fff0b3");
+				events
+					.add(event);
+			});
+	}
+
+	private void adicionarEventosDeAtendimento(LocalDate dataInicialFiltro, LocalDate dataFinalFiltro,
+			List<EventFullCalendar> events) {
 		atendimentoDAO
 			.listarTodos()
 			.stream()
@@ -88,36 +141,6 @@ public class AgendamentoController {
 				events
 					.add(event);
 			});
-		prontuarioDAO
-			.buscarTodasOcorrenciasVacina()
-			.stream()
-			.filter(ocorrenciaVacina -> ocorrenciaVacina.getData().isBefore(LocalDateTime.now()))
-			.filter(ocorrenciaVacina -> aplicarFiltroDeData(dataInicialFiltro, dataFinalFiltro, ocorrenciaVacina))
-			.forEach(ocorrenciaVacina -> {
-				EventFullCalendar event = new EventFullCalendar();
-				event.setId(String.valueOf(ocorrenciaVacina.getOcorrenciaId()));
-				event.setTitle(ocorrenciaVacina.getDescricao());
-				event.setStart(DateTimeFormatter.ISO_DATE_TIME.format(ocorrenciaVacina.getData()));
-				event.setType(ocorrenciaVacina.getTipo().name());
-				event.setColor("#fff0b3");
-				events
-					.add(event);
-			});
-		agendamentos
-			.stream()
-			.filter(ag -> ag.getDataHoraFinal().isAfter(LocalDateTime.now()))
-			.forEach(ag -> {
-				EventFullCalendar event = new EventFullCalendar();
-				event.setId(String.valueOf(ag.getOcorrencia().getOcorrenciaId()));
-				event.setTitle(ag.getOcorrencia().getDescricao());
-				event.setStart(DateTimeFormatter.ISO_DATE_TIME.format(ag.getDataHoraInicial()));
-				event.setEnd(DateTimeFormatter.ISO_DATE_TIME.format(ag.getDataHoraFinal()));
-				event.setType(ag.getOcorrencia().getTipo().name());
-				event.setColor("#ccffcc");
-				events
-					.add(event);
-			});
-		return events;
 	}
 
 	private boolean aplicarFiltroDeData(LocalDate dataInicialFiltro, LocalDate dataFinalFiltro,
@@ -133,23 +156,7 @@ public class AgendamentoController {
 	
 	@GetMapping("/ocorrencia/{type}/{id}")
 	public ModelAndView buscarOcorrencia(@PathVariable("type") String tpOcorrencia, @PathVariable("id") Long idOcorrencia) {
-		TipoOcorrenciaProntuario tipoOcorrencia = TipoOcorrenciaProntuario.valueOf(tpOcorrencia);
-		OcorrenciaProntuario ocorrencia = null;
-		switch (tipoOcorrencia) {
-			case ATENDIMENTO: {
-				ocorrencia = atendimentoDAO.buscarPorId(idOcorrencia);
-				ocorrencia = (OcorrenciaAtendimento)ocorrencia;
-				break;
-			}
-			case VACINA: {
-				ocorrencia = prontuarioDAO.buscarOcorrenciaVacina(idOcorrencia);
-				ocorrencia = (OcorrenciaVacina)ocorrencia;
-				break;
-			}
-			case PATOLOGIA: {
-				throw new RuntimeException("Patologia não é um tipo de evento suportado p/ agendamento");
-			}
-		}
+		OcorrenciaProntuario ocorrencia = OcorrenciaFactory.getInstance().getOcorrencia(tpOcorrencia, idOcorrencia);
 		ModelAndView modelAndView = new ModelAndView("forward:/prontuario/prontuarioDoAnimal/" + ocorrencia.getProntuario().getAnimal().getAnimalId());
 		return modelAndView;
 	}
@@ -168,26 +175,9 @@ public class AgendamentoController {
 		LocalDateTime dataHoraFim = LocalDateTime.parse(dataEHoraFinal, DateTimeFormatter.ISO_DATE_TIME);
 		TipoOcorrenciaProntuario tipoOcorrencia = TipoOcorrenciaProntuario.valueOf(tipoDeOcorrencia);
 		Agendamento agendamento = new Agendamento();
-		if (tipoDeOcorrencia.equals("VACINA")) {
-			OcorrenciaVacina vacina = new OcorrenciaVacina();
-			vacina.setProntuario(prontuario);
-			vacina.setVacina(prontuarioDAO.buscarVacinaPorId(Long.parseLong(vacinaSelecionada)));
-			vacina.setData(dataHoraInicio);
-			vacina.setTipo(tipoOcorrencia);
-			prontuarioDAO.salvarOcorrenciaVacina(vacina);
-			prontuario.getVacinas().add(vacina);
-			agendamento.setOcorrencia(vacina);
-		} else if (tipoDeOcorrencia.equals("ATENDIMENTO")) {
-			OcorrenciaAtendimento atendimento = new OcorrenciaAtendimento();
-			atendimento.setTipoDeAtendimento(atendimentoDAO.buscarTipoDeAtendimentoPorId(Long.parseLong(atendimentoSelecionado)));
-			atendimento.setProntuario(prontuario);
-			atendimento.setData(dataHoraInicio);
-			atendimento.setTipo(tipoOcorrencia);
-			prontuarioDAO.salvarAtendimento(atendimento);
-			prontuario.getAtendimentos().add(atendimento);
-			agendamento.setOcorrencia(atendimento);
-		}
-		prontuarioDAO.salvar(prontuario);
+		String opcaoDescritivo = vacinaSelecionada != null? vacinaSelecionada : atendimentoSelecionado;
+		OcorrenciaProntuario ocorrenciaProntuario = OcorrenciaFactory.getInstance().criarOcorrencia(opcaoDescritivo, dataHoraInicio, tipoOcorrencia, prontuario);
+		agendamento.setOcorrencia(ocorrenciaProntuario);
 		agendamento.setDataHoraInicial(dataHoraInicio);
 		agendamento.setDataHoraFinal(dataHoraFim);
 		agendamento.setTipo(tipoOcorrencia);
@@ -195,5 +185,5 @@ public class AgendamentoController {
 		ModelAndView modelAndView = new ModelAndView("redirect:/prontuario/prontuarioDoAnimal/" + prontuario.getAnimal().getAnimalId());
 		return modelAndView;
 	}
-	
+
 }

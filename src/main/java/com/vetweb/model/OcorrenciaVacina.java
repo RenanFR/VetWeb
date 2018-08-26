@@ -31,6 +31,13 @@ public class OcorrenciaVacina extends OcorrenciaProntuario implements Serializab
 	
 	private boolean pago;
 	
+	public OcorrenciaVacina() {
+	}
+	
+	public OcorrenciaVacina(Vacina vacina) {
+		this.vacina = vacina;
+	}
+
 	@Override
 	public Prontuario getProntuario() {
 		return prontuario;

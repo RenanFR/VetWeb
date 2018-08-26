@@ -42,7 +42,7 @@ import com.google.common.cache.CacheBuilder;
 @ComponentScan(basePackages = {"com.vetweb.controller", "com.vetweb.dao", "com.vetweb.scheduled",
     "com.vetweb.model", "com.vetweb.dao.auth", "com.vetweb.model.auth", "com.vetweb.controller.advice",
     "com.vetweb.model.error", "com.vetweb.model.pojo", "com.vetweb.service", "com.vetweb.controller.rest",
-    "com.vetweb.endpoint", "com.vetweb.client"})
+    "com.vetweb.endpoint", "com.vetweb.client", "com.vetweb.patterns"})
 public class AppWebConfiguration extends WebMvcConfigurerAdapter implements WebApplicationInitializer {
 	
     @Bean
