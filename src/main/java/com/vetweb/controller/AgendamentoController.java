@@ -57,6 +57,9 @@ public class AgendamentoController {
 	@Autowired
 	private AgendamentoDAO agendamentoDAO;
 	
+	@Autowired
+	private OcorrenciaFactory ocorrenciaFactory;
+	
 	@GetMapping
 	public ModelAndView agenda() {
 		ModelAndView modelAndView = new ModelAndView("agendamento/agendamento");
@@ -156,7 +159,7 @@ public class AgendamentoController {
 	
 	@GetMapping("/ocorrencia/{type}/{id}")
 	public ModelAndView buscarOcorrencia(@PathVariable("type") String tpOcorrencia, @PathVariable("id") Long idOcorrencia) {
-		OcorrenciaProntuario ocorrencia = OcorrenciaFactory.getInstance().getOcorrencia(tpOcorrencia, idOcorrencia);
+		OcorrenciaProntuario ocorrencia = ocorrenciaFactory.getOcorrencia(tpOcorrencia, idOcorrencia);
 		ModelAndView modelAndView = new ModelAndView("forward:/prontuario/prontuarioDoAnimal/" + ocorrencia.getProntuario().getAnimal().getAnimalId());
 		return modelAndView;
 	}
@@ -176,7 +179,7 @@ public class AgendamentoController {
 		TipoOcorrenciaProntuario tipoOcorrencia = TipoOcorrenciaProntuario.valueOf(tipoDeOcorrencia);
 		Agendamento agendamento = new Agendamento();
 		String opcaoDescritivo = vacinaSelecionada != null? vacinaSelecionada : atendimentoSelecionado;
-		OcorrenciaProntuario ocorrenciaProntuario = OcorrenciaFactory.getInstance().criarOcorrencia(opcaoDescritivo, dataHoraInicio, tipoOcorrencia, prontuario);
+		OcorrenciaProntuario ocorrenciaProntuario = ocorrenciaFactory.criarOcorrencia(opcaoDescritivo, dataHoraInicio, tipoOcorrencia, prontuario);
 		agendamento.setOcorrencia(ocorrenciaProntuario);
 		agendamento.setDataHoraInicial(dataHoraInicio);
 		agendamento.setDataHoraFinal(dataHoraFim);

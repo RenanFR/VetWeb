@@ -24,29 +24,30 @@ import com.vetweb.model.pojo.TipoOcorrenciaProntuario;
 @Component
 public class OcorrenciaFactory {
 	
-	@Autowired
 	private AtendimentoDAO daoAtendimento;
 	
-	@Autowired
 	private ProntuarioDAO daoProntuario;
 	
-	@Autowired
 	private AnimalDAO daoAnimal;
 	
-	@Autowired
 	private ExameDAO daoExame;
 	
-	private static OcorrenciaFactory singletonInstance;
+//	private static OcorrenciaFactory singletonInstance;
 	
-	private OcorrenciaFactory() {
+	@Autowired
+	private OcorrenciaFactory(AtendimentoDAO atendimentoDAO, ProntuarioDAO prontuarioDAO, AnimalDAO animalDAO, ExameDAO exameDAO) {
+		this.daoAtendimento = atendimentoDAO;
+		this.daoProntuario = prontuarioDAO;
+		this.daoAnimal = animalDAO;
+		this.daoExame = exameDAO;
 	}
 	
-	public synchronized static OcorrenciaFactory getInstance() {
-		if (singletonInstance == null) {
-			singletonInstance = new OcorrenciaFactory();
-		}
-		return singletonInstance;
-	}
+//	public synchronized static OcorrenciaFactory getInstance() {
+//		if (singletonInstance == null) {
+//			singletonInstance = new OcorrenciaFactory();
+//		}
+//		return singletonInstance;
+//	}
 	
 	public OcorrenciaProntuario getOcorrencia(String tipo, Long idOcorrencia) {
 		OcorrenciaProntuario ocorrencia = null;
@@ -84,6 +85,7 @@ public class OcorrenciaFactory {
 				ocorrenciaAtendimento.setProntuario(prontuario);
 				daoProntuario.salvarAtendimento(ocorrenciaAtendimento);
 				prontuario.getAtendimentos().add(ocorrenciaAtendimento);
+				break;
 			}
 			case PATOLOGIA: {
 				Patologia patologia = daoAnimal.buscarPatologiaPorDescricao(opcaoDescritivo);
@@ -92,6 +94,7 @@ public class OcorrenciaFactory {
 				ocorrenciaPatologia.setProntuario(prontuario);
 				daoProntuario.salvarOcorrenciaPatologia(ocorrenciaPatologia);
 				prontuario.getPatologias().add(ocorrenciaPatologia);
+				break;
 			}
 			case VACINA: {
 				Vacina vacina = daoProntuario.buscarVacinaPorId(Long.parseLong(opcaoDescritivo));
@@ -100,6 +103,7 @@ public class OcorrenciaFactory {
 				ocorrenciaVacina.setProntuario(prontuario);
 				daoProntuario.salvarOcorrenciaVacina(ocorrenciaVacina);
 				prontuario.getVacinas().add(ocorrenciaVacina);
+				break;
 			}
 			case EXAME: {
 				Exame exame = daoExame.buscarPorDescricao(opcaoDescritivo);
@@ -108,6 +112,7 @@ public class OcorrenciaFactory {
 				ocorrenciaExame.setProntuario(prontuario);
 				daoProntuario.salvarOcorrenciaExame(ocorrenciaExame);
 				prontuario.getExames().add(ocorrenciaExame);
+				break;
 			}
 		}
 		ocorrenciaProntuario.setData(dataHoraInicio);
