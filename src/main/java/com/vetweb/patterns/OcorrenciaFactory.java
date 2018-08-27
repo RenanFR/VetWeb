@@ -32,8 +32,6 @@ public class OcorrenciaFactory {
 	
 	private ExameDAO daoExame;
 	
-//	private static OcorrenciaFactory singletonInstance;
-	
 	@Autowired
 	private OcorrenciaFactory(AtendimentoDAO atendimentoDAO, ProntuarioDAO prontuarioDAO, AnimalDAO animalDAO, ExameDAO exameDAO) {
 		this.daoAtendimento = atendimentoDAO;
@@ -41,13 +39,6 @@ public class OcorrenciaFactory {
 		this.daoAnimal = animalDAO;
 		this.daoExame = exameDAO;
 	}
-	
-//	public synchronized static OcorrenciaFactory getInstance() {
-//		if (singletonInstance == null) {
-//			singletonInstance = new OcorrenciaFactory();
-//		}
-//		return singletonInstance;
-//	}
 	
 	public OcorrenciaProntuario getOcorrencia(String tipo, Long idOcorrencia) {
 		OcorrenciaProntuario ocorrencia = null;

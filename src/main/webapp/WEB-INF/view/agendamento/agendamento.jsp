@@ -73,10 +73,22 @@
 					$('#lblVacina').css('display', 'block');
 					$('#slcAtendimento').css('display', 'none');
 					$('#lblAtendimento').css('display', 'none');
+					$('#slcExame').css('display', 'none');
+					$('#lblExame').css('display', 'none');
 				}
 				if (rdoSelecionado.val() === 'ATENDIMENTO') {
 					$('#slcAtendimento').css('display', 'block');
 					$('#lblAtendimento').css('display', 'block');
+					$('#slcVacina').css('display', 'none');
+					$('#lblVacina').css('display', 'none');
+					$('#slcExame').css('display', 'none');
+					$('#lblExame').css('display', 'none');
+				} 
+				if (rdoSelecionado.val() === 'EXAME') {
+					$('#slcExame').css('display', 'block');
+					$('#lblExame').css('display', 'block');
+					$('#lblAtendimento').css('display', 'none');
+					$('#slcAtendimento').css('display', 'none');
 					$('#slcVacina').css('display', 'none');
 					$('#lblVacina').css('display', 'none');
 				} 
@@ -101,7 +113,8 @@
           
           <vetweb:modalAgendamento proprietarios="${todosOsClientes}" 
 				tiposDeAtendimento="${tiposDeAtendimento}" 
-				vacinas="${todasAsVacinas}">
+				vacinas="${todasAsVacinas}"
+				exames="${exames}">
 			</vetweb:modalAgendamento>
           
     </jsp:body>

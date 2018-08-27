@@ -25,11 +25,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.vetweb.dao.AgendamentoDAO;
 import com.vetweb.dao.AnimalDAO;
 import com.vetweb.dao.AtendimentoDAO;
 import com.vetweb.dao.ExameDAO;
 import com.vetweb.dao.ProntuarioDAO;
 import com.vetweb.dao.VacinaDAO;
+import com.vetweb.model.Agendamento;
 import com.vetweb.model.Animal;
 import com.vetweb.model.Exame;
 import com.vetweb.model.OcorrenciaAtendimento;
@@ -66,6 +68,9 @@ public class ProntuarioController {
     
     @Autowired
     private ExameDAO exameDAO;
+    
+    @Autowired
+    private AgendamentoDAO agendamentoDAO;
     
     public static String modelDML = null;
     
@@ -247,6 +252,14 @@ public class ProntuarioController {
     	ocorrenciaExame.setTipo(TipoOcorrenciaProntuario.EXAME);
     	Exame exame = exameDAO.buscarPorDescricao(exameDescricao);
 		ocorrenciaExame.setExame(exame);
+		if (ocorrenciaExame.getData().isAfter(LocalDateTime.now())) {
+			Agendamento agendamento = new Agendamento();
+			agendamento.setOcorrencia(ocorrenciaExame);
+			agendamento.setTipo(TipoOcorrenciaProntuario.EXAME);
+			agendamento.setDataHoraInicial(ocorrenciaExame.getData());
+			agendamento.setDataHoraFinal(ocorrenciaExame.getData().plusHours(1));
+			agendamentoDAO.salvar(agendamento);
+		}
 		prontuarioDAO.salvarOcorrenciaExame(ocorrenciaExame);
     	return new ModelAndView("redirect:prontuarioDoAnimal/" + prontuario.getAnimal().getAnimalId());
     }

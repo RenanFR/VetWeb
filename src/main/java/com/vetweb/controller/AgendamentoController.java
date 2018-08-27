@@ -22,10 +22,12 @@ import org.springframework.web.servlet.ModelAndView;
 import com.vetweb.dao.AgendamentoDAO;
 import com.vetweb.dao.AnimalDAO;
 import com.vetweb.dao.AtendimentoDAO;
+import com.vetweb.dao.ExameDAO;
 import com.vetweb.dao.ProntuarioDAO;
 import com.vetweb.dao.ProprietarioDAO;
 import com.vetweb.model.Agendamento;
 import com.vetweb.model.Animal;
+import com.vetweb.model.Exame;
 import com.vetweb.model.Prontuario;
 import com.vetweb.model.Proprietario;
 import com.vetweb.model.TipoDeAtendimento;
@@ -60,6 +62,9 @@ public class AgendamentoController {
 	@Autowired
 	private OcorrenciaFactory ocorrenciaFactory;
 	
+	@Autowired
+	private ExameDAO exameDAO;
+	
 	@GetMapping
 	public ModelAndView agenda() {
 		ModelAndView modelAndView = new ModelAndView("agendamento/agendamento");
@@ -74,6 +79,8 @@ public class AgendamentoController {
 		modelAndView.addObject("tiposDeAtendimento", tiposDeAtendimentoDisponiveis);
 		List<Vacina> vacinasDisponiveis = prontuarioDAO.buscarVacinas();
 		modelAndView.addObject("todasAsVacinas", vacinasDisponiveis);
+		List<Exame> examesDisponiveis = exameDAO.listarTodos();
+		modelAndView.addObject("exames", examesDisponiveis);
 	}
 	
 	@ResponseBody
@@ -84,13 +91,12 @@ public class AgendamentoController {
 		LocalDate dataFinalFiltro = LocalDate.parse(end, DateTimeFormatter.ISO_DATE);
 		List<EventFullCalendar> events = new ArrayList<>();
 		List<Agendamento> agendamentos = agendamentoDAO.listarTodos();
-		adicionarEventosDeAtendimento(dataInicialFiltro, dataFinalFiltro, events);
-		adicionarEventosDeVacina(dataInicialFiltro, dataFinalFiltro, events);
-		adicionarEventosAgendados(events, agendamentos);
+		addEvents(dataInicialFiltro, dataFinalFiltro, events);
+		addScheduledEvents(events, agendamentos);
 		return events;
 	}
 
-	private void adicionarEventosAgendados(List<EventFullCalendar> events, List<Agendamento> agendamentos) {
+	private void addScheduledEvents(List<EventFullCalendar> events, List<Agendamento> agendamentos) {
 		agendamentos
 			.stream()
 			.filter(ag -> ag.getDataHoraFinal().isAfter(LocalDateTime.now()))
@@ -102,12 +108,11 @@ public class AgendamentoController {
 				event.setEnd(DateTimeFormatter.ISO_DATE_TIME.format(ag.getDataHoraFinal()));
 				event.setType(ag.getOcorrencia().getTipo().name());
 				event.setColor("#ccffcc");
-				events
-					.add(event);
+				events.add(event);
 			});
 	}
 
-	private void adicionarEventosDeVacina(LocalDate dataInicialFiltro, LocalDate dataFinalFiltro,
+	private void addEvents(LocalDate dataInicialFiltro, LocalDate dataFinalFiltro,
 			List<EventFullCalendar> events) {
 		prontuarioDAO
 			.buscarTodasOcorrenciasVacina()
@@ -121,13 +126,8 @@ public class AgendamentoController {
 				event.setStart(DateTimeFormatter.ISO_DATE_TIME.format(ocorrenciaVacina.getData()));
 				event.setType(ocorrenciaVacina.getTipo().name());
 				event.setColor("#fff0b3");
-				events
-					.add(event);
+				events.add(event);
 			});
-	}
-
-	private void adicionarEventosDeAtendimento(LocalDate dataInicialFiltro, LocalDate dataFinalFiltro,
-			List<EventFullCalendar> events) {
 		atendimentoDAO
 			.listarTodos()
 			.stream()
@@ -141,8 +141,21 @@ public class AgendamentoController {
 				event.setEnd(DateTimeFormatter.ISO_DATE_TIME.format(atendimento.getData().plus(atendimento.getTipoDeAtendimento().getDuracao())));
 				event.setType(atendimento.getTipo().name());
 				event.setColor("#ccf5ff");
-				events
-					.add(event);
+				events.add(event); 
+			});
+		prontuarioDAO
+			.buscarTodasOcorrenciasExame()
+			.stream()
+			.filter(ocorrenciaExame -> ocorrenciaExame.getData().isBefore(LocalDateTime.now()))
+			.filter(ocorrenciaExame -> aplicarFiltroDeData(dataInicialFiltro, dataFinalFiltro, ocorrenciaExame))
+			.forEach(ocorrenciaExame -> {
+				EventFullCalendar eventFullCalendar = new EventFullCalendar();
+				eventFullCalendar.setId(String.valueOf(ocorrenciaExame.getOcorrenciaId()));
+				eventFullCalendar.setTitle(ocorrenciaExame.getExame().getDescricao());
+				eventFullCalendar.setStart(DateTimeFormatter.ISO_DATE_TIME.format(ocorrenciaExame.getData()));
+				eventFullCalendar.setType(ocorrenciaExame.getTipo().name());
+				eventFullCalendar.setColor("#BFBFBF");
+				events.add(eventFullCalendar);
 			});
 	}
 
@@ -170,6 +183,7 @@ public class AgendamentoController {
 			@RequestParam("tipoOcorrencia") String tipoDeOcorrencia, 
 			@RequestParam(value = "slcVacina", required = false) String vacinaSelecionada,
 			@RequestParam(value = "slcAtendimento", required = false) String atendimentoSelecionado, 
+			@RequestParam(value = "slcExame", required = false) String exameSelecionado, 
 			@RequestParam("dataHoraInicial") String dataEHoraInicial, 
 			@RequestParam("dataHoraFinal") String dataEHoraFinal) {
 		Animal animal = animalDAO.buscarPorId(Long.parseLong(animalSelecionado));

@@ -13,6 +13,8 @@
 
 <%@attribute name="vacinas" required="true" type="java.util.List" %>
 
+<%@attribute name="exames" required="true" type="java.util.List" %>
+
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
@@ -55,14 +57,23 @@
 		                   
 						<label id="lblTipo" for="tipoOcorrencia"><spring:message code="tipo"/></label>
 						
-	               		  <input type="radio" name="tipoOcorrencia" value="VACINA" class="rdoTipo"> Vacina
+	               		  <input type="radio" name="tipoOcorrencia" value="VACINA" class="rdoTipo"> <spring:message code="vacina"/>
 	               		  
-	               		  <input type="radio" name="tipoOcorrencia" value="ATENDIMENTO" class="rdoTipo"> Atendimento<br	/>
+	               		  <input type="radio" name="tipoOcorrencia" value="ATENDIMENTO" class="rdoTipo"> <spring:message code="atendimento"/>
+	               		  
+	               		  <input type="radio" name="tipoOcorrencia" value="EXAME" class="rdoTipo"> <spring:message code="exame"/><br	/>
 	               		  
 							<label id="lblVacina" for="slcVacina" style="display: none;"><spring:message code="selecioneVacina"/></label>
 		                   <select id="slcVacina" style="display: none;" name="slcVacina">
 		                   		<c:forEach items="${todasAsVacinas}" var="vacina">
 		                   			<option value="${vacina.vacinaId}">${vacina.nome}</option>
+		                   		</c:forEach>
+		                   </select>
+		                   
+							<label id="lblExame" for="slcExame" style="display: none;"><spring:message code="selecioneExame"/></label>
+		                   <select id="slcExame" style="display: none;" name="slcExame">
+		                   		<c:forEach items="${exames}" var="exame">
+		                   			<option value="${exame.descricao}">${exame.descricao}</option>
 		                   		</c:forEach>
 		                   </select>
 		                   
