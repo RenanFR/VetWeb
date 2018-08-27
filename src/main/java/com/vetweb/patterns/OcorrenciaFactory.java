@@ -70,7 +70,7 @@ public class OcorrenciaFactory {
 		OcorrenciaProntuario ocorrenciaProntuario = null;
 		switch (tipoOcorrencia) {
 			case ATENDIMENTO: {
-				TipoDeAtendimento tipoDeAtendimento = daoAtendimento.buscarTipoDeAtendimentoPorNome(opcaoDescritivo);
+				TipoDeAtendimento tipoDeAtendimento = daoAtendimento.buscarTipoDeAtendimentoPorId(Long.parseLong(opcaoDescritivo));
 				ocorrenciaProntuario = new OcorrenciaAtendimento(tipoDeAtendimento, tipoDeAtendimento.getModeloAtendimento());
 				OcorrenciaAtendimento ocorrenciaAtendimento = (OcorrenciaAtendimento)ocorrenciaProntuario;
 				ocorrenciaAtendimento.setProntuario(prontuario);

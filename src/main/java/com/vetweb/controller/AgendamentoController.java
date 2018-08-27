@@ -1,5 +1,9 @@
 package com.vetweb.controller;
 
+import static com.vetweb.model.pojo.TipoOcorrenciaProntuario.ATENDIMENTO;
+import static com.vetweb.model.pojo.TipoOcorrenciaProntuario.EXAME;
+import static com.vetweb.model.pojo.TipoOcorrenciaProntuario.VACINA;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -192,7 +196,8 @@ public class AgendamentoController {
 		LocalDateTime dataHoraFim = LocalDateTime.parse(dataEHoraFinal, DateTimeFormatter.ISO_DATE_TIME);
 		TipoOcorrenciaProntuario tipoOcorrencia = TipoOcorrenciaProntuario.valueOf(tipoDeOcorrencia);
 		Agendamento agendamento = new Agendamento();
-		String opcaoDescritivo = vacinaSelecionada != null? vacinaSelecionada : atendimentoSelecionado;
+		String opcaoDescritivo = tipoOcorrencia == VACINA? vacinaSelecionada : tipoOcorrencia == ATENDIMENTO? 
+				atendimentoSelecionado : tipoOcorrencia == EXAME? exameSelecionado : null;
 		OcorrenciaProntuario ocorrenciaProntuario = ocorrenciaFactory.criarOcorrencia(opcaoDescritivo, dataHoraInicio, tipoOcorrencia, prontuario);
 		agendamento.setOcorrencia(ocorrenciaProntuario);
 		agendamento.setDataHoraInicial(dataHoraInicio);
