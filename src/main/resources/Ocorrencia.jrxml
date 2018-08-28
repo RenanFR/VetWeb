@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Ocorrencia" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="62cf1552-9cdf-4b93-bdf6-880b746e6546">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<subDataset name="relatorio_tipos" uuid="5dc2e2c8-f122-40a2-9492-7d8aaf519e94">
+		<queryString language="SQL">
+			<![CDATA[select tipo from tbl_ocorrencia group by tipo]]>
+		</queryString>
+		<field name="tipo" class="java.lang.String"/>
+		<group name="tipo">
+			<groupExpression><![CDATA[$F{tipo}]]></groupExpression>
+		</group>
+	</subDataset>
+	<subDataset name="relatorio_por_tipo" uuid="30a1bf74-3780-4733-8923-4e0c711573b6">
+		<queryString language="SQL">
+			<![CDATA[select count(*) qtd, tipo from tbl_ocorrencia group by tipo]]>
+		</queryString>
+		<field name="qtd" class="java.lang.Long"/>
+		<field name="tipo" class="java.lang.String"/>
+		<group name="tipo">
+			<groupExpression><![CDATA[$F{tipo}]]></groupExpression>
+		</group>
+		<group name="qtd">
+			<groupExpression><![CDATA[$F{qtd}]]></groupExpression>
+		</group>
+	</subDataset>
+	<parameter name="Data_Ini" class="java.util.Date"/>
+	<parameter name="Data_Fim" class="java.util.Date"/>
+	<queryString>
+		<![CDATA[select prontuario.prontuarioid codigo_prontuario, pessoa.nome nome_cliente,
+animal.nome nome_animal, ocorrencia.tipo tipo_ocorrencia, ocorrencia.data data_ocorrencia, exame.pago foi_pago
+from tbl_animal animal, tbl_cliente cliente, tbl_pessoa pessoa, tbl_exame_event exame
+join tbl_ocorrencia ocorrencia on exame.ocorrenciaid = ocorrencia.ocorrenciaid
+join tbl_prontuario prontuario on exame.prontuarioid = prontuario.prontuarioid
+join tbl_exame tipo_exame on exame.exameid = tipo_exame.exameid
+where animal.animalid = prontuario.animalid and cliente.pessoaid = pessoa.pessoaid
+and ocorrencia.data between $P{Data_Ini} and $P{Data_Fim}]]>
+	</queryString>
+	<field name="codigo_prontuario" class="java.lang.Long"/>
+	<field name="nome_cliente" class="java.lang.String"/>
+	<field name="nome_animal" class="java.lang.String"/>
+	<field name="tipo_ocorrencia" class="java.lang.String"/>
+	<field name="data_ocorrencia" class="java.sql.Timestamp"/>
+	<field name="foi_pago" class="java.lang.Boolean"/>
+	<background>
+		<band/>
+	</background>
+	<title>
+		<band height="72">
+			<frame>
+				<reportElement mode="Opaque" x="-20" y="-20" width="595" height="92" backcolor="#006699" uuid="474f1cc7-285f-4a9b-8397-9609a90d8b4c"/>
+				<staticText>
+					<reportElement x="20" y="20" width="234" height="43" forecolor="#FFFFFF" uuid="75edba26-48e2-491b-b1b8-49b4236e9db0"/>
+					<textElement>
+						<font size="34" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Ocorrências]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="296" y="43" width="279" height="20" forecolor="#FFFFFF" uuid="2bf9ed19-d7fc-4467-b35a-a01a6e40cd0e"/>
+					<textElement textAlignment="Right">
+						<font size="14" isBold="false"/>
+					</textElement>
+					<text><![CDATA[Todas as ocorrências de prontuário]]></text>
+				</staticText>
+			</frame>
+		</band>
+	</title>
+	<columnHeader>
+		<band height="21">
+			<line>
+				<reportElement x="-20" y="20" width="595" height="1" forecolor="#666666" uuid="d4f4445b-379b-429d-941a-30b9984751d9"/>
+			</line>
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="0" width="92" height="20" forecolor="#006699" backcolor="#E6E6E6" uuid="c18373e3-2700-4e0c-96cd-6a418bd99bd7"/>
+				<textElement textAlignment="Center">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[codigo_prontuario]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="92" y="0" width="92" height="20" forecolor="#006699" backcolor="#E6E6E6" uuid="f9f1e290-8124-4cd7-94fc-89f8a614f89f"/>
+				<textElement textAlignment="Center">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[nome_cliente]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="184" y="0" width="92" height="20" forecolor="#006699" backcolor="#E6E6E6" uuid="15a9362a-aa6e-401d-b84b-feca0d642c8f"/>
+				<textElement textAlignment="Center">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[nome_animal]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="276" y="0" width="92" height="20" forecolor="#006699" backcolor="#E6E6E6" uuid="cb80fe7b-f7b9-4738-b798-c58cbab8b392"/>
+				<textElement textAlignment="Center">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[tipo_ocorrencia]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="368" y="0" width="92" height="20" forecolor="#006699" backcolor="#E6E6E6" uuid="bbb736dc-bfc2-47f9-9451-61df804a0d33"/>
+				<textElement textAlignment="Center">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[data_ocorrencia]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="460" y="0" width="92" height="20" forecolor="#006699" backcolor="#E6E6E6" uuid="fab91b93-fa75-45ae-b391-f2fdb7774f0c"/>
+				<textElement textAlignment="Center">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[foi_pago]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20">
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="0" y="19" width="555" height="1" uuid="3ad23568-d1bc-4a1d-8818-f51d75cdd644"/>
+			</line>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="0" y="0" width="92" height="20" uuid="0862e99d-4939-40e3-afa0-5d99e6825e72"/>
+				<textElement>
+					<font size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{codigo_prontuario}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="92" y="0" width="92" height="20" uuid="2e80cfe1-4c45-41dd-b259-d7271cf150c3"/>
+				<textElement>
+					<font size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nome_cliente}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="184" y="0" width="92" height="20" uuid="b9823f21-54ae-4d45-aa0d-0bc9e85ca6f4"/>
+				<textElement>
+					<font size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nome_animal}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="276" y="0" width="92" height="20" uuid="9a2ddb7f-04b4-4523-81e5-4e2a3962b8a7"/>
+				<textElement>
+					<font size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{tipo_ocorrencia}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="dd/MM/yyyy">
+				<reportElement x="368" y="0" width="92" height="20" uuid="ec446795-0504-48c6-8033-e334a19ee111"/>
+				<textElement>
+					<font size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{data_ocorrencia}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="460" y="0" width="92" height="20" uuid="0d7dd7e6-1f7a-4180-ad08-98d7b27145a0"/>
+				<textElement>
+					<font size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{foi_pago}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band/>
+	</columnFooter>
+	<pageFooter>
+		<band height="22">
+			<textField>
+				<reportElement x="435" y="1" width="80" height="20" uuid="c484086e-1fdc-4aa7-bfc8-bc5a84beefa1"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="515" y="1" width="40" height="20" uuid="fb0ada34-e03d-49df-9a00-922e34ba394b"/>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="104">
+			<pieChart>
+				<chart>
+					<reportElement x="0" y="0" width="555" height="104" uuid="eaaac020-e68f-402b-a636-441ffc5c32d3"/>
+					<chartTitle/>
+					<chartSubtitle/>
+					<chartLegend/>
+				</chart>
+				<pieDataset>
+					<dataset>
+						<datasetRun subDataset="relatorio_por_tipo" uuid="f4e6c11a-9524-46f8-a63b-ca32d4061449"/>
+					</dataset>
+					<keyExpression><![CDATA[$F{tipo}]]></keyExpression>
+					<valueExpression><![CDATA[$F{qtd}]]></valueExpression>
+				</pieDataset>
+				<piePlot>
+					<plot/>
+					<itemLabel/>
+				</piePlot>
+			</pieChart>
+		</band>
+	</summary>
+</jasperReport>
