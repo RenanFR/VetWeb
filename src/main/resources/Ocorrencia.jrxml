@@ -25,8 +25,12 @@
 			<groupExpression><![CDATA[$F{qtd}]]></groupExpression>
 		</group>
 	</subDataset>
-	<parameter name="Data_Ini" class="java.util.Date"/>
-	<parameter name="Data_Fim" class="java.util.Date"/>
+	<parameter name="Data_Ini" class="java.util.Date">
+		<defaultValueExpression><![CDATA[new java.util.Date("08/27/2018")]]></defaultValueExpression>
+	</parameter>
+	<parameter name="Data_Fim" class="java.util.Date">
+		<defaultValueExpression><![CDATA[new java.util.Date("08/29/2018")]]></defaultValueExpression>
+	</parameter>
 	<queryString>
 		<![CDATA[select prontuario.prontuarioid codigo_prontuario, pessoa.nome nome_cliente,
 animal.nome nome_animal, ocorrencia.tipo tipo_ocorrencia, ocorrencia.data data_ocorrencia, exame.pago foi_pago
