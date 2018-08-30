@@ -23,18 +23,18 @@
                         <password>postgres</password>
                     </security>
                 </datasource>
-
+		
                 <security-domain name="Dblogin" cache-type="default">
                     <authentication>
                         <login-module code="Database" flag="required">
                             <module-option name="dsJndiName" value="java:jboss/datasources/vetwebds"/>
-                            <module-option name="principalsQuery" value="select password from Usuario where username = ?"/>
-                            <module-option name="rolesQuery" value="select perfis_descricao, 'Roles' from usuario_perfil up inner join usuario u on up.usuarios_username = u.username where u.username = ?"/>
+                            <module-option name="principalsQuery" value="select password from tbl_usuario where username = ?"/>
+                            <module-option name="rolesQuery" value="select perfis_descricao, 'Roles' from tbl_usuario_perfis up inner join tbl_usuario u on up.usuarios_username = u.username where u.username = ?"/>
                             <module-option name="hashAlgorithm" value="MD5"/>
                             <module-option name="hashEncoding" value="base64"/>
                         </login-module>
                     </authentication>
-                </security-domain>					
+                </security-domain>
 								
         <outbound-socket-binding name="mail-smtp">
             <remote-destination host="localhost" port="25"/>
