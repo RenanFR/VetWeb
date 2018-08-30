@@ -10,6 +10,10 @@
 * Crie o banco de dados da aplicação no postgresql com o nome vetweb_database. As duas aplicações compartilham a mesma base de dados, no vetweb os dados de conexão com o banco são feitos de forma programática na classe ConfigJPA, já no auth os dados são referenciados no persistence.xml por meio de datasource (Um datasource é uma seção no arquivo de configuração do servidor onde podemos colocar os parâmetros de conexão com o banco, deixando-os isolados da aplicação)
 
 * Faça o download do WildFly 10 como servidor de aplicação para executar os projetos (Disponibilizei o arquivo compactado com o servidor e as configurações necessárias no drive), caso queira usar uma instância própria do WildFly adicione as seguintes configurações no arquivo standalone-full.xml (Listei soltas as tags abaixo, porém cada uma tem sua seção correta, no caso do driver do banco pode ser necessário incluir o arquivo Jar JDBC do postgresql)
+
+* A configuração do Runtime do WildFly deve apontar para uma jdk, portanto é necessário instalar o jdk previamente
+
+* Durante o desenvolvimento utilizar como arquivo de configuração do servidor o standalone-full.xml
 ```		
 		<driver name="postgresql" module="org.postgresql">
 				<driver-class>org.postgresql.Driver</driver-class>
