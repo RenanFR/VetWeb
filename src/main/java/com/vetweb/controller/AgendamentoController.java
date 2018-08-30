@@ -32,6 +32,7 @@ import com.vetweb.dao.ProprietarioDAO;
 import com.vetweb.model.Agendamento;
 import com.vetweb.model.Animal;
 import com.vetweb.model.Exame;
+import com.vetweb.model.OcorrenciaFactory;
 import com.vetweb.model.Prontuario;
 import com.vetweb.model.Proprietario;
 import com.vetweb.model.TipoDeAtendimento;
@@ -39,7 +40,6 @@ import com.vetweb.model.Vacina;
 import com.vetweb.model.pojo.EventFullCalendar;
 import com.vetweb.model.pojo.OcorrenciaProntuario;
 import com.vetweb.model.pojo.TipoOcorrenciaProntuario;
-import com.vetweb.patterns.OcorrenciaFactory;
 
 @Controller
 @Transactional

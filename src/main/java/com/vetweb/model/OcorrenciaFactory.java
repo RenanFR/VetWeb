@@ -1,4 +1,4 @@
-package com.vetweb.patterns;
+package com.vetweb.model;
 
 import java.time.LocalDateTime;
 
@@ -9,15 +9,6 @@ import com.vetweb.dao.AnimalDAO;
 import com.vetweb.dao.AtendimentoDAO;
 import com.vetweb.dao.ExameDAO;
 import com.vetweb.dao.ProntuarioDAO;
-import com.vetweb.model.Exame;
-import com.vetweb.model.OcorrenciaAtendimento;
-import com.vetweb.model.OcorrenciaExame;
-import com.vetweb.model.OcorrenciaPatologia;
-import com.vetweb.model.OcorrenciaVacina;
-import com.vetweb.model.Patologia;
-import com.vetweb.model.Prontuario;
-import com.vetweb.model.TipoDeAtendimento;
-import com.vetweb.model.Vacina;
 import com.vetweb.model.pojo.OcorrenciaProntuario;
 import com.vetweb.model.pojo.TipoOcorrenciaProntuario;
 

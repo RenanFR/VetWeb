@@ -103,10 +103,7 @@
 	                </li>
 	
 	                <li>
-	                    <a href="#"><i class="fa fa-edit "></i>My Link Three </a>
-	                </li>
-	                <li>
-	                    <a href="#"><i class="fa fa-table "></i>My Link Four</a>
+	                    <a href="<c:url value="/relatorios"></c:url>"><i class="fa	fa-pie-chart"></i><spring:message code="relatorios"/></a>
 	                </li>
 	                <li>
 	                    <a href="<c:url value="${urlClinica}"></c:url>"><i class="fa fa-building "></i> <spring:message code="clinica" text="text"></spring:message>  </a>
