@@ -44,7 +44,6 @@ public class JasperService {
 			JasperPrint jasperPrint = JasperFillManager.fillReport(reportLocation.concat(reportName + ".jasper"), parameterMap, connection);;
 			JRExporter jrExporter = new JRPdfExporter();
 			jrExporter.setParameter(JRExporterParameter.JASPER_PRINT, jasperPrint);
-//			FileOutputStream value = new FileOutputStream(reportLocation.concat(reportName + ".pdf"));
 			jrExporter.setParameter(JRExporterParameter.OUTPUT_STREAM, outputStream);
 			jrExporter.exportReport();
 			connection.close();
