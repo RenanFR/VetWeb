@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Ocorrencia" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="62cf1552-9cdf-4b93-bdf6-880b746e6546">
-	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.zoom" value="1.6105100000000008"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<subDataset name="relatorio_tipos" uuid="5dc2e2c8-f122-40a2-9492-7d8aaf519e94">
@@ -32,21 +32,29 @@
 		<defaultValueExpression><![CDATA[new java.util.Date("08/29/2018")]]></defaultValueExpression>
 	</parameter>
 	<queryString>
-		<![CDATA[select prontuario.prontuarioid codigo_prontuario, pessoa.nome nome_cliente,
-animal.nome nome_animal, ocorrencia.tipo tipo_ocorrencia, ocorrencia.data data_ocorrencia, exame.pago foi_pago
-from tbl_animal animal, tbl_cliente cliente, tbl_pessoa pessoa, tbl_exame_event exame
-join tbl_ocorrencia ocorrencia on exame.ocorrenciaid = ocorrencia.ocorrenciaid
-join tbl_prontuario prontuario on exame.prontuarioid = prontuario.prontuarioid
-join tbl_exame tipo_exame on exame.exameid = tipo_exame.exameid
-where animal.animalid = prontuario.animalid and cliente.pessoaid = pessoa.pessoaid
-and ocorrencia.data between $P{Data_Ini} and $P{Data_Fim}]]>
+		<![CDATA[SELECT prontuario.prontuarioid codigo_prontuario, pessoa.nome nome_cliente, animal.nome nome_animal, ocorrencia.tipo tipo_ocorrencia, ocorrencia.data data_ocorrencia,
+exame.pago exame_pago, atendimento.pago atendimento_pago, vacina.pago vacina_pago
+FROM tbl_prontuario prontuario, tbl_animal animal, tbl_cliente cliente, tbl_pessoa pessoa, tbl_ocorrencia ocorrencia
+LEFT JOIN tbl_exame_event exame ON ocorrencia.ocorrenciaid = exame.ocorrenciaid
+LEFT JOIN tbl_patologia_event patologia ON ocorrencia.ocorrenciaid = patologia.ocorrenciaid
+LEFT JOIN tbl_atendimento atendimento ON ocorrencia.ocorrenciaid = atendimento.ocorrenciaid
+LEFT JOIN tbl_vacina_event vacina ON ocorrencia.ocorrenciaid = vacina.ocorrenciaid
+WHERE prontuario.prontuarioid = atendimento.prontuarioid
+OR prontuario.prontuarioid = exame.prontuarioid
+OR prontuario.prontuarioid = patologia.prontuarioid
+OR prontuario.prontuarioid = vacina.prontuarioid
+AND prontuario.animalid = animal.animalid
+AND cliente.pessoaid = pessoa.pessoaid
+AND ocorrencia.data BETWEEN $P{Data_Ini} AND $P{Data_Fim};]]>
 	</queryString>
 	<field name="codigo_prontuario" class="java.lang.Long"/>
 	<field name="nome_cliente" class="java.lang.String"/>
 	<field name="nome_animal" class="java.lang.String"/>
 	<field name="tipo_ocorrencia" class="java.lang.String"/>
 	<field name="data_ocorrencia" class="java.sql.Timestamp"/>
-	<field name="foi_pago" class="java.lang.Boolean"/>
+	<field name="exame_pago" class="java.lang.Boolean"/>
+	<field name="atendimento_pago" class="java.lang.Boolean"/>
+	<field name="vacina_pago" class="java.lang.Boolean"/>
 	<background>
 		<band/>
 	</background>
@@ -77,95 +85,51 @@ and ocorrencia.data between $P{Data_Ini} and $P{Data_Fim}]]>
 				<reportElement x="-20" y="20" width="595" height="1" forecolor="#666666" uuid="d4f4445b-379b-429d-941a-30b9984751d9"/>
 			</line>
 			<staticText>
-				<reportElement mode="Opaque" x="0" y="0" width="92" height="20" forecolor="#006699" backcolor="#E6E6E6" uuid="c18373e3-2700-4e0c-96cd-6a418bd99bd7"/>
-				<textElement textAlignment="Center">
-					<font size="14" isBold="true"/>
-				</textElement>
-				<text><![CDATA[codigo_prontuario]]></text>
-			</staticText>
-			<staticText>
-				<reportElement mode="Opaque" x="92" y="0" width="92" height="20" forecolor="#006699" backcolor="#E6E6E6" uuid="f9f1e290-8124-4cd7-94fc-89f8a614f89f"/>
-				<textElement textAlignment="Center">
-					<font size="14" isBold="true"/>
-				</textElement>
+				<reportElement x="100" y="1" width="100" height="20" uuid="2b2877c0-acf7-4b93-81fb-228e7ec9f10d"/>
 				<text><![CDATA[nome_cliente]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="184" y="0" width="92" height="20" forecolor="#006699" backcolor="#E6E6E6" uuid="15a9362a-aa6e-401d-b84b-feca0d642c8f"/>
-				<textElement textAlignment="Center">
-					<font size="14" isBold="true"/>
-				</textElement>
+				<reportElement x="200" y="1" width="100" height="20" uuid="669b3ce2-1b59-4784-b6a2-b86b89d89977"/>
 				<text><![CDATA[nome_animal]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="276" y="0" width="92" height="20" forecolor="#006699" backcolor="#E6E6E6" uuid="cb80fe7b-f7b9-4738-b798-c58cbab8b392"/>
-				<textElement textAlignment="Center">
-					<font size="14" isBold="true"/>
-				</textElement>
+				<reportElement x="276" y="1" width="100" height="20" uuid="484a7f52-bf13-40ec-8164-81cb9f0c557b"/>
 				<text><![CDATA[tipo_ocorrencia]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="368" y="0" width="92" height="20" forecolor="#006699" backcolor="#E6E6E6" uuid="bbb736dc-bfc2-47f9-9451-61df804a0d33"/>
-				<textElement textAlignment="Center">
-					<font size="14" isBold="true"/>
-				</textElement>
+				<reportElement x="376" y="1" width="100" height="20" uuid="539c9e7e-840e-4def-9140-d435dcf27181"/>
 				<text><![CDATA[data_ocorrencia]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="460" y="0" width="92" height="20" forecolor="#006699" backcolor="#E6E6E6" uuid="fab91b93-fa75-45ae-b391-f2fdb7774f0c"/>
-				<textElement textAlignment="Center">
-					<font size="14" isBold="true"/>
-				</textElement>
-				<text><![CDATA[foi_pago]]></text>
+				<reportElement x="0" y="0" width="100" height="20" uuid="ebfcb3fa-c5cb-4dc8-8687-2c608198e7ef"/>
+				<text><![CDATA[codigo_prontuario]]></text>
 			</staticText>
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="20">
+		<band height="32">
 			<line>
 				<reportElement positionType="FixRelativeToBottom" x="0" y="19" width="555" height="1" uuid="3ad23568-d1bc-4a1d-8818-f51d75cdd644"/>
 			</line>
-			<textField isStretchWithOverflow="true">
-				<reportElement x="0" y="0" width="92" height="20" uuid="0862e99d-4939-40e3-afa0-5d99e6825e72"/>
-				<textElement>
-					<font size="14"/>
-				</textElement>
+			<textField>
+				<reportElement x="0" y="0" width="100" height="20" uuid="c8ddacc1-7890-4bf4-9f41-cbb1c62a1d1e"/>
 				<textFieldExpression><![CDATA[$F{codigo_prontuario}]]></textFieldExpression>
 			</textField>
-			<textField isStretchWithOverflow="true">
-				<reportElement x="92" y="0" width="92" height="20" uuid="2e80cfe1-4c45-41dd-b259-d7271cf150c3"/>
-				<textElement>
-					<font size="14"/>
-				</textElement>
+			<textField>
+				<reportElement x="100" y="0" width="100" height="20" uuid="1d996be1-bf0d-451e-a849-c574ae6af81c"/>
 				<textFieldExpression><![CDATA[$F{nome_cliente}]]></textFieldExpression>
 			</textField>
-			<textField isStretchWithOverflow="true">
-				<reportElement x="184" y="0" width="92" height="20" uuid="b9823f21-54ae-4d45-aa0d-0bc9e85ca6f4"/>
-				<textElement>
-					<font size="14"/>
-				</textElement>
+			<textField>
+				<reportElement x="200" y="0" width="100" height="20" uuid="59ef5d82-2b72-48a4-a2bd-c3b2dfa2a096"/>
 				<textFieldExpression><![CDATA[$F{nome_animal}]]></textFieldExpression>
 			</textField>
-			<textField isStretchWithOverflow="true">
-				<reportElement x="276" y="0" width="92" height="20" uuid="9a2ddb7f-04b4-4523-81e5-4e2a3962b8a7"/>
-				<textElement>
-					<font size="14"/>
-				</textElement>
+			<textField>
+				<reportElement x="276" y="0" width="100" height="20" uuid="27074bf6-59f2-4cd3-b113-d73c7a6975fb"/>
 				<textFieldExpression><![CDATA[$F{tipo_ocorrencia}]]></textFieldExpression>
 			</textField>
-			<textField isStretchWithOverflow="true" pattern="dd/MM/yyyy">
-				<reportElement x="368" y="0" width="92" height="20" uuid="ec446795-0504-48c6-8033-e334a19ee111"/>
-				<textElement>
-					<font size="14"/>
-				</textElement>
+			<textField>
+				<reportElement x="376" y="0" width="100" height="20" uuid="23e30541-6a8e-46a3-97c5-7d372dc66054"/>
 				<textFieldExpression><![CDATA[$F{data_ocorrencia}]]></textFieldExpression>
-			</textField>
-			<textField isStretchWithOverflow="true">
-				<reportElement x="460" y="0" width="92" height="20" uuid="0d7dd7e6-1f7a-4180-ad08-98d7b27145a0"/>
-				<textElement>
-					<font size="14"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{foi_pago}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
