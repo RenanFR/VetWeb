@@ -50,6 +50,7 @@ public class RelatorioController {
 			System.out.println(parameter + "	" + parameters[i]);
 			i++;
 		}
+		response.setContentType("application/pdf");
 		jasperService.gerarRelatorio(ReportFactory.createReport(reportType, parameters), response.getOutputStream());
 	}
 	
