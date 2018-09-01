@@ -42,11 +42,12 @@ public class RelatorioController {
 			HttpServletResponse response) throws IOException {
 		Report report = ReportFactory.createReport(reportType);
 		Enumeration<String> parametersRequest = request.getParameterNames();
-		Object[] parameters = new Object[report.getParameters().size()];
+		Object[] parameters = new Object[report.getParameters().size() + 2];
 		int i = 0;
 		while (parametersRequest.hasMoreElements()) {
 			String parameter = parametersRequest.nextElement();
 			parameters[i] = request.getParameter(parameter);
+			System.out.println(parameter + "	" + parameters[i]);
 			i++;
 		}
 		jasperService.gerarRelatorio(ReportFactory.createReport(reportType, parameters), response.getOutputStream());
