@@ -48,6 +48,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     	http.authorizeRequests()
                 .antMatchers("/endpoint/auth").permitAll()
                 .antMatchers("/integration/mappings").permitAll()
+                .antMatchers("/relatorios").permitAll()
                 .anyRequest().authenticated() 
                 .and().formLogin().loginPage("/login")
                 .permitAll()

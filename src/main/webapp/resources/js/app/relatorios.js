@@ -7,11 +7,9 @@ var buscarParametros = function() {
 	    url: '/vetweb/relatorios/' + relatorioSelecionado,
 	    contentType: 'text/html',
 	    success: function (data, textStatus, jqXHR) {
+	    	$('input').not('[value="reset"], [value="print"]').remove();
+	    	$('label').remove();
 			for (param in data.parameters) {
-				$('#' + data.parameters[param].key + '').remove();
-				$('#' + data.parameters[param].key + '').remove();
-				$('[for="' + data.parameters[param].key + '"]').remove();
-				$('[for="' + data.parameters[param].key + '"]').remove();
 				let form = $('#form');
 				form.append('<tr>');
 				let label = '<th><label for="' + data.parameters[param].key + '">' + data.parameters[param].key + '</label></th>';
@@ -24,8 +22,8 @@ var buscarParametros = function() {
 	        }
 	    },
 	    error: function (jqXHR, textStatus, errorThrown) {
-	    	$('#form input').remove();
-	    	$('#form label').remove();
+	    	$('input').not('[value="reset"], [value="print"]').remove();
+	    	$('label').remove();
 	    }
 	});	
 }
