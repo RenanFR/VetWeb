@@ -31,6 +31,7 @@ import com.vetweb.dao.AtendimentoDAO;
 import com.vetweb.dao.ExameDAO;
 import com.vetweb.dao.ProntuarioDAO;
 import com.vetweb.dao.VacinaDAO;
+import com.vetweb.jms.JMSNotificacaoOcorrenciaCliente;
 import com.vetweb.model.Agendamento;
 import com.vetweb.model.Animal;
 import com.vetweb.model.Exame;
@@ -71,6 +72,9 @@ public class ProntuarioController {
     
     @Autowired
     private AgendamentoDAO agendamentoDAO;
+    
+    @Autowired
+    private JMSNotificacaoOcorrenciaCliente jmsNotificaOcorrenciaCliente;
     
     public static String modelDML = null;
     
@@ -210,6 +214,8 @@ public class ProntuarioController {
 
 	@SuppressWarnings("static-access")
 	private void notificaCliente(OcorrenciaProntuario elementoProntuario, Prontuario prontuario) {//FIXME Enviar p/ JMS
+		jmsNotificaOcorrenciaCliente.sendNotification("notifica_ocorrencia_cliente", "message");
+		jmsNotificaOcorrenciaCliente.receive("notifica_ocorrencia_cliente");
 		emailService.enviar(prontuario.getAnimal().getProprietario(),
         		"Foi feita uma nova inclusao de " + elementoProntuario
         		+ " ao prontuario do seu animal " + prontuario.getAnimal().getNome() + "",

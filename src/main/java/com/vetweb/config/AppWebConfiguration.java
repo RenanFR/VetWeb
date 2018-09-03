@@ -5,9 +5,11 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.concurrent.TimeUnit;
 
+import javax.jms.ConnectionFactory;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 
+import org.apache.activemq.ActiveMQConnectionFactory;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cache.guava.GuavaCacheManager;
@@ -20,6 +22,7 @@ import org.springframework.format.datetime.standard.DateTimeFormatterRegistrar;
 import org.springframework.format.support.DefaultFormattingConversionService;
 import org.springframework.format.support.FormattingConversionService;
 import org.springframework.http.HttpStatus;
+import org.springframework.jms.annotation.EnableJms;
 import org.springframework.web.WebApplicationInitializer;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartResolver;
@@ -36,13 +39,14 @@ import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
 import com.google.common.cache.CacheBuilder;
 
-@EnableWebMvc
 @Configuration
+@EnableWebMvc
 @EnableCaching
+@EnableJms
 @ComponentScan(basePackages = {"com.vetweb.controller", "com.vetweb.dao", "com.vetweb.scheduled",
     "com.vetweb.model", "com.vetweb.dao.auth", "com.vetweb.model.auth", "com.vetweb.controller.advice",
     "com.vetweb.model.error", "com.vetweb.model.pojo", "com.vetweb.service", "com.vetweb.controller.rest",
-    "com.vetweb.endpoint", "com.vetweb.client", "com.vetweb.patterns"})
+    "com.vetweb.endpoint", "com.vetweb.client", "com.vetweb.patterns", "com.vetweb.jms"})
 public class AppWebConfiguration extends WebMvcConfigurerAdapter implements WebApplicationInitializer {
 	
     @Bean
@@ -116,6 +120,11 @@ public class AppWebConfiguration extends WebMvcConfigurerAdapter implements WebA
     			
     }
     
+    @Bean
+    public ConnectionFactory connectionFactory() {
+    	ConnectionFactory connectionFactory = new ActiveMQConnectionFactory("java:/ConnectionFactory");
+    	return connectionFactory;
+    }
 	@Override
 	public void onStartup(ServletContext servletContext) throws ServletException {
 		servletContext.setInitParameter("razaoSocial", "vetwork");		
