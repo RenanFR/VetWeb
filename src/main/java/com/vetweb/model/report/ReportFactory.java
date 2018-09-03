@@ -49,6 +49,9 @@ public class ReportFactory {
 				report = new ReportOcorrencia(null, null);
 			}
 		}
+		if (type == ReportType.Clientes_por_ano) {
+			report = new ReportClientesPorAno();
+		}
 		return report;
 	}
 

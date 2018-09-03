@@ -5,6 +5,7 @@ import java.io.OutputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -36,10 +37,13 @@ public class JasperService {
 		try {
 			Connection connection = getConnection();
 			String reportName = report.getType().name();
-			Map<String, Object> parameterMap = report
-													.getParameters()
-													.stream()
-													.collect(Collectors.toMap(param -> param.getKey(), param -> param.getValue()));
+			Map<String, Object> parameterMap = new HashMap<>();
+			if (report.getParameters() != null) {
+				parameterMap = report
+						.getParameters()
+						.stream()
+						.collect(Collectors.toMap(param -> param.getKey(), param -> param.getValue()));
+			}
 			String reportLocation = new ClassPathResource(reportName + ".jrxml").getFile().getAbsolutePath();
 			JasperCompileManager.compileReportToFile(reportLocation);
 			JasperPrint jasperPrint = JasperFillManager.fillReport(new ClassPathResource(reportName + ".jasper").getFile().getAbsolutePath(), parameterMap, connection);;

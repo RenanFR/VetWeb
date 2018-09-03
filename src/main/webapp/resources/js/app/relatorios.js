@@ -24,7 +24,8 @@ var buscarParametros = function() {
 	        }
 	    },
 	    error: function (jqXHR, textStatus, errorThrown) {
-	    	
+	    	$('#form input').remove();
+	    	$('#form label').remove();
 	    }
 	});	
 }

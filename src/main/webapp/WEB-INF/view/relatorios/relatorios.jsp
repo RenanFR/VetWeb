@@ -29,7 +29,7 @@
                       <td>
                       	<select name="tipoRelatorio" id="tipoRelatorio">
                            	<option value="Ocorrencia"><spring:message code="ocorrenciasPorTipo"	/></option>
-                           	<option value="Ocorrencia"><spring:message code="ocorrenciasPorTipo"	/></option>
+                           	<option value="Clientes_por_ano"><spring:message code="clientesPorAno"	/></option>
 						</select>
                       </td>
                   </tr>

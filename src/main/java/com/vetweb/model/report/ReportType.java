@@ -2,6 +2,7 @@ package com.vetweb.model.report;
 
 public enum ReportType {
 	
-	Ocorrencia
+	Ocorrencia,
+	Clientes_por_ano
 
 }
