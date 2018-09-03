@@ -18,6 +18,7 @@ import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRExporter;
 import net.sf.jasperreports.engine.JRExporterParameter;
 import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.export.JRPdfExporter;
@@ -50,6 +51,7 @@ public class JasperService {
 			JRExporter jrExporter = new JRPdfExporter();
 			jrExporter.setParameter(JRExporterParameter.JASPER_PRINT, jasperPrint);
 			jrExporter.setParameter(JRExporterParameter.OUTPUT_STREAM, outputStream);
+			JasperExportManager.exportReportToPdfFile(jasperPrint, reportName.concat(".pdf"));
 			jrExporter.exportReport();
 			connection.close();
 		} catch (JRException e) {
