@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Clientes_por_ano" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="95acdb59-5d07-4554-89dc-bd8c551d6bf5">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Clientes_por_ano" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="95acdb59-5d07-4554-89dc-bd8c551d6bf5">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
@@ -12,23 +12,6 @@
 		<group name="qtd_clientes">
 			<groupExpression><![CDATA[$F{qtd_clientes}]]></groupExpression>
 		</group>
-	</subDataset>
-	<subDataset name="listagem_clientes" uuid="d17031c2-e52f-4bbd-8197-10c706c3956f">
-		<queryString language="SQL">
-			<![CDATA[select pessoa.nome nome_cliente, pessoa.email email_cliente, pessoa.cep cep_cliente, pessoa.celular celular_cliente, pessoa.inclusao data_cadastro,
-age(pessoa.nascimento) idade_cliente, count(animal.animalid) qtd_animais
-from tbl_pessoa pessoa
-inner join tbl_cliente cliente on cliente.pessoaid = pessoa.pessoaid
-inner join tbl_animal animal on cliente.pessoaid = animal.proprietarioid
-group by nome_cliente, email_cliente, cep_cliente, celular_cliente, data_cadastro, idade_cliente]]>
-		</queryString>
-		<field name="nome_cliente" class="java.lang.String"/>
-		<field name="email_cliente" class="java.lang.String"/>
-		<field name="cep_cliente" class="java.lang.String"/>
-		<field name="celular_cliente" class="java.lang.String"/>
-		<field name="data_cadastro" class="java.sql.Date"/>
-		<field name="idade_cliente" class="org.postgresql.util.PGInterval"/>
-		<field name="qtd_animais" class="java.lang.Long"/>
 	</subDataset>
 	<queryString>
 		<![CDATA[select pessoa.nome nome_cliente, pessoa.email email_cliente, pessoa.cep cep_cliente, pessoa.celular celular_cliente, pessoa.inclusao data_cadastro,
@@ -53,7 +36,7 @@ group by nome_cliente, email_cliente, cep_cliente, celular_cliente, data_cadastr
 			<staticText>
 				<reportElement x="0" y="0" width="555" height="79" uuid="bd6a2c82-7f51-4de6-858f-51fad618a029"/>
 				<textElement textAlignment="Center">
-					<font fontName="Verdana" size="24"/>
+					<font fontName="Garuda" size="24"/>
 				</textElement>
 				<text><![CDATA[Relatório de clientes]]></text>
 			</staticText>
