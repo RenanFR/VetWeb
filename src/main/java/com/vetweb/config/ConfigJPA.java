@@ -1,14 +1,18 @@
 package com.vetweb.config;
 // @author renan.rodrigues@metasix.com.br
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Properties;
 
 import javax.persistence.EntityManagerFactory;
 
 import javax.sql.DataSource;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Profile;
+import org.springframework.core.env.Environment;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.JpaVendorAdapter;
@@ -20,8 +24,11 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableTransactionManagement
 public class ConfigJPA {
 	
+	@Autowired
+	private Environment environment;
+	
     @Bean
-    public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
+    public LocalContainerEntityManagerFactoryBean entityManagerFactory() throws URISyntaxException {
         LocalContainerEntityManagerFactoryBean entityManagerFactory = new LocalContainerEntityManagerFactoryBean();
         entityManagerFactory.setDataSource(dataSource());
         entityManagerFactory.setPackagesToScan(new String[]{"com.vetweb.model", 
@@ -34,12 +41,16 @@ public class ConfigJPA {
     
     @Bean
     @Profile("production")
-    private DataSource dataSource(){
+    private DataSource dataSource() throws URISyntaxException{
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
         dataSource.setDriverClassName("org.postgresql.Driver");
-        dataSource.setUrl("jdbc:postgresql://localhost:5432/vetweb_database");
-        dataSource.setUsername("postgres");
-        dataSource.setPassword("postgres");
+        URI uri = new URI(environment.getProperty("DATABASE_URL"));
+//        dataSource.setUrl("jdbc:postgresql://localhost:5432/vetweb_database");
+        dataSource.setUrl("jdbc:postgresql://" + uri.getHost() + ":" + uri.getPort() + "/" + uri.getPath());
+        dataSource.setUsername(uri.getUserInfo().split(":")[0]);
+//        dataSource.setUsername("postgres");
+        dataSource.setPassword(uri.getUserInfo().split(":")[1]);
+//        dataSource.setPassword("postgres");
         return dataSource;
     }
     
