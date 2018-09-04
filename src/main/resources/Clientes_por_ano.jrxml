@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Clientes_por_ano" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="95acdb59-5d07-4554-89dc-bd8c551d6bf5">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<subDataset name="qtd_clientes" uuid="ea137dea-652d-4ef7-b0c8-90347989a9e2">
+		<queryString language="SQL">
+			<![CDATA[SELECT COUNT(*) qtd_clientes,  date_part('year', cliente.inclusao) ano_cadastro FROM tbl_pessoa cliente GROUP BY ano_cadastro]]>
+		</queryString>
+		<field name="qtd_clientes" class="java.lang.Long"/>
+		<field name="ano_cadastro" class="java.lang.Double"/>
+		<group name="qtd_clientes">
+			<groupExpression><![CDATA[$F{qtd_clientes}]]></groupExpression>
+		</group>
+	</subDataset>
+	<queryString>
+		<![CDATA[select pessoa.nome nome_cliente, pessoa.email email_cliente, pessoa.cep cep_cliente, pessoa.celular celular_cliente, pessoa.inclusao data_cadastro,
+age(pessoa.nascimento) idade_cliente, count(animal.animalid) qtd_animais
+from tbl_pessoa pessoa
+inner join tbl_cliente cliente on cliente.pessoaid = pessoa.pessoaid
+inner join tbl_animal animal on cliente.pessoaid = animal.proprietarioid
+group by nome_cliente, email_cliente, cep_cliente, celular_cliente, data_cadastro, idade_cliente]]>
+	</queryString>
+	<field name="nome_cliente" class="java.lang.String"/>
+	<field name="email_cliente" class="java.lang.String"/>
+	<field name="cep_cliente" class="java.lang.String"/>
+	<field name="celular_cliente" class="java.lang.String"/>
+	<field name="data_cadastro" class="java.sql.Date"/>
+	<field name="idade_cliente" class="org.postgresql.util.PGInterval"/>
+	<field name="qtd_animais" class="java.lang.Long"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="80" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="555" height="79" uuid="bd6a2c82-7f51-4de6-858f-51fad618a029"/>
+				<textElement textAlignment="Center">
+					<font fontName="Garuda" size="24"/>
+				</textElement>
+				<text><![CDATA[Relatório de clientes]]></text>
+			</staticText>
+		</band>
+	</title>
+	<columnHeader>
+		<band height="61" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="2" width="100" height="20" uuid="2435edaf-948a-4124-98ff-6b850fd74953"/>
+				<text><![CDATA[nome_cliente]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="100" y="2" width="100" height="20" uuid="2e03e0cf-0899-491e-824b-58190bfaaf71"/>
+				<text><![CDATA[email_cliente]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="200" y="2" width="100" height="20" uuid="a3e4a565-2301-4269-b36d-5f260fa64409"/>
+				<text><![CDATA[cep_cliente]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="300" y="2" width="100" height="20" uuid="f5c5de76-0635-413d-ae66-daee5a1afc1f"/>
+				<text><![CDATA[data_cadastro]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="400" y="2" width="100" height="20" uuid="a955118e-c987-4d17-8484-797e41eb4f2c"/>
+				<text><![CDATA[idade_cliente]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="500" y="2" width="100" height="20" uuid="9c2fc0f2-56ae-4d68-b8c6-b4f434f30386"/>
+				<text><![CDATA[qtd_animais]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="70" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="100" height="20" uuid="8cf8b063-0e62-45a1-ba52-58f541b68c06"/>
+				<textFieldExpression><![CDATA[$F{nome_cliente}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="false">
+				<reportElement x="100" y="0" width="100" height="20" uuid="b89cc6cb-eb53-474e-a829-650a7873cf8a"/>
+				<textFieldExpression><![CDATA[$F{email_cliente}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="200" y="0" width="100" height="20" uuid="186f62ea-1c2c-4a0c-a17b-9c575bb0652c"/>
+				<textFieldExpression><![CDATA[$F{cep_cliente}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="300" y="0" width="100" height="20" uuid="8bbb7aad-aa3b-47bc-9c43-97c5d37d51d9"/>
+				<textFieldExpression><![CDATA[$F{data_cadastro}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="400" y="0" width="100" height="20" uuid="13bc4d1f-d01e-4f7b-854d-6d623135c3c3"/>
+				<textFieldExpression><![CDATA[""+$F{idade_cliente}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="500" y="0" width="100" height="20" uuid="ea5ef3a1-9fb0-4ec4-856a-38d53e8d3654"/>
+				<textFieldExpression><![CDATA[$F{qtd_animais}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<summary>
+		<band height="97" splitType="Stretch">
+			<barChart>
+				<chart>
+					<reportElement x="0" y="0" width="555" height="97" uuid="375d0959-b983-47a4-8503-eecdde20afa4"/>
+					<chartTitle/>
+					<chartSubtitle/>
+					<chartLegend/>
+				</chart>
+				<categoryDataset>
+					<dataset>
+						<datasetRun subDataset="qtd_clientes" uuid="f64955f2-a1aa-4da4-ad0e-8272943a5129"/>
+					</dataset>
+					<categorySeries>
+						<seriesExpression><![CDATA[""]]></seriesExpression>
+						<categoryExpression><![CDATA[$F{ano_cadastro}]]></categoryExpression>
+						<valueExpression><![CDATA[$F{qtd_clientes}]]></valueExpression>
+					</categorySeries>
+				</categoryDataset>
+				<barPlot>
+					<plot/>
+					<itemLabel/>
+					<categoryAxisFormat>
+						<axisFormat/>
+					</categoryAxisFormat>
+					<valueAxisFormat>
+						<axisFormat/>
+					</valueAxisFormat>
+				</barPlot>
+			</barChart>
+		</band>
+	</summary>
+</jasperReport>

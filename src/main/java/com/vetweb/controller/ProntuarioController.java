@@ -25,11 +25,14 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.vetweb.dao.AgendamentoDAO;
 import com.vetweb.dao.AnimalDAO;
 import com.vetweb.dao.AtendimentoDAO;
 import com.vetweb.dao.ExameDAO;
 import com.vetweb.dao.ProntuarioDAO;
 import com.vetweb.dao.VacinaDAO;
+import com.vetweb.jms.JMSNotificacaoOcorrenciaCliente;
+import com.vetweb.model.Agendamento;
 import com.vetweb.model.Animal;
 import com.vetweb.model.Exame;
 import com.vetweb.model.OcorrenciaAtendimento;
@@ -66,6 +69,12 @@ public class ProntuarioController {
     
     @Autowired
     private ExameDAO exameDAO;
+    
+    @Autowired
+    private AgendamentoDAO agendamentoDAO;
+    
+    @Autowired
+    private JMSNotificacaoOcorrenciaCliente jmsNotificaOcorrenciaCliente;
     
     public static String modelDML = null;
     
@@ -177,19 +186,19 @@ public class ProntuarioController {
 	    		.map(pat -> pat.getNome()).collect(Collectors.toList()));
 		modelAndView.addObject("exames", exameDAO.listarTodos().stream()
     			.map(exame -> exame.getDescricao()).collect(Collectors.toList()));
-		List<OcorrenciaProntuario> elementosHistorico = new ArrayList<>();
-		prontuario.getAtendimentos()
-			.forEach(at -> elementosHistorico
-					.add(at));
-		prontuario.getPatologias()
-			.forEach(pat -> elementosHistorico
-					.add(pat));
-		prontuario.getVacinas()
-			.forEach(vac -> elementosHistorico
-					.add(vac));
+		List<OcorrenciaProntuario> elementosHistorico = adicionaHistoricoAoProntuario(prontuario);
 		modelAndView.addObject("historico", elementosHistorico);
         return modelAndView;
     }
+
+	private List<OcorrenciaProntuario> adicionaHistoricoAoProntuario(Prontuario prontuario) {
+		List<OcorrenciaProntuario> elementosHistorico = new ArrayList<>();
+		prontuario.getAtendimentos().forEach(at -> elementosHistorico.add(at));
+		prontuario.getPatologias().forEach(pat -> elementosHistorico.add(pat));
+		prontuario.getVacinas().forEach(vac -> elementosHistorico.add(vac));
+		prontuario.getExames().forEach(ex -> elementosHistorico.add(ex));
+		return elementosHistorico;
+	}
     
     @RequestMapping(value = "/adicionarAtendimento", method = RequestMethod.POST)
     public ModelAndView adcAtendimento(@ModelAttribute("atendimento") OcorrenciaAtendimento atendimento,
@@ -205,6 +214,8 @@ public class ProntuarioController {
 
 	@SuppressWarnings("static-access")
 	private void notificaCliente(OcorrenciaProntuario elementoProntuario, Prontuario prontuario) {//FIXME Enviar p/ JMS
+		jmsNotificaOcorrenciaCliente.sendNotification("notifica_ocorrencia_cliente", "message");
+		jmsNotificaOcorrenciaCliente.receive("notifica_ocorrencia_cliente");
 		emailService.enviar(prontuario.getAnimal().getProprietario(),
         		"Foi feita uma nova inclusao de " + elementoProntuario
         		+ " ao prontuario do seu animal " + prontuario.getAnimal().getNome() + "",
@@ -222,7 +233,7 @@ public class ProntuarioController {
     	Patologia pat = animalDAO.buscarPatologiaPorDescricao(patologiaStr);
 		animalDAO.salvarPatologia(pat);
 		if (prontuarioPatologiaId != null) {
-			prontuarioPatologia = prontuarioDAO.buscarOcorrenciaDaPatologia(prontuarioPatologiaId);
+			prontuarioPatologia = prontuarioDAO.buscarOcorrenciaPatologia(prontuarioPatologiaId);
 		}
 		prontuarioPatologia.setPatologia(pat);
 		Prontuario prontuario = prontuarioDAO.buscarPorId(prontuarioId);
@@ -236,16 +247,25 @@ public class ProntuarioController {
     @RequestMapping(value="/adicionarExame", method=RequestMethod.POST)
     public ModelAndView adcExame(@RequestParam("prontuarioId") final Long prontuarioId,
     		@RequestParam("exame") final String exameDescricao, 
-    		@RequestParam("ocorrenciaId") final Long ocorrenciaId,
+    		@RequestParam("ocorrenciaExameId") final Long ocorrenciaId,
     		@RequestParam("data") final String inclusaoExame) {
     	Prontuario prontuario = prontuarioDAO.buscarPorId(prontuarioId);
     	OcorrenciaExame ocorrenciaExame = new OcorrenciaExame();
+    	ocorrenciaExame.setOcorrenciaId(ocorrenciaId);
     	ocorrenciaExame.setProntuario(prontuario);
     	ocorrenciaExame.setData(LocalDateTime.parse(inclusaoExame, DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm")));
     	ocorrenciaExame.setPago(false);
     	ocorrenciaExame.setTipo(TipoOcorrenciaProntuario.EXAME);
     	Exame exame = exameDAO.buscarPorDescricao(exameDescricao);
 		ocorrenciaExame.setExame(exame);
+		if (ocorrenciaExame.getData().isAfter(LocalDateTime.now())) {
+			Agendamento agendamento = new Agendamento();
+			agendamento.setOcorrencia(ocorrenciaExame);
+			agendamento.setTipo(TipoOcorrenciaProntuario.EXAME);
+			agendamento.setDataHoraInicial(ocorrenciaExame.getData());
+			agendamento.setDataHoraFinal(ocorrenciaExame.getData().plusHours(1));
+			agendamentoDAO.salvar(agendamento);
+		}
 		prontuarioDAO.salvarOcorrenciaExame(ocorrenciaExame);
     	return new ModelAndView("redirect:prontuarioDoAnimal/" + prontuario.getAnimal().getAnimalId());
     }
@@ -306,9 +326,22 @@ public class ProntuarioController {
     	Prontuario prontuario = prontuarioDAO.buscarPorId(prontuarioId);
     	ModelAndView modelAndView = new ModelAndView("redirect:/prontuario/prontuarioDoAnimal/" + prontuario.getAnimal().getAnimalId());
 		modelAndView.addObject("prontuario", prontuario);
-    	prontuarioDAO.removerOcorrenciaPatologia(prontuarioDAO.buscarOcorrenciaDaPatologia(patologiaId));
+    	prontuarioDAO.removerOcorrenciaPatologia(prontuarioDAO.buscarOcorrenciaPatologia(patologiaId));
     	adicionarListasAoProntuario(modelAndView);
 		return modelAndView;
+    }
+    
+    @RequestMapping(value = "/removerExameDoProntuario/{prontuarioId}/{exameId}", method = RequestMethod.GET)
+    public ModelAndView removerExameDoProntuario(@PathVariable("prontuarioId")Long prontuarioId, @PathVariable("exameId")Long exameId,
+    		@ModelAttribute("atendimento") OcorrenciaAtendimento atendimento,
+    		@ModelAttribute("prontuarioPatologia") Patologia patologia,
+    		@ModelAttribute("prontuarioVacina") Vacina vacina) {
+    	Prontuario prontuario = prontuarioDAO.buscarPorId(prontuarioId);
+    	ModelAndView modelAndView = new ModelAndView("redirect:/prontuario/prontuarioDoAnimal/" + prontuario.getAnimal().getAnimalId());
+    	modelAndView.addObject("prontuario", prontuario);
+    	prontuarioDAO.removerOcorrenciaExame(prontuarioDAO.buscarOcorrenciaExame(exameId));
+    	adicionarListasAoProntuario(modelAndView);
+    	return modelAndView;
     }
     
     @SuppressWarnings("rawtypes")

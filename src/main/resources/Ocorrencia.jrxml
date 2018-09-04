@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Ocorrencia" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="62cf1552-9cdf-4b93-bdf6-880b746e6546">
+	<property name="ireport.zoom" value="1.6105100000000008"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<subDataset name="relatorio_tipos" uuid="5dc2e2c8-f122-40a2-9492-7d8aaf519e94">
+		<queryString language="SQL">
+			<![CDATA[select tipo from tbl_ocorrencia group by tipo]]>
+		</queryString>
+		<field name="tipo" class="java.lang.String"/>
+		<group name="tipo">
+			<groupExpression><![CDATA[$F{tipo}]]></groupExpression>
+		</group>
+	</subDataset>
+	<subDataset name="relatorio_por_tipo" uuid="30a1bf74-3780-4733-8923-4e0c711573b6">
+		<queryString language="SQL">
+			<![CDATA[select count(*) qtd, tipo from tbl_ocorrencia group by tipo]]>
+		</queryString>
+		<field name="qtd" class="java.lang.Long"/>
+		<field name="tipo" class="java.lang.String"/>
+		<group name="tipo">
+			<groupExpression><![CDATA[$F{tipo}]]></groupExpression>
+		</group>
+		<group name="qtd">
+			<groupExpression><![CDATA[$F{qtd}]]></groupExpression>
+		</group>
+	</subDataset>
+	<parameter name="Data_Ini" class="java.util.Date">
+		<defaultValueExpression><![CDATA[new java.util.Date("08/27/2018")]]></defaultValueExpression>
+	</parameter>
+	<parameter name="Data_Fim" class="java.util.Date">
+		<defaultValueExpression><![CDATA[new java.util.Date("08/29/2018")]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT prontuario.prontuarioid codigo_prontuario, pessoa.nome nome_cliente, animal.nome nome_animal, ocorrencia.tipo tipo_ocorrencia, ocorrencia.data data_ocorrencia,
+exame.pago exame_pago, atendimento.pago atendimento_pago, vacina.pago vacina_pago
+FROM tbl_prontuario prontuario, tbl_animal animal, tbl_cliente cliente, tbl_pessoa pessoa, tbl_ocorrencia ocorrencia
+LEFT JOIN tbl_exame_event exame ON ocorrencia.ocorrenciaid = exame.ocorrenciaid
+LEFT JOIN tbl_patologia_event patologia ON ocorrencia.ocorrenciaid = patologia.ocorrenciaid
+LEFT JOIN tbl_atendimento atendimento ON ocorrencia.ocorrenciaid = atendimento.ocorrenciaid
+LEFT JOIN tbl_vacina_event vacina ON ocorrencia.ocorrenciaid = vacina.ocorrenciaid
+WHERE prontuario.prontuarioid = atendimento.prontuarioid
+OR prontuario.prontuarioid = exame.prontuarioid
+OR prontuario.prontuarioid = patologia.prontuarioid
+OR prontuario.prontuarioid = vacina.prontuarioid
+AND prontuario.animalid = animal.animalid
+AND cliente.pessoaid = pessoa.pessoaid
+AND ocorrencia.data BETWEEN $P{Data_Ini} AND $P{Data_Fim};]]>
+	</queryString>
+	<field name="codigo_prontuario" class="java.lang.Long"/>
+	<field name="nome_cliente" class="java.lang.String"/>
+	<field name="nome_animal" class="java.lang.String"/>
+	<field name="tipo_ocorrencia" class="java.lang.String"/>
+	<field name="data_ocorrencia" class="java.sql.Timestamp"/>
+	<field name="exame_pago" class="java.lang.Boolean"/>
+	<field name="atendimento_pago" class="java.lang.Boolean"/>
+	<field name="vacina_pago" class="java.lang.Boolean"/>
+	<background>
+		<band/>
+	</background>
+	<title>
+		<band height="72">
+			<frame>
+				<reportElement mode="Opaque" x="-20" y="-20" width="595" height="92" backcolor="#006699" uuid="474f1cc7-285f-4a9b-8397-9609a90d8b4c"/>
+				<staticText>
+					<reportElement x="20" y="20" width="234" height="43" forecolor="#FFFFFF" uuid="75edba26-48e2-491b-b1b8-49b4236e9db0"/>
+					<textElement>
+						<font size="34" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Ocorrências]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="296" y="43" width="279" height="20" forecolor="#FFFFFF" uuid="2bf9ed19-d7fc-4467-b35a-a01a6e40cd0e"/>
+					<textElement textAlignment="Right">
+						<font size="14" isBold="false"/>
+					</textElement>
+					<text><![CDATA[Todas as ocorrências de prontuário]]></text>
+				</staticText>
+			</frame>
+		</band>
+	</title>
+	<columnHeader>
+		<band height="21">
+			<line>
+				<reportElement x="-20" y="20" width="595" height="1" forecolor="#666666" uuid="d4f4445b-379b-429d-941a-30b9984751d9"/>
+			</line>
+			<staticText>
+				<reportElement x="100" y="1" width="100" height="20" uuid="2b2877c0-acf7-4b93-81fb-228e7ec9f10d"/>
+				<text><![CDATA[nome_cliente]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="200" y="1" width="100" height="20" uuid="669b3ce2-1b59-4784-b6a2-b86b89d89977"/>
+				<text><![CDATA[nome_animal]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="276" y="1" width="100" height="20" uuid="484a7f52-bf13-40ec-8164-81cb9f0c557b"/>
+				<text><![CDATA[tipo_ocorrencia]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="376" y="1" width="100" height="20" uuid="539c9e7e-840e-4def-9140-d435dcf27181"/>
+				<text><![CDATA[data_ocorrencia]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="0" width="100" height="20" uuid="ebfcb3fa-c5cb-4dc8-8687-2c608198e7ef"/>
+				<text><![CDATA[codigo_prontuario]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="32">
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="0" y="19" width="555" height="1" uuid="3ad23568-d1bc-4a1d-8818-f51d75cdd644"/>
+			</line>
+			<textField>
+				<reportElement x="0" y="0" width="100" height="20" uuid="c8ddacc1-7890-4bf4-9f41-cbb1c62a1d1e"/>
+				<textFieldExpression><![CDATA[$F{codigo_prontuario}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="100" y="0" width="100" height="20" uuid="1d996be1-bf0d-451e-a849-c574ae6af81c"/>
+				<textFieldExpression><![CDATA[$F{nome_cliente}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="200" y="0" width="100" height="20" uuid="59ef5d82-2b72-48a4-a2bd-c3b2dfa2a096"/>
+				<textFieldExpression><![CDATA[$F{nome_animal}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="276" y="0" width="100" height="20" uuid="27074bf6-59f2-4cd3-b113-d73c7a6975fb"/>
+				<textFieldExpression><![CDATA[$F{tipo_ocorrencia}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="376" y="0" width="100" height="20" uuid="23e30541-6a8e-46a3-97c5-7d372dc66054"/>
+				<textFieldExpression><![CDATA[$F{data_ocorrencia}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band/>
+	</columnFooter>
+	<pageFooter>
+		<band height="22">
+			<textField>
+				<reportElement x="435" y="1" width="80" height="20" uuid="c484086e-1fdc-4aa7-bfc8-bc5a84beefa1"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="515" y="1" width="40" height="20" uuid="fb0ada34-e03d-49df-9a00-922e34ba394b"/>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="104">
+			<pieChart>
+				<chart>
+					<reportElement x="0" y="0" width="555" height="104" uuid="eaaac020-e68f-402b-a636-441ffc5c32d3"/>
+					<chartTitle/>
+					<chartSubtitle/>
+					<chartLegend/>
+				</chart>
+				<pieDataset>
+					<dataset>
+						<datasetRun subDataset="relatorio_por_tipo" uuid="f4e6c11a-9524-46f8-a63b-ca32d4061449"/>
+					</dataset>
+					<keyExpression><![CDATA[$F{tipo}]]></keyExpression>
+					<valueExpression><![CDATA[$F{qtd}]]></valueExpression>
+				</pieDataset>
+				<piePlot>
+					<plot/>
+					<itemLabel/>
+				</piePlot>
+			</pieChart>
+		</band>
+	</summary>
+</jasperReport>

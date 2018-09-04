@@ -65,7 +65,35 @@ var ajaxService = {
 		    	alert('ERRO AO BUSCAR A VACINA PARA EDIÇÃO.	');
 		    }
 		});	
+	},
+	
+	editarExame: function(exameId) {
 		
+		var inputExameId = $('#ocorrenciaExameId');
+		var select = $("select[id='exames']");
+		$.ajax({
+			type: 'GET',
+			url: '/vetweb/ajax/prontuario/editar-ocorrencia/exame/' + exameId,
+			contentType: 'text/html',
+			success: function (data, textStatus, jqXHR) {
+				inputExameId.val(data.ocorrenciaId);
+				select.val(data.exame.descricao);
+				var date = new Date();
+				var day = date.getDate();
+				var month = date.getMonth() + 1;
+				var year = date.getFullYear();
+				var hours = date.getHours();
+				var minutes = date.getMinutes();
+				if (day < 10) { day = '0'+ day} 
+				if (month < 10) { month = '0' + month} 
+				if (minutes < 10) { minutes = '0' + minutes} 
+				date = year + '-' + month + '-' + day + 'T' + hours + ':' + minutes;
+				$('#dataExame').val(date);
+			},
+			error: function (jqXHR, textStatus, errorThrown) {
+				alert('ERRO AO BUSCAR EXAME PARA EDIÇÃO.	');
+			}
+		});	
 	},
 	
 	editarPatologia: function(prontuarioPatologiaId) {

@@ -29,6 +29,13 @@ public class OcorrenciaExame extends OcorrenciaProntuario implements Serializabl
     private Prontuario prontuario;
     
     public boolean pago;
+    
+    public OcorrenciaExame() {
+	}
+
+	public OcorrenciaExame(Exame exame) {
+		this.exame = exame;
+	}
 
 	public Exame getExame() {
 		return exame;

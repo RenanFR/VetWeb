@@ -13,7 +13,8 @@
     <jsp:attribute name="script">
         <script src="<c:url value="/resources/js/app/ajaxService.js"></c:url>" type="text/javascript"></script>
         <script>
-        	$(document).ready(ajaxService.buscarRacasPorEspecie());
+        	$(document)
+        		.ready(ajaxService.buscarRacasPorEspecie());
         </script>
     </jsp:attribute>
     <jsp:body>

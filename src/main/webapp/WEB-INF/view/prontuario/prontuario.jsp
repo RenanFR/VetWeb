@@ -118,6 +118,16 @@
 										  	</button>
 										</a>
 									</c:if>
+									<c:if test="${elementoHistorico.tipo == 'EXAME'}">
+										<button data-toggle="modal" data-target="#modalExame" onclick="ajaxService.editarExame(${elementoHistorico.ocorrenciaId})">
+											<i class="fa fa-file-text-o fa-lg"></i>
+										</button>
+										<a href="<c:url value="/prontuario/removerExameDoProntuario/${prontuario.prontuarioId}/${elementoHistorico.ocorrenciaId}"></c:url>">
+										  	<button>
+											  	<i class="fa fa-trash-o fa-2x"></i>
+										  	</button>
+										</a>
+									</c:if>
 									${elementoHistorico.tipo}
 								</td>
 								<td>${elementoHistorico.descricao}</td>
