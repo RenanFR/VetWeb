@@ -38,8 +38,8 @@
               
             </table>
             
-            <input type="reset" value="reset" class="btn btn-primary"   />
-            <input type="submit" value="print" class="btn btn-primary"   />
+            <input type="reset" value="Reset" class="btn btn-primary"   />
+            <input type="submit" value="Print" class="btn btn-primary"   />
               
           </form:form>
 
