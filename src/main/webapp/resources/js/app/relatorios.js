@@ -7,7 +7,7 @@ var buscarParametros = function() {
 	    url: '/vetweb/relatorios/' + relatorioSelecionado,
 	    contentType: 'text/html',
 	    success: function (data, textStatus, jqXHR) {
-	    	$('input').not('[value="Reset"], [value="Print"]').remove();
+	    	$('input').not('[value="Reset"], [value="Print"], [name="_csrf"]').remove();
 	    	$('label').remove();
 			for (param in data.parameters) {
 				let form = $('#form');
@@ -22,7 +22,7 @@ var buscarParametros = function() {
 	        }
 	    },
 	    error: function (jqXHR, textStatus, errorThrown) {
-	    	$('input').not('[value="reset"], [value="print"]').remove();
+	    	$('input').not('[value="Reset"], [value="Print"], [name="_csrf"]').remove();
 	    	$('label').remove();
 	    }
 	});	
