@@ -125,13 +125,15 @@ public class AppWebConfiguration extends WebMvcConfigurerAdapter implements WebA
     	ConnectionFactory connectionFactory = new ActiveMQConnectionFactory("java:/ConnectionFactory");
     	return connectionFactory;
     }
+    
 	@Override
 	public void onStartup(ServletContext servletContext) throws ServletException {
-		servletContext.setInitParameter("razaoSocial", "vetwork");		
+		servletContext.setInitParameter("razaoSocial", "vetwork");
 		servletContext.setInitParameter("fundadaEm", LocalDate.now()
 				.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));	
 		servletContext.setInitParameter("cnpj", "11.545.952/0001-07");
 		servletContext.setInitParameter("proprietario", "proprietario");
+	    servletContext.setInitParameter("spring.profiles.active", "development");
 	}
 	
 }

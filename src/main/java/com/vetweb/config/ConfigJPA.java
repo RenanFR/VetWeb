@@ -28,9 +28,9 @@ public class ConfigJPA {
 	private Environment environment;
 	
     @Bean
-    public LocalContainerEntityManagerFactoryBean entityManagerFactory() throws URISyntaxException {
+    public LocalContainerEntityManagerFactoryBean entityManagerFactory(DataSource dataSource) throws URISyntaxException {
         LocalContainerEntityManagerFactoryBean entityManagerFactory = new LocalContainerEntityManagerFactoryBean();
-        entityManagerFactory.setDataSource(dataSource());
+        entityManagerFactory.setDataSource(dataSource);
         entityManagerFactory.setPackagesToScan(new String[]{"com.vetweb.model", 
             "com.vetweb.model.auth"});
         JpaVendorAdapter adapter = new HibernateJpaVendorAdapter();
@@ -44,14 +44,23 @@ public class ConfigJPA {
     private DataSource dataSource() throws URISyntaxException{
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
         dataSource.setDriverClassName("org.postgresql.Driver");
-        URI uri = new URI(environment.getProperty("DATABASE_URL"));
-//        dataSource.setUrl("jdbc:postgresql://localhost:5432/vetweb_database");
-        dataSource.setUrl("jdbc:postgresql://" + uri.getHost() + ":" + uri.getPort() + "/" + uri.getPath());
-        dataSource.setUsername(uri.getUserInfo().split(":")[0]);
-//        dataSource.setUsername("postgres");
-        dataSource.setPassword(uri.getUserInfo().split(":")[1]);
-//        dataSource.setPassword("postgres");
+    	URI uri = new URI(environment.getProperty("DATABASE_URL"));
+    	dataSource.setUrl("jdbc:postgresql://" + uri.getHost() + ":" + uri.getPort() + "/" + uri.getPath());
+    	dataSource.setUsername(uri.getUserInfo().split(":")[0]);
+    	dataSource.setPassword(uri.getUserInfo().split(":")[1]);
         return dataSource;
+    }
+    
+    @Bean
+    @Profile("development")
+    private DataSource source() {
+    	DriverManagerDataSource dataSource = new DriverManagerDataSource();
+    	dataSource.setDriverClassName("org.postgresql.Driver");
+    	dataSource.setUrl("jdbc:postgresql://localhost:5432/vetweb_database");
+    	dataSource.setUsername("postgres");
+    	dataSource.setPassword("postgres");
+    	return dataSource;
+    	
     }
     
     private Properties properties(){
