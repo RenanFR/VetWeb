@@ -248,6 +248,12 @@
 		   <groupId>org.apache.activemq</groupId>
 		   <artifactId>activemq-all</artifactId>
 		   <version>5.15.0</version>
+		</dependency>
+		
+		<dependency>
+		    <groupId>javax.el</groupId>
+		    <artifactId>javax.el-api</artifactId>
+		    <version>3.0.0</version>
 		</dependency>		
 		
     </dependencies>
