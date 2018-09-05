@@ -45,7 +45,6 @@ import com.vetweb.model.TipoDeAtendimento;
 import com.vetweb.model.Vacina;
 import com.vetweb.model.pojo.OcorrenciaProntuario;
 import com.vetweb.model.pojo.TipoOcorrenciaProntuario;
-import com.vetweb.service.EmailService;
 
 @Controller
 @Transactional
@@ -63,9 +62,6 @@ public class ProntuarioController {
     
     @Autowired
     private VacinaDAO vacinaDAO;
-    
-    @Autowired
-    private EmailService emailService;
     
     @Autowired
     private ExameDAO exameDAO;
@@ -208,18 +204,13 @@ public class ProntuarioController {
     	Prontuario prontuario = prontuarioDAO.buscarPorId(prontuarioId);
     	atendimento.setProntuario(prontuario);
         prontuarioDAO.salvarAtendimento(atendimento);
-        notificaCliente(atendimento, prontuario);
+        notificaCliente(atendimento);
         return new ModelAndView("redirect:prontuarioDoAnimal/" + prontuario.getAnimal().getAnimalId());
     }
 
-	@SuppressWarnings("static-access")
-	private void notificaCliente(OcorrenciaProntuario elementoProntuario, Prontuario prontuario) {//FIXME Enviar p/ JMS
-		jmsNotificaOcorrenciaCliente.sendNotification("notifica_ocorrencia_cliente", "message");
+	private void notificaCliente(OcorrenciaProntuario elementoProntuario) {
+		jmsNotificaOcorrenciaCliente.sendNotification("notifica_ocorrencia_cliente", elementoProntuario);
 		jmsNotificaOcorrenciaCliente.receive("notifica_ocorrencia_cliente");
-		emailService.enviar(prontuario.getAnimal().getProprietario(),
-        		"Foi feita uma nova inclusao de " + elementoProntuario
-        		+ " ao prontuario do seu animal " + prontuario.getAnimal().getNome() + "",
-        		"Inclusão de " + elementoProntuario + "");
 	}
     
     @RequestMapping(value="/adicionarPatologia", method=RequestMethod.POST)
@@ -240,7 +231,7 @@ public class ProntuarioController {
 		prontuarioPatologia.setProntuario(prontuario);
 		prontuarioPatologia.setData(LocalDateTime.parse(inclusaoPatologia, DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm")));
 		prontuarioDAO.salvarOcorrenciaPatologia(prontuarioPatologia);
-    	notificaCliente(prontuarioPatologia, prontuario);
+    	notificaCliente(prontuarioPatologia);
     	return new ModelAndView("redirect:prontuarioDoAnimal/" + prontuario.getAnimal().getAnimalId());
     }
     
@@ -267,6 +258,7 @@ public class ProntuarioController {
 			agendamentoDAO.salvar(agendamento);
 		}
 		prontuarioDAO.salvarOcorrenciaExame(ocorrenciaExame);
+		notificaCliente(ocorrenciaExame);
     	return new ModelAndView("redirect:prontuarioDoAnimal/" + prontuario.getAnimal().getAnimalId());
     }
     
@@ -287,7 +279,7 @@ public class ProntuarioController {
 		prontuarioVacina.setProntuario(prontuario);
 		prontuarioVacina.setData(LocalDateTime.parse(inclusaoVacina, DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm")));
     	prontuarioDAO.salvarOcorrenciaVacina(prontuarioVacina);
-    	notificaCliente(prontuarioVacina, prontuario);
+    	notificaCliente(prontuarioVacina);
     	return new ModelAndView("redirect:prontuarioDoAnimal/" + prontuarioDAO.buscarPorId(prontuarioId).getAnimal().getAnimalId());
     }
     

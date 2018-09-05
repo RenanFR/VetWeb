@@ -15,9 +15,8 @@ import com.vetweb.model.pojo.TipoOcorrenciaProntuario;
 @Table(name = "tbl_patologia_event")
 public class OcorrenciaPatologia extends OcorrenciaProntuario implements Serializable {
 
+	private static final long serialVersionUID = 3695573793611769516L;
 
-	private static final long serialVersionUID = 1651108074834160258L;
-	
 	@ManyToOne
 	@JsonManagedReference
 	@JoinColumn(name="prontuarioId", referencedColumnName = "prontuarioId")

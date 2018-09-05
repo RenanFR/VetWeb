@@ -1,5 +1,6 @@
 package com.vetweb.model.pojo;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -22,8 +23,10 @@ import com.vetweb.model.Prontuario;
 @Entity
 @Table(name = "tbl_ocorrencia")
 @Inheritance(strategy = InheritanceType.JOINED)
-public abstract class OcorrenciaProntuario {
+public abstract class OcorrenciaProntuario implements Serializable	{
 	
+	private static final long serialVersionUID = 3695573793611769516L;
+
 	@Id @GeneratedValue(strategy = GenerationType.TABLE)
 	private Long ocorrenciaId;
 	

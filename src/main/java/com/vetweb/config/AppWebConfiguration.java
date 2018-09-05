@@ -5,11 +5,11 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.concurrent.TimeUnit;
 
+import javax.annotation.Resource;
 import javax.jms.ConnectionFactory;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 
-import org.apache.activemq.ActiveMQConnectionFactory;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cache.guava.GuavaCacheManager;
@@ -48,6 +48,9 @@ import com.google.common.cache.CacheBuilder;
     "com.vetweb.model.error", "com.vetweb.model.pojo", "com.vetweb.service", "com.vetweb.controller.rest",
     "com.vetweb.endpoint", "com.vetweb.client", "com.vetweb.patterns", "com.vetweb.jms", "com.vetweb.model.report"})
 public class AppWebConfiguration extends WebMvcConfigurerAdapter implements WebApplicationInitializer {
+	
+	@Resource(lookup = "java:/ConnectionFactory")
+	private ConnectionFactory connectionFactory;
 	
     @Bean
     public InternalResourceViewResolver internalResourceViewResolver() {
@@ -122,18 +125,16 @@ public class AppWebConfiguration extends WebMvcConfigurerAdapter implements WebA
     
     @Bean
     public ConnectionFactory connectionFactory() {
-    	ConnectionFactory connectionFactory = new ActiveMQConnectionFactory("java:/ConnectionFactory");
     	return connectionFactory;
     }
     
 	@Override
 	public void onStartup(ServletContext servletContext) throws ServletException {
-		servletContext.setInitParameter("razaoSocial", "vetwork");
+		servletContext.setInitParameter("razaoSocial", "vetwork");		
 		servletContext.setInitParameter("fundadaEm", LocalDate.now()
 				.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));	
 		servletContext.setInitParameter("cnpj", "11.545.952/0001-07");
 		servletContext.setInitParameter("proprietario", "proprietario");
-	    servletContext.setInitParameter("spring.profiles.active", "development");
 	}
 	
 }
