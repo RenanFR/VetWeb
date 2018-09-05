@@ -133,7 +133,7 @@ public class AppWebConfiguration extends WebMvcConfigurerAdapter implements WebA
 				.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));	
 		servletContext.setInitParameter("cnpj", "11.545.952/0001-07");
 		servletContext.setInitParameter("proprietario", "proprietario");
-	    servletContext.setInitParameter("spring.profiles.active", "development");
+//	    servletContext.setInitParameter("spring.profiles.active", "development");
 	}
 	
 }
