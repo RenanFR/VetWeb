@@ -251,9 +251,9 @@
 		</dependency>
 		
 		<dependency>
-		    <groupId>javax.el</groupId>
-		    <artifactId>javax.el-api</artifactId>
-		    <version>3.0.0</version>
+		    <groupId>org.apache.tomcat</groupId>
+		    <artifactId>tomcat-el-api</artifactId>
+		    <version>7.0.5</version>
 		</dependency>		
 		
     </dependencies>
