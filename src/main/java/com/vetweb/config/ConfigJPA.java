@@ -28,14 +28,14 @@ public class ConfigJPA {
 	private Environment environment;
 	
     @Bean
-    public LocalContainerEntityManagerFactoryBean entityManagerFactory(DataSource dataSource, Properties properties) throws URISyntaxException {
+    public LocalContainerEntityManagerFactoryBean entityManagerFactory(DataSource dataSource) throws URISyntaxException {
         LocalContainerEntityManagerFactoryBean entityManagerFactory = new LocalContainerEntityManagerFactoryBean();
         entityManagerFactory.setDataSource(dataSource);
         entityManagerFactory.setPackagesToScan(new String[]{"com.vetweb.model", 
             "com.vetweb.model.auth"});
         JpaVendorAdapter adapter = new HibernateJpaVendorAdapter();
         entityManagerFactory.setJpaVendorAdapter(adapter);
-        entityManagerFactory.setJpaProperties(properties);
+        entityManagerFactory.setJpaProperties(properties());
         return entityManagerFactory;
     }
     
@@ -63,14 +63,12 @@ public class ConfigJPA {
     	
     }
     
-    @Bean
-    @Profile({"development", "production"})
     private Properties properties(){
         Properties properties = new Properties();
         properties.setProperty("hibernate.hbm2ddl.auto", "update");
         properties.setProperty("hibernate.dialect", "org.hibernate.dialect.PostgreSQLDialect");
         properties.setProperty("hibernate.show_sql", "true");
-//        properties.setProperty("hibernate.jdbc.lob.non_contextual_creation", "true");
+        properties.setProperty("hibernate.jdbc.lob.non_contextual_creation", "true");
         return properties;
     }
     
