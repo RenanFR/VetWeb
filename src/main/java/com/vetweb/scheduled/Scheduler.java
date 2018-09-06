@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.vetweb.dao.AtendimentoDAO;
 import com.vetweb.dao.ProntuarioDAO;
 import com.vetweb.dao.ProprietarioDAO;
+import com.vetweb.jms.JMSNotificacaoOcorrenciaCliente;
 import com.vetweb.model.OcorrenciaAtendimento;
 import com.vetweb.model.Pessoa;
 import com.vetweb.model.Proprietario;
@@ -35,6 +36,9 @@ public class Scheduler {
 	
 	@Autowired
 	private EmailService emailService;
+	
+	@Autowired
+	private JMSNotificacaoOcorrenciaCliente jmsNotificacaoOcorrenciaCliente;
 	
 	private static final Logger LOGGER = Logger.getLogger(Scheduler.class);
 	
@@ -69,7 +73,6 @@ public class Scheduler {
     		.forEach(ate -> this.notificaRetornoAtendimento(ate));
     }
     
-    @SuppressWarnings("static-access")
 	private void notificaRetornoAtendimento(OcorrenciaAtendimento atendimento) {
     	Pessoa pessoaDestinatario = prontuarioDAO.buscarProntuarioDoAtendimento(atendimento).getAnimal().getProprietario();
     	StringBuilder mensagemRetorno = new StringBuilder();
@@ -77,5 +80,12 @@ public class Scheduler {
     				+ atendimento.getTipoDeAtendimento().getNome() + " FEITO EM " + atendimento.getData() + " E HOJE. FAVOR COMPARECER A CLINICA. ");
     	emailService.enviar(pessoaDestinatario, mensagemRetorno.toString(), "RETORNO DE ATENDIMENTO");
     }
+	
+	@Scheduled(fixedDelay = MINUTO)
+	public void notificarOcorrencia() {
+		LOGGER.info("ENCAMINHANDO E-MAILS DE NOTIFICAÇÃO DE OCORRÊNCIA.	");
+		jmsNotificacaoOcorrenciaCliente
+			.receive();
+	}
     
 }

@@ -3,18 +3,15 @@ package com.vetweb.jms;
 import javax.annotation.PostConstruct;
 import javax.jms.ConnectionFactory;
 import javax.jms.JMSException;
-import javax.jms.Message;
 import javax.jms.ObjectMessage;
 import javax.jms.Session;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jms.annotation.JmsListener;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.jms.core.MessageCreator;
 import org.springframework.stereotype.Component;
 
-import com.vetweb.controller.ProntuarioController;
 import com.vetweb.model.Prontuario;
 import com.vetweb.model.pojo.OcorrenciaProntuario;
 import com.vetweb.service.EmailService;
@@ -29,6 +26,8 @@ public class JMSNotificacaoOcorrenciaCliente {
 	private EmailService emailService;
 	
 	private JmsTemplate jmsTemplate;
+	
+	private static final String QUEUE = "notifica_ocorrencia_cliente";
 	
 	private static final Logger LOGGER = Logger.getLogger(JMSNotificacaoOcorrenciaCliente.class);
 	
@@ -46,11 +45,8 @@ public class JMSNotificacaoOcorrenciaCliente {
 		});
 	}
 	
-	@SuppressWarnings("static-access")
-//	@JmsListener(destination = "notifica_ocorrencia_cliente")
-	public void receive(String queue) {
-		Message message = jmsTemplate.receive(queue);
-		ObjectMessage objectMessage = (ObjectMessage)message;
+	public void receive() {
+		ObjectMessage objectMessage = (ObjectMessage)jmsTemplate.receive(QUEUE);
 		try {
 			OcorrenciaProntuario ocorrenciaProntuario = (OcorrenciaProntuario)objectMessage.getObject();
 			Prontuario prontuario = ocorrenciaProntuario.getProntuario();
@@ -59,7 +55,7 @@ public class JMSNotificacaoOcorrenciaCliente {
 	        		+ " ao prontuario do seu animal " + prontuario.getAnimal().getNome() + "",
 	        		"Inclusão de " + ocorrenciaProntuario + "");			
 		} catch (JMSException | ClassCastException e) {
-			System.out.println(e);			
+			LOGGER.error("NÃO FOI POSSÍVEL REALIZAR A NOTIFICAÇÃO, VERIFIQUE SE HÁ E-MAILS NÃO ENVIADOS NA FILA E OS PARÂMETROS DE ENVIO. " + e);			
 		}
 	}
 

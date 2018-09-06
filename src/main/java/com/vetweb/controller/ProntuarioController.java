@@ -210,7 +210,6 @@ public class ProntuarioController {
 
 	private void notificaCliente(OcorrenciaProntuario elementoProntuario) {
 		jmsNotificaOcorrenciaCliente.sendNotification("notifica_ocorrencia_cliente", elementoProntuario);
-		jmsNotificaOcorrenciaCliente.receive("notifica_ocorrencia_cliente");
 	}
     
     @RequestMapping(value="/adicionarPatologia", method=RequestMethod.POST)

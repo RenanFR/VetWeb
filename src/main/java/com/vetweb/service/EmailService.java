@@ -13,7 +13,7 @@ import com.vetweb.model.Pessoa;
 @Service
 public class EmailService {
 	
-	public static void enviar(Pessoa destinatario, String msg, String subject) {
+	public void enviar(Pessoa destinatario, String msg, String subject) {
 		try {
 			
 			Email email = new SimpleEmail();
