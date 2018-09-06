@@ -9,6 +9,7 @@ import javax.jms.Session;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jms.annotation.JmsListener;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.jms.core.MessageCreator;
 import org.springframework.stereotype.Component;
@@ -46,6 +47,7 @@ public class JMSNotificacaoOcorrenciaCliente {
 	}
 	
 	@SuppressWarnings("static-access")
+//	@JmsListener(destination = "notifica_ocorrencia_cliente")
 	public void receive(String queue) {
 		Message message = jmsTemplate.receive(queue);
 		ObjectMessage objectMessage = (ObjectMessage)message;

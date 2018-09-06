@@ -23,6 +23,7 @@ import org.springframework.format.support.DefaultFormattingConversionService;
 import org.springframework.format.support.FormattingConversionService;
 import org.springframework.http.HttpStatus;
 import org.springframework.jms.annotation.EnableJms;
+import org.springframework.jms.config.DefaultJmsListenerContainerFactory;
 import org.springframework.web.WebApplicationInitializer;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartResolver;
@@ -126,6 +127,13 @@ public class AppWebConfiguration extends WebMvcConfigurerAdapter implements WebA
     @Bean
     public ConnectionFactory connectionFactory() {
     	return connectionFactory;
+    }
+    
+    @Bean
+    public DefaultJmsListenerContainerFactory jmsListenerContainerFactory() {
+    	DefaultJmsListenerContainerFactory defaultJmsListenerContainerFactory = new DefaultJmsListenerContainerFactory();
+    	defaultJmsListenerContainerFactory.setConnectionFactory(connectionFactory);
+    	return defaultJmsListenerContainerFactory;
     }
     
 	@Override
