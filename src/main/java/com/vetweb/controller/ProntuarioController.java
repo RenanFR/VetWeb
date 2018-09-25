@@ -30,6 +30,7 @@ import com.vetweb.dao.AnimalDAO;
 import com.vetweb.dao.AtendimentoDAO;
 import com.vetweb.dao.ExameDAO;
 import com.vetweb.dao.ProntuarioDAO;
+import com.vetweb.dao.ProprietarioDAO;
 import com.vetweb.dao.VacinaDAO;
 import com.vetweb.jms.JMSNotificacaoOcorrenciaCliente;
 import com.vetweb.model.Agendamento;
@@ -41,6 +42,7 @@ import com.vetweb.model.OcorrenciaPatologia;
 import com.vetweb.model.OcorrenciaVacina;
 import com.vetweb.model.Patologia;
 import com.vetweb.model.Prontuario;
+import com.vetweb.model.Proprietario;
 import com.vetweb.model.TipoDeAtendimento;
 import com.vetweb.model.Vacina;
 import com.vetweb.model.pojo.OcorrenciaProntuario;
@@ -68,6 +70,9 @@ public class ProntuarioController {
     
     @Autowired
     private AgendamentoDAO agendamentoDAO;
+    
+    @Autowired
+    private ProprietarioDAO proprietarioDAO;
     
     @Autowired
     private JMSNotificacaoOcorrenciaCliente jmsNotificaOcorrenciaCliente;
@@ -195,13 +200,30 @@ public class ProntuarioController {
 		prontuario.getExames().forEach(ex -> elementosHistorico.add(ex));
 		return elementosHistorico;
 	}
+	
+	private void autorizaOcorrenciaPorDebito(TipoOcorrenciaProntuario tipoOcorrenciaProntuario, Proprietario proprietario) {
+		if (proprietario.isAtivo()) {
+			return;
+		} else {
+			if (tipoOcorrenciaProntuario == TipoOcorrenciaProntuario.ATENDIMENTO) {
+				if (proprietarioDAO.buscarClientesEmDebito(TipoOcorrenciaProntuario.ATENDIMENTO).contains(proprietario)) {
+					throw new RuntimeException("CLIENTE POSSUI ATENDIMENTOS NÃO PAGOS.");
+				}
+			} else if (tipoOcorrenciaProntuario == TipoOcorrenciaProntuario.VACINA) {
+				if (proprietarioDAO.buscarClientesEmDebito(TipoOcorrenciaProntuario.VACINA).contains(proprietario)) {
+					throw new RuntimeException("CLIENTE POSSUI VACINAS NÃO PAGAS.");
+				}
+			}
+		}
+	}
     
     @RequestMapping(value = "/adicionarAtendimento", method = RequestMethod.POST)
     public ModelAndView adcAtendimento(@ModelAttribute("atendimento") OcorrenciaAtendimento atendimento,
     		@RequestParam("prontuarioId") final Long prontuarioId) {
     	LOGGER.debug("Inserindo atendimento " + atendimento.getTipoDeAtendimento().getNome() + " no prontuário " + prontuarioId);
-    	atendimento.setTipo(TipoOcorrenciaProntuario.ATENDIMENTO);
     	Prontuario prontuario = prontuarioDAO.buscarPorId(prontuarioId);
+    	autorizaOcorrenciaPorDebito(TipoOcorrenciaProntuario.ATENDIMENTO, prontuario.getAnimal().getProprietario());
+    	atendimento.setTipo(TipoOcorrenciaProntuario.ATENDIMENTO);
     	atendimento.setProntuario(prontuario);
         prontuarioDAO.salvarAtendimento(atendimento);
         notificaCliente(atendimento);

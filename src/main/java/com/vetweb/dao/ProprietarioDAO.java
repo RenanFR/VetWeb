@@ -22,6 +22,7 @@ import com.vetweb.model.OcorrenciaAtendimento;
 import com.vetweb.model.Prontuario;
 import com.vetweb.model.OcorrenciaVacina;
 import com.vetweb.model.Proprietario;
+import com.vetweb.model.pojo.TipoOcorrenciaProntuario;
 
 @Repository
 public class ProprietarioDAO implements IDAO<Proprietario> {
@@ -160,15 +161,25 @@ public class ProprietarioDAO implements IDAO<Proprietario> {
     	
     }
 
-	public List<Proprietario> buscarClientesEmDebito() {
-		String query = "SELECT p FROM Proprietario p "
+	public List<Proprietario> buscarClientesEmDebito(TipoOcorrenciaProntuario... tipoOcorrenciaProntuario) {
+		StringBuilder query = new StringBuilder("SELECT p FROM Proprietario p "
 			+ "JOIN p.animais a "
-			+ "JOIN a.prontuario pr "
-			+ "LEFT JOIN pr.vacinas v "
-			+ "LEFT JOIN pr.atendimentos a "
-			+ "WHERE v.pago = false OR a.pago = false";
+			+ "JOIN a.prontuario pr ");
+			if (tipoOcorrenciaProntuario.length > 0) {
+				for (TipoOcorrenciaProntuario tipoOcorrencia : tipoOcorrenciaProntuario) {
+					if (tipoOcorrencia == TipoOcorrenciaProntuario.VACINA) {
+						query.append("LEFT JOIN pr.vacinas v ");
+					} else if (tipoOcorrencia == TipoOcorrenciaProntuario.ATENDIMENTO) {
+						query.append("LEFT JOIN pr.atendimentos a ");
+					}
+				}
+			} else {
+				query.append("LEFT JOIN pr.vacinas v ");
+				query.append("LEFT JOIN pr.atendimentos a ");
+			}
+			query.append("WHERE v.pago = false OR a.pago = false");
 		List<Proprietario> clientesComDebito = entityManager
-												.createQuery(query, Proprietario.class)
+												.createQuery(query.toString(), Proprietario.class)
 												.getResultList();
 		return clientesComDebito;
 	}
