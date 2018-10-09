@@ -177,7 +177,22 @@ public class ProprietarioDAO implements IDAO<Proprietario> {
 				query.append("LEFT JOIN pr.vacinas v ");
 				query.append("LEFT JOIN pr.atendimentos a ");
 			}
-			query.append("WHERE v.pago = false OR a.pago = false");
+			query.append("WHERE ");
+			if (tipoOcorrenciaProntuario.length > 0) {
+				for (TipoOcorrenciaProntuario tipoOcorrencia : tipoOcorrenciaProntuario) {
+					if (tipoOcorrencia == TipoOcorrenciaProntuario.VACINA) {
+						query.append("v.pago = false ");
+					}
+					if (tipoOcorrencia == TipoOcorrenciaProntuario.ATENDIMENTO) {
+						if (query.toString().contains("v.pago")) {
+							query.append("OR ");
+						}
+						query.append("a.pago = false ");
+					}
+				}
+			} else {
+				query.append("v.pago = false OR a.pago = false");
+			}
 		List<Proprietario> clientesComDebito = entityManager
 												.createQuery(query.toString(), Proprietario.class)
 												.getResultList();

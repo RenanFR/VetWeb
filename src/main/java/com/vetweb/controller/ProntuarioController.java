@@ -218,7 +218,7 @@ public class ProntuarioController {
 	}
     
     @RequestMapping(value = "/adicionarAtendimento", method = RequestMethod.POST)
-    public ModelAndView adcAtendimento(@ModelAttribute("atendimento") OcorrenciaAtendimento atendimento,
+    public ModelAndView addAtendimento(@ModelAttribute("atendimento") OcorrenciaAtendimento atendimento,
     		@RequestParam("prontuarioId") final Long prontuarioId) {
     	LOGGER.debug("Inserindo atendimento " + atendimento.getTipoDeAtendimento().getNome() + " no prontuário " + prontuarioId);
     	Prontuario prontuario = prontuarioDAO.buscarPorId(prontuarioId);
@@ -235,7 +235,7 @@ public class ProntuarioController {
 	}
     
     @RequestMapping(value="/adicionarPatologia", method=RequestMethod.POST)
-    public ModelAndView adcPatologia(@RequestParam("prontuarioId") final Long prontuarioId,
+    public ModelAndView addPatologia(@RequestParam("prontuarioId") final Long prontuarioId,
     		@RequestParam("patologia") final String patologiaStr, 
     		@RequestParam("prontuarioPatologiaId") final Long prontuarioPatologiaId,
     	@RequestParam("data") final String inclusaoPatologia) {
@@ -257,7 +257,7 @@ public class ProntuarioController {
     }
     
     @RequestMapping(value="/adicionarExame", method=RequestMethod.POST)
-    public ModelAndView adcExame(@RequestParam("prontuarioId") final Long prontuarioId,
+    public ModelAndView addExame(@RequestParam("prontuarioId") final Long prontuarioId,
     		@RequestParam("exame") final String exameDescricao, 
     		@RequestParam("ocorrenciaExameId") final Long ocorrenciaId,
     		@RequestParam("data") final String inclusaoExame) {
@@ -284,11 +284,14 @@ public class ProntuarioController {
     }
     
     @RequestMapping(value="/adicionarVacina", method=RequestMethod.POST)
-    public ModelAndView adcVacina(@RequestParam("prontuarioId") final Long prontuarioId,
+    public ModelAndView addVacina(@RequestParam("prontuarioId") final Long prontuarioId,
     		@RequestParam("vacina") final String vacinaStr,
     		@RequestParam("prontuarioVacinaId") final Long prontuarioVacinaId,
     		@RequestParam("data") final String inclusaoVacina) {
     	LOGGER.info(("Inserindo vacina " + vacinaStr + " no prontuário " + prontuarioId).toUpperCase());
+    	Prontuario prontuario = prontuarioDAO.buscarPorId(prontuarioId);
+    	Proprietario proprietario = prontuario.getAnimal().getProprietario();
+		autorizaOcorrenciaPorDebito(TipoOcorrenciaProntuario.VACINA, proprietario);
     	OcorrenciaVacina prontuarioVacina = new OcorrenciaVacina();
     	prontuarioVacina.setTipo(TipoOcorrenciaProntuario.VACINA);
     	Vacina vacina = vacinaDAO.buscarPorNome(vacinaStr);
@@ -296,7 +299,6 @@ public class ProntuarioController {
 		if (prontuarioVacinaId != null)
 			prontuarioVacina = prontuarioDAO.buscarOcorrenciaVacina(prontuarioVacinaId);
 		prontuarioVacina.setVacina(vacina);
-		Prontuario prontuario = prontuarioDAO.buscarPorId(prontuarioId);
 		prontuarioVacina.setProntuario(prontuario);
 		prontuarioVacina.setData(LocalDateTime.parse(inclusaoVacina, DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm")));
     	prontuarioDAO.salvarOcorrenciaVacina(prontuarioVacina);
