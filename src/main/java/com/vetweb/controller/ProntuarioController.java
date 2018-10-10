@@ -213,6 +213,10 @@ public class ProntuarioController {
 				if (proprietarioDAO.buscarClientesEmDebito(TipoOcorrenciaProntuario.VACINA).contains(proprietario)) {
 					throw new RuntimeException("CLIENTE POSSUI VACINAS NÃO PAGAS.");
 				}
+			} else if (tipoOcorrenciaProntuario == TipoOcorrenciaProntuario.EXAME) {
+				if (proprietarioDAO.buscarClientesEmDebito(TipoOcorrenciaProntuario.EXAME).contains(proprietario)) {
+					throw new RuntimeException("CLIENTE POSSUI EXAMES NÃO PAGOS.");
+				}
 			}
 		}
 	}
@@ -262,6 +266,8 @@ public class ProntuarioController {
     		@RequestParam("ocorrenciaExameId") final Long ocorrenciaId,
     		@RequestParam("data") final String inclusaoExame) {
     	Prontuario prontuario = prontuarioDAO.buscarPorId(prontuarioId);
+    	Proprietario proprietario = prontuarioDAO.buscarPorId(prontuarioId).getAnimal().getProprietario();
+		autorizaOcorrenciaPorDebito(TipoOcorrenciaProntuario.EXAME, proprietario);
     	OcorrenciaExame ocorrenciaExame = new OcorrenciaExame();
     	ocorrenciaExame.setOcorrenciaId(ocorrenciaId);
     	ocorrenciaExame.setProntuario(prontuario);

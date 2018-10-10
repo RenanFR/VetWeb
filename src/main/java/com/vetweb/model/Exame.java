@@ -1,6 +1,7 @@
 package com.vetweb.model;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 import javax.persistence.Column;
 
@@ -28,6 +29,8 @@ public class Exame implements Serializable {
 	
 	@Column(columnDefinition = "TEXT")
     private String encerramento;
+	
+	private BigDecimal preco;
 
     public Exame() {
 	}
@@ -68,6 +71,14 @@ public class Exame implements Serializable {
 
 	public void setEncerramento(String encerramento) {
 		this.encerramento = encerramento;
+	}
+
+	public BigDecimal getPreco() {
+		return preco;
+	}
+
+	public void setPreco(BigDecimal preco) {
+		this.preco = preco;
 	}
     
 }

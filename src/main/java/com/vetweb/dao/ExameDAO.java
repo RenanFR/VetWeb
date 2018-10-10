@@ -44,7 +44,7 @@ public class ExameDAO implements IDAO<Exame>{
 		return entityManager
 				.createQuery(consultaExamePorDescricao, Exame.class)
 				.setParameter("descricaoExame", "%" + descricao + "%")
-				.getSingleResult();
+				.getResultList().get(0);
 	}
 
 	@Override

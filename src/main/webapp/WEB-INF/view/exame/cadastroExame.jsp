@@ -36,6 +36,10 @@
                             <form:textarea path="encerramento" id="encerramento"/>
                         </td>
                     </tr>
+                    <tr>
+                        <th><label for="preco"><spring:message code="custo"/></label></th>
+                        <td><form:input path="preco" id="preco"></form:input></td>
+                    </tr>
                 </tbody>
             </table>
             <input type="submit" value="submit"  />

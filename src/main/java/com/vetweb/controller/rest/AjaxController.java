@@ -79,6 +79,13 @@ public class AjaxController {
     	return vacina.isPago();    	
     }
     
+    @RequestMapping(value = "/atualizaStatusPagoExame/{exameId}", method = RequestMethod.GET)
+    public boolean atualizaStatusPagoExame(@PathVariable("exameId") final Long exameId) {
+    	OcorrenciaExame ocorrenciaExame = prontuarioDAO.buscarOcorrenciaExame(exameId);
+    	ocorrenciaExame.setPago(!ocorrenciaExame.isPago());
+    	return ocorrenciaExame.isPago();
+    }
+    
     @RequestMapping(value = "/racasPorEspecie/{especie}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public List<Raca> racasPorEspecie(@PathVariable("especie")String especie){
         return animalDAO.buscarRacasPorEspecie(especie);

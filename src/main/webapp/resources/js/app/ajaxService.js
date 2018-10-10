@@ -143,6 +143,22 @@ var ajaxService = {
 		
 	},
 	
+	alterarStatusPagamentoExame: function(exameId) {
+		
+		$.ajax({
+			type: 'GET',
+			url: '/vetweb/ajax/prontuario/atualizaStatusPagoExame/' + exameId,
+			contentType: 'text/html',
+			success: function (data, textStatus, jqXHR) {
+				alert('STATUS DE PAGAMENTO DO EXAME ALTERADO.	');
+			},
+			error: function (jqXHR, textStatus, errorThrown) {
+				alert('ERRO AO ALTERAR O STATUS DE PAGAMENTO DO EXAME.	');
+			}
+		});
+		
+	},
+	
 	alterarStatusPagamentoVacina: function(prontuarioVacinaId) {
 		
 		$.ajax({

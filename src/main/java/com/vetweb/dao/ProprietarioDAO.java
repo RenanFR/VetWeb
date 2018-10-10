@@ -19,8 +19,9 @@ import org.springframework.stereotype.Repository;
 
 import com.vetweb.model.Animal;
 import com.vetweb.model.OcorrenciaAtendimento;
-import com.vetweb.model.Prontuario;
+import com.vetweb.model.OcorrenciaExame;
 import com.vetweb.model.OcorrenciaVacina;
+import com.vetweb.model.Prontuario;
 import com.vetweb.model.Proprietario;
 import com.vetweb.model.pojo.TipoOcorrenciaProntuario;
 
@@ -112,6 +113,18 @@ public class ProprietarioDAO implements IDAO<Proprietario> {
     			.getResultList();
     }
     
+    public List<OcorrenciaExame> buscarExamesParaOCliente(Long proprietario) {
+    	String consultaExamesParaOCliente = "SELECT ocorrenciaExame FROM OcorrenciaExame ocorrenciaExame "
+    			+ "JOIN ocorrenciaExame.prontuario prontuario "
+    			+ "JOIN prontuario.animal animal "
+    			+ "JOIN animal.proprietario cliente "
+    			+ "WHERE cliente.pessoaId = :codigoCliente";
+    	return entityManager
+    			.createQuery(consultaExamesParaOCliente, OcorrenciaExame.class)
+    			.setParameter("codigoCliente", proprietario)
+    			.getResultList();
+    }
+    
     public List<OcorrenciaAtendimento> buscarAtendimentosParaOCliente(Long proprietario) {
     	String consultaAtendimentosParaOCliente = "SELECT ocorrenciaAtendimento FROM OcorrenciaAtendimento ocorrenciaAtendimento "
     			+ "JOIN ocorrenciaAtendimento.prontuario prontuario "
@@ -171,11 +184,14 @@ public class ProprietarioDAO implements IDAO<Proprietario> {
 						query.append("LEFT JOIN pr.vacinas v ");
 					} else if (tipoOcorrencia == TipoOcorrenciaProntuario.ATENDIMENTO) {
 						query.append("LEFT JOIN pr.atendimentos a ");
+					} else if (tipoOcorrencia == TipoOcorrenciaProntuario.EXAME) {
+						query.append("LEFT JOIN pr.exames e ");
 					}
 				}
 			} else {
 				query.append("LEFT JOIN pr.vacinas v ");
 				query.append("LEFT JOIN pr.atendimentos a ");
+				query.append("LEFT JOIN pr.exames e ");
 			}
 			query.append("WHERE ");
 			if (tipoOcorrenciaProntuario.length > 0) {
@@ -189,9 +205,15 @@ public class ProprietarioDAO implements IDAO<Proprietario> {
 						}
 						query.append("a.pago = false ");
 					}
+					if (tipoOcorrencia == TipoOcorrenciaProntuario.EXAME) {
+						if (query.toString().contains("e.pago")) {
+							query.append("OR ");
+						}
+						query.append("e.pago = false ");
+					}
 				}
 			} else {
-				query.append("v.pago = false OR a.pago = false");
+				query.append("v.pago = false OR a.pago = false OR e.pago = false");
 			}
 		List<Proprietario> clientesComDebito = entityManager
 												.createQuery(query.toString(), Proprietario.class)

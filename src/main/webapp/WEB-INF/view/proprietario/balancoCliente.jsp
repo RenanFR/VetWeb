@@ -30,6 +30,7 @@
             <thead>
                 <tr>
                     <th><spring:message code="atendimentoMedico"/></th>
+                    <th><spring:message code="exames"/></th>
                     <th><spring:message code="vacinas"/></th>
                 </tr>
             </thead>
@@ -59,6 +60,34 @@
 	                        				<input type="checkbox" class="flagPago" ${atendimento.pago? 'checked' : ''} onclick="ajaxService.alterarStatusPagamentoAtendimento(${atendimento.ocorrenciaId})"	/>
 	                        			</td>
 	                        			<td>${atendimento.data}</td>
+	                        		</tr>
+				                </c:forEach>
+                        	</table>
+                        </td>
+                        <td>
+                        	<table>
+                        		<tr>
+                        			<th>
+                        				<spring:message code="nome"/>
+                        			</th>
+                        			<th>
+                        				<spring:message code="preco"/>
+                        			</th>
+                        			<th>
+                        				<spring:message code="dataOcorrencia"/>
+                        			</th>
+                        			<th>
+                        				<spring:message code="pago"/>
+                        			</th>
+                        		</tr>
+				                <c:forEach items="${examesRealizados}" var="exame">
+	                        		<tr>
+	                        			<td>${exame.exame.descricao}</td>
+	                        			<td>${exame.exame.preco}</td>
+	                        			<td>${exame.data}</td>
+	                        			<td>
+	                        				<input type="checkbox" class="flagPago" ${exame.pago? 'checked' : ''} onclick="ajaxService.alterarStatusPagamentoExame(${exame.ocorrenciaId})"	/>
+	                        			</td>
 	                        		</tr>
 				                </c:forEach>
                         	</table>
