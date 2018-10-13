@@ -46,6 +46,7 @@ import com.vetweb.model.Prontuario;
 import com.vetweb.model.Proprietario;
 import com.vetweb.model.TipoDeAtendimento;
 import com.vetweb.model.Vacina;
+import com.vetweb.model.error.DebitoOcorrenciaException;
 import com.vetweb.model.pojo.OcorrenciaProntuario;
 import com.vetweb.model.pojo.TipoOcorrenciaProntuario;
 
@@ -290,7 +291,11 @@ public class ProntuarioController {
     	Prontuario prontuario = prontuarioDAO.buscarPorId(prontuarioId);
     	ModelAndView modelAndView = new ModelAndView("redirect:prontuarioDoAnimal/" + prontuarioDAO.buscarPorId(prontuarioId).getAnimal().getAnimalId());
     	Proprietario proprietario = prontuario.getAnimal().getProprietario();
-    	ocorrenciaUtils.autorizaOcorrenciaPorDebito(TipoOcorrenciaProntuario.VACINA, proprietario);
+    	try {
+    		ocorrenciaUtils.autorizaOcorrenciaPorDebito(TipoOcorrenciaProntuario.VACINA, proprietario);
+    	} catch (DebitoOcorrenciaException debitoOcorrenciaException) {
+    		redirectAttributes.addFlashAttribute("tipoDebito", debitoOcorrenciaException.getTipoOcorrenciaProntuario());
+    	}
     	OcorrenciaVacina prontuarioVacina = new OcorrenciaVacina();
     	prontuarioVacina.setTipo(TipoOcorrenciaProntuario.VACINA);
     	Vacina vacina = vacinaDAO.buscarPorNome(vacinaStr);

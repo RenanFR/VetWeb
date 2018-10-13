@@ -23,12 +23,15 @@ public class OcorrenciaFactory {
 	
 	private ExameDAO daoExame;
 	
+	private OcorrenciaUtils ocorrenciaUtils;
+	
 	@Autowired
-	private OcorrenciaFactory(AtendimentoDAO atendimentoDAO, ProntuarioDAO prontuarioDAO, AnimalDAO animalDAO, ExameDAO exameDAO) {
+	private OcorrenciaFactory(AtendimentoDAO atendimentoDAO, ProntuarioDAO prontuarioDAO, AnimalDAO animalDAO, ExameDAO exameDAO, OcorrenciaUtils ocorrenciaUtils) {
 		this.daoAtendimento = atendimentoDAO;
 		this.daoProntuario = prontuarioDAO;
 		this.daoAnimal = animalDAO;
 		this.daoExame = exameDAO;
+		this.ocorrenciaUtils = ocorrenciaUtils;
 	}
 	
 	public OcorrenciaProntuario getOcorrencia(String tipo, Long idOcorrencia) {
@@ -99,6 +102,8 @@ public class OcorrenciaFactory {
 		}
 		ocorrenciaProntuario.setData(dataHoraInicio);
 		ocorrenciaProntuario.setTipo(tipoOcorrencia);
+		Proprietario proprietario = ocorrenciaProntuario.getProntuario().getAnimal().getProprietario();
+		ocorrenciaUtils.autorizaOcorrenciaPorDebito(ocorrenciaProntuario.getTipo(), proprietario);
 		daoProntuario.salvar(prontuario);
 		return ocorrenciaProntuario;
 	}

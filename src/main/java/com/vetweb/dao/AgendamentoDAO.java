@@ -18,7 +18,7 @@ public class AgendamentoDAO implements IDAO<Agendamento>{
 
 	public void salvar(Agendamento agendamento) {
 		if (!listarTodos(agendamento.getDataHoraInicial(), agendamento.getDataHoraFinal()).isEmpty()) {
-			throw new RuntimeException("O AGENDA CONFLITA COM OUTRO EXISTENTE NO MESMO HORÁRIO.");
+			throw new RuntimeException("O AGENDAMENTO CONFLITA COM OUTRO EXISTENTE NO MESMO HORÁRIO.");
 		}
 		if (agendamento.getAgendamentoId() == null) {
 			entityManager.persist(agendamento);

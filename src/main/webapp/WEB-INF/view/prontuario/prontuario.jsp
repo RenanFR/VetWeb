@@ -136,6 +136,7 @@
 					</tbody>
 				</table>
 			</div>
+			<div id="tipoDebito">${tipoDebito}</div>
 		</div>
 		
 		<vetweb:modalAtendimento prontuario="${prontuario}" tiposDeAtendimento="${tiposDeAtendimento}"></vetweb:modalAtendimento>
