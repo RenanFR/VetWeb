@@ -55,7 +55,6 @@
     </jsp:attribute>
     
     <jsp:body>
-    
 			<div class="row">
 				<div class="col-md-12">
 					<button data-toggle="modal" data-target="#modalAtendimento" onclick="ajaxService.buscarModeloPorTipoDeAtendimento()" class="btn btn-info">

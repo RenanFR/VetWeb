@@ -91,6 +91,12 @@ public class AgendamentoController {
 	@RequestMapping("/eventos")
 	public List<EventFullCalendar> todosOsEventos(@RequestParam(value = "start", required = false) String start, @RequestParam(value = "end", required = false) String end) {
 		LOGGER.debug("Recebendo data inicial " + start + " e final " + end + " para exibição dos eventos");
+		if (start == null) {
+			start = LocalDateTime.MIN.format(DateTimeFormatter.ISO_DATE);
+		}
+		if (end == null) {
+			end = LocalDateTime.MAX.format(DateTimeFormatter.ISO_DATE);
+		}
 		LocalDate dataInicialFiltro = LocalDate.parse(start, DateTimeFormatter.ISO_DATE);
 		LocalDate dataFinalFiltro = LocalDate.parse(end, DateTimeFormatter.ISO_DATE);
 		List<EventFullCalendar> events = new ArrayList<>();

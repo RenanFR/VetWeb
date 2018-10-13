@@ -36,7 +36,7 @@ group by nome_cliente, email_cliente, cep_cliente, celular_cliente, data_cadastr
 			<staticText>
 				<reportElement x="0" y="0" width="555" height="79" uuid="bd6a2c82-7f51-4de6-858f-51fad618a029"/>
 				<textElement textAlignment="Center">
-					<font fontName="Garuda" size="24"/>
+					<font fontName="SansSerif" size="24"/>
 				</textElement>
 				<text><![CDATA[Relatório de clientes]]></text>
 			</staticText>
@@ -46,26 +46,44 @@ group by nome_cliente, email_cliente, cep_cliente, celular_cliente, data_cadastr
 		<band height="61" splitType="Stretch">
 			<staticText>
 				<reportElement x="0" y="2" width="100" height="20" uuid="2435edaf-948a-4124-98ff-6b850fd74953"/>
+				<textElement>
+					<font fontName="SansSerif"/>
+				</textElement>
 				<text><![CDATA[nome_cliente]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="100" y="2" width="100" height="20" uuid="2e03e0cf-0899-491e-824b-58190bfaaf71"/>
+				<textElement>
+					<font fontName="SansSerif"/>
+				</textElement>
 				<text><![CDATA[email_cliente]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="200" y="2" width="100" height="20" uuid="a3e4a565-2301-4269-b36d-5f260fa64409"/>
+				<textElement>
+					<font fontName="SansSerif"/>
+				</textElement>
 				<text><![CDATA[cep_cliente]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="300" y="2" width="100" height="20" uuid="f5c5de76-0635-413d-ae66-daee5a1afc1f"/>
+				<textElement>
+					<font fontName="SansSerif"/>
+				</textElement>
 				<text><![CDATA[data_cadastro]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="400" y="2" width="100" height="20" uuid="a955118e-c987-4d17-8484-797e41eb4f2c"/>
+				<textElement>
+					<font fontName="SansSerif"/>
+				</textElement>
 				<text><![CDATA[idade_cliente]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="500" y="2" width="100" height="20" uuid="9c2fc0f2-56ae-4d68-b8c6-b4f434f30386"/>
+				<reportElement x="500" y="2" width="55" height="20" uuid="9c2fc0f2-56ae-4d68-b8c6-b4f434f30386"/>
+				<textElement>
+					<font fontName="SansSerif"/>
+				</textElement>
 				<text><![CDATA[qtd_animais]]></text>
 			</staticText>
 		</band>
@@ -74,26 +92,44 @@ group by nome_cliente, email_cliente, cep_cliente, celular_cliente, data_cadastr
 		<band height="70" splitType="Stretch">
 			<textField>
 				<reportElement x="0" y="0" width="100" height="20" uuid="8cf8b063-0e62-45a1-ba52-58f541b68c06"/>
+				<textElement>
+					<font fontName="SansSerif"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$F{nome_cliente}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
 				<reportElement x="100" y="0" width="100" height="20" uuid="b89cc6cb-eb53-474e-a829-650a7873cf8a"/>
+				<textElement>
+					<font fontName="SansSerif"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$F{email_cliente}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="200" y="0" width="100" height="20" uuid="186f62ea-1c2c-4a0c-a17b-9c575bb0652c"/>
+				<textElement>
+					<font fontName="SansSerif"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$F{cep_cliente}]]></textFieldExpression>
 			</textField>
 			<textField pattern="dd/MM/yyyy">
 				<reportElement x="300" y="0" width="100" height="20" uuid="8bbb7aad-aa3b-47bc-9c43-97c5d37d51d9"/>
+				<textElement>
+					<font fontName="SansSerif"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$F{data_cadastro}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="400" y="0" width="100" height="20" uuid="13bc4d1f-d01e-4f7b-854d-6d623135c3c3"/>
+				<textElement>
+					<font fontName="SansSerif"/>
+				</textElement>
 				<textFieldExpression><![CDATA[""+$F{idade_cliente}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="500" y="0" width="100" height="20" uuid="ea5ef3a1-9fb0-4ec4-856a-38d53e8d3654"/>
+				<reportElement x="500" y="0" width="55" height="20" uuid="ea5ef3a1-9fb0-4ec4-856a-38d53e8d3654"/>
+				<textElement>
+					<font fontName="SansSerif"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$F{qtd_animais}]]></textFieldExpression>
 			</textField>
 		</band>

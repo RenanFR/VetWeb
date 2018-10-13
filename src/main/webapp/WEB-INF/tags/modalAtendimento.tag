@@ -28,7 +28,7 @@
                        <tr>
                            <th><spring:message code="tipoDeAtendimento"/>: </th>
                            <td>
-                               <form:select id="tipoDeAtendimento" path="tipoDeAtendimento" items="${tiposDeAtendimento}" onchange="ajaxService.buscaModeloPorTipoDeAtendimento()">
+                               <form:select id="tipoDeAtendimento" path="tipoDeAtendimento" items="${tiposDeAtendimento}" onchange="ajaxService.buscarModeloPorTipoDeAtendimento()">
                                </form:select>
                            </td>
                        </tr>

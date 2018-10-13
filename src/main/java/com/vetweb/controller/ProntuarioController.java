@@ -24,13 +24,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.vetweb.dao.AgendamentoDAO;
 import com.vetweb.dao.AnimalDAO;
 import com.vetweb.dao.AtendimentoDAO;
 import com.vetweb.dao.ExameDAO;
 import com.vetweb.dao.ProntuarioDAO;
-import com.vetweb.dao.ProprietarioDAO;
 import com.vetweb.dao.VacinaDAO;
 import com.vetweb.jms.JMSNotificacaoOcorrenciaCliente;
 import com.vetweb.model.Agendamento;
@@ -39,6 +39,7 @@ import com.vetweb.model.Exame;
 import com.vetweb.model.OcorrenciaAtendimento;
 import com.vetweb.model.OcorrenciaExame;
 import com.vetweb.model.OcorrenciaPatologia;
+import com.vetweb.model.OcorrenciaUtils;
 import com.vetweb.model.OcorrenciaVacina;
 import com.vetweb.model.Patologia;
 import com.vetweb.model.Prontuario;
@@ -72,10 +73,10 @@ public class ProntuarioController {
     private AgendamentoDAO agendamentoDAO;
     
     @Autowired
-    private ProprietarioDAO proprietarioDAO;
+    private JMSNotificacaoOcorrenciaCliente jmsNotificaOcorrenciaCliente;
     
     @Autowired
-    private JMSNotificacaoOcorrenciaCliente jmsNotificaOcorrenciaCliente;
+    private OcorrenciaUtils ocorrenciaUtils;
     
     public static String modelDML = null;
     
@@ -200,38 +201,21 @@ public class ProntuarioController {
 		prontuario.getExames().forEach(ex -> elementosHistorico.add(ex));
 		return elementosHistorico;
 	}
-	
-	private void autorizaOcorrenciaPorDebito(TipoOcorrenciaProntuario tipoOcorrenciaProntuario, Proprietario proprietario) {
-		if (proprietario.isAtivo()) {
-			return;
-		} else {
-			if (tipoOcorrenciaProntuario == TipoOcorrenciaProntuario.ATENDIMENTO) {
-				if (proprietarioDAO.buscarClientesEmDebito(TipoOcorrenciaProntuario.ATENDIMENTO).contains(proprietario)) {
-					throw new RuntimeException("CLIENTE POSSUI ATENDIMENTOS NÃO PAGOS.");
-				}
-			} else if (tipoOcorrenciaProntuario == TipoOcorrenciaProntuario.VACINA) {
-				if (proprietarioDAO.buscarClientesEmDebito(TipoOcorrenciaProntuario.VACINA).contains(proprietario)) {
-					throw new RuntimeException("CLIENTE POSSUI VACINAS NÃO PAGAS.");
-				}
-			} else if (tipoOcorrenciaProntuario == TipoOcorrenciaProntuario.EXAME) {
-				if (proprietarioDAO.buscarClientesEmDebito(TipoOcorrenciaProntuario.EXAME).contains(proprietario)) {
-					throw new RuntimeException("CLIENTE POSSUI EXAMES NÃO PAGOS.");
-				}
-			}
-		}
-	}
     
     @RequestMapping(value = "/adicionarAtendimento", method = RequestMethod.POST)
     public ModelAndView addAtendimento(@ModelAttribute("atendimento") OcorrenciaAtendimento atendimento,
-    		@RequestParam("prontuarioId") final Long prontuarioId) {
+    		@RequestParam("prontuarioId") final Long prontuarioId, 
+    		RedirectAttributes redirectAttributes) {
     	LOGGER.debug("Inserindo atendimento " + atendimento.getTipoDeAtendimento().getNome() + " no prontuário " + prontuarioId);
     	Prontuario prontuario = prontuarioDAO.buscarPorId(prontuarioId);
-    	autorizaOcorrenciaPorDebito(TipoOcorrenciaProntuario.ATENDIMENTO, prontuario.getAnimal().getProprietario());
+    	ModelAndView modelAndView = new ModelAndView("redirect:prontuarioDoAnimal/" + prontuario.getAnimal().getAnimalId());
+    	ocorrenciaUtils.autorizaOcorrenciaPorDebito(TipoOcorrenciaProntuario.ATENDIMENTO, prontuario.getAnimal().getProprietario());
     	atendimento.setTipo(TipoOcorrenciaProntuario.ATENDIMENTO);
     	atendimento.setProntuario(prontuario);
         prontuarioDAO.salvarAtendimento(atendimento);
         notificaCliente(atendimento);
-        return new ModelAndView("redirect:prontuarioDoAnimal/" + prontuario.getAnimal().getAnimalId());
+        agendarOcorrencia(atendimento);
+		return modelAndView;
     }
 
 	private void notificaCliente(OcorrenciaProntuario elementoProntuario) {
@@ -253,21 +237,24 @@ public class ProntuarioController {
 		}
 		prontuarioPatologia.setPatologia(pat);
 		Prontuario prontuario = prontuarioDAO.buscarPorId(prontuarioId);
+		ModelAndView modelAndView = new ModelAndView("redirect:prontuarioDoAnimal/" + prontuario.getAnimal().getAnimalId());
 		prontuarioPatologia.setProntuario(prontuario);
 		prontuarioPatologia.setData(LocalDateTime.parse(inclusaoPatologia, DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm")));
 		prontuarioDAO.salvarOcorrenciaPatologia(prontuarioPatologia);
     	notificaCliente(prontuarioPatologia);
-    	return new ModelAndView("redirect:prontuarioDoAnimal/" + prontuario.getAnimal().getAnimalId());
+		return modelAndView;
     }
     
     @RequestMapping(value="/adicionarExame", method=RequestMethod.POST)
     public ModelAndView addExame(@RequestParam("prontuarioId") final Long prontuarioId,
     		@RequestParam("exame") final String exameDescricao, 
     		@RequestParam("ocorrenciaExameId") final Long ocorrenciaId,
-    		@RequestParam("data") final String inclusaoExame) {
+    		@RequestParam("data") final String inclusaoExame,
+    		RedirectAttributes redirectAttributes) {
     	Prontuario prontuario = prontuarioDAO.buscarPorId(prontuarioId);
+    	ModelAndView modelAndView = new ModelAndView("redirect:prontuarioDoAnimal/" + prontuario.getAnimal().getAnimalId());
     	Proprietario proprietario = prontuarioDAO.buscarPorId(prontuarioId).getAnimal().getProprietario();
-		autorizaOcorrenciaPorDebito(TipoOcorrenciaProntuario.EXAME, proprietario);
+		ocorrenciaUtils.autorizaOcorrenciaPorDebito(TipoOcorrenciaProntuario.EXAME, proprietario);
     	OcorrenciaExame ocorrenciaExame = new OcorrenciaExame();
     	ocorrenciaExame.setOcorrenciaId(ocorrenciaId);
     	ocorrenciaExame.setProntuario(prontuario);
@@ -276,28 +263,34 @@ public class ProntuarioController {
     	ocorrenciaExame.setTipo(TipoOcorrenciaProntuario.EXAME);
     	Exame exame = exameDAO.buscarPorDescricao(exameDescricao);
 		ocorrenciaExame.setExame(exame);
-		if (ocorrenciaExame.getData().isAfter(LocalDateTime.now())) {
-			Agendamento agendamento = new Agendamento();
-			agendamento.setOcorrencia(ocorrenciaExame);
-			agendamento.setTipo(TipoOcorrenciaProntuario.EXAME);
-			agendamento.setDataHoraInicial(ocorrenciaExame.getData());
-			agendamento.setDataHoraFinal(ocorrenciaExame.getData().plusHours(1));
-			agendamentoDAO.salvar(agendamento);
-		}
+		agendarOcorrencia(ocorrenciaExame);
 		prontuarioDAO.salvarOcorrenciaExame(ocorrenciaExame);
 		notificaCliente(ocorrenciaExame);
-    	return new ModelAndView("redirect:prontuarioDoAnimal/" + prontuario.getAnimal().getAnimalId());
+		return modelAndView;
     }
+
+	private void agendarOcorrencia(OcorrenciaProntuario ocorrenciaProntuario) {
+		if (ocorrenciaProntuario.getData().isAfter(LocalDateTime.now())) {
+			Agendamento agendamento = new Agendamento();
+			agendamento.setOcorrencia(ocorrenciaProntuario);
+			agendamento.setTipo(TipoOcorrenciaProntuario.EXAME);
+			agendamento.setDataHoraInicial(ocorrenciaProntuario.getData());
+			agendamento.setDataHoraFinal(ocorrenciaProntuario.getData().plusHours(1));
+			agendamentoDAO.salvar(agendamento);
+		}
+	}
     
     @RequestMapping(value="/adicionarVacina", method=RequestMethod.POST)
     public ModelAndView addVacina(@RequestParam("prontuarioId") final Long prontuarioId,
     		@RequestParam("vacina") final String vacinaStr,
     		@RequestParam("prontuarioVacinaId") final Long prontuarioVacinaId,
-    		@RequestParam("data") final String inclusaoVacina) {
+    		@RequestParam("data") final String inclusaoVacina,
+    		RedirectAttributes redirectAttributes) {
     	LOGGER.info(("Inserindo vacina " + vacinaStr + " no prontuário " + prontuarioId).toUpperCase());
     	Prontuario prontuario = prontuarioDAO.buscarPorId(prontuarioId);
+    	ModelAndView modelAndView = new ModelAndView("redirect:prontuarioDoAnimal/" + prontuarioDAO.buscarPorId(prontuarioId).getAnimal().getAnimalId());
     	Proprietario proprietario = prontuario.getAnimal().getProprietario();
-		autorizaOcorrenciaPorDebito(TipoOcorrenciaProntuario.VACINA, proprietario);
+    	ocorrenciaUtils.autorizaOcorrenciaPorDebito(TipoOcorrenciaProntuario.VACINA, proprietario);
     	OcorrenciaVacina prontuarioVacina = new OcorrenciaVacina();
     	prontuarioVacina.setTipo(TipoOcorrenciaProntuario.VACINA);
     	Vacina vacina = vacinaDAO.buscarPorNome(vacinaStr);
@@ -308,8 +301,9 @@ public class ProntuarioController {
 		prontuarioVacina.setProntuario(prontuario);
 		prontuarioVacina.setData(LocalDateTime.parse(inclusaoVacina, DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm")));
     	prontuarioDAO.salvarOcorrenciaVacina(prontuarioVacina);
+    	agendarOcorrencia(prontuarioVacina);
     	notificaCliente(prontuarioVacina);
-    	return new ModelAndView("redirect:prontuarioDoAnimal/" + prontuarioDAO.buscarPorId(prontuarioId).getAnimal().getAnimalId());
+		return modelAndView;
     }
     
     @RequestMapping(value = "/removerAtendimentoDoProntuario/{prontuarioId}/{atendimentoId}", method = RequestMethod.GET)
