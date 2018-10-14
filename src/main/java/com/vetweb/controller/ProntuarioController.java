@@ -13,6 +13,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
@@ -191,8 +192,21 @@ public class ProntuarioController {
     			.map(exame -> exame.getDescricao()).collect(Collectors.toList()));
 		List<OcorrenciaProntuario> elementosHistorico = adicionaHistoricoAoProntuario(prontuario);
 		modelAndView.addObject("historico", elementosHistorico);
+    	Proprietario proprietario = prontuario.getAnimal().getProprietario();
+    	addDebitosClientePagina(modelAndView, proprietario);
         return modelAndView;
     }
+
+	private void addDebitosClientePagina(ModelAndView modelAndView, Proprietario proprietario) {
+		for (TipoOcorrenciaProntuario tipoOcorrenciaProntuario : TipoOcorrenciaProntuario.values() ) {
+			try {
+				ocorrenciaUtils.autorizaOcorrenciaPorDebito(tipoOcorrenciaProntuario, proprietario);
+			} catch (DebitoOcorrenciaException debitoOcorrenciaException) {
+				String contemDebitoTipo = "possuiDebito" + StringUtils.capitalize(debitoOcorrenciaException.getTipoOcorrenciaProntuario().toString().toLowerCase());
+				modelAndView.addObject(contemDebitoTipo, true);
+			}
+		}
+	}
 
 	private List<OcorrenciaProntuario> adicionaHistoricoAoProntuario(Prontuario prontuario) {
 		List<OcorrenciaProntuario> elementosHistorico = new ArrayList<>();
@@ -210,7 +224,6 @@ public class ProntuarioController {
     	LOGGER.debug("Inserindo atendimento " + atendimento.getTipoDeAtendimento().getNome() + " no prontuário " + prontuarioId);
     	Prontuario prontuario = prontuarioDAO.buscarPorId(prontuarioId);
     	ModelAndView modelAndView = new ModelAndView("redirect:prontuarioDoAnimal/" + prontuario.getAnimal().getAnimalId());
-    	ocorrenciaUtils.autorizaOcorrenciaPorDebito(TipoOcorrenciaProntuario.ATENDIMENTO, prontuario.getAnimal().getProprietario());
     	atendimento.setTipo(TipoOcorrenciaProntuario.ATENDIMENTO);
     	atendimento.setProntuario(prontuario);
         prontuarioDAO.salvarAtendimento(atendimento);
@@ -254,8 +267,6 @@ public class ProntuarioController {
     		RedirectAttributes redirectAttributes) {
     	Prontuario prontuario = prontuarioDAO.buscarPorId(prontuarioId);
     	ModelAndView modelAndView = new ModelAndView("redirect:prontuarioDoAnimal/" + prontuario.getAnimal().getAnimalId());
-    	Proprietario proprietario = prontuarioDAO.buscarPorId(prontuarioId).getAnimal().getProprietario();
-		ocorrenciaUtils.autorizaOcorrenciaPorDebito(TipoOcorrenciaProntuario.EXAME, proprietario);
     	OcorrenciaExame ocorrenciaExame = new OcorrenciaExame();
     	ocorrenciaExame.setOcorrenciaId(ocorrenciaId);
     	ocorrenciaExame.setProntuario(prontuario);
@@ -290,12 +301,6 @@ public class ProntuarioController {
     	LOGGER.info(("Inserindo vacina " + vacinaStr + " no prontuário " + prontuarioId).toUpperCase());
     	Prontuario prontuario = prontuarioDAO.buscarPorId(prontuarioId);
     	ModelAndView modelAndView = new ModelAndView("redirect:prontuarioDoAnimal/" + prontuarioDAO.buscarPorId(prontuarioId).getAnimal().getAnimalId());
-    	Proprietario proprietario = prontuario.getAnimal().getProprietario();
-    	try {
-    		ocorrenciaUtils.autorizaOcorrenciaPorDebito(TipoOcorrenciaProntuario.VACINA, proprietario);
-    	} catch (DebitoOcorrenciaException debitoOcorrenciaException) {
-    		redirectAttributes.addFlashAttribute("tipoDebito", debitoOcorrenciaException.getTipoOcorrenciaProntuario());
-    	}
     	OcorrenciaVacina prontuarioVacina = new OcorrenciaVacina();
     	prontuarioVacina.setTipo(TipoOcorrenciaProntuario.VACINA);
     	Vacina vacina = vacinaDAO.buscarPorNome(vacinaStr);

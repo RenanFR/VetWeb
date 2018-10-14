@@ -21,7 +21,7 @@
               </button>
             </div>
             <div class="modal-body">
-            <form:form servletRelativeAction="/prontuario/adicionarExame?prontuarioId=${prontuario.prontuarioId}" method="POST">
+            <form:form servletRelativeAction="/prontuario/adicionarExame?prontuarioId=${prontuario.prontuarioId}" method="POST" id="frmIncluirExame">
                   <caption><spring:message code="adcExame"/></caption>
                   <tbody>
                   
@@ -50,7 +50,7 @@
                   
                   <div class="modal-footer">
                       <input type="reset" value="reset" class="btn btn-primary"   />
-                      <input type="submit" value="submit" class="btn btn-primary"   />
+                      <input type="submit" value="submit" class="btn btn-primary" id="btnIncluirExame"  />
                   </div>
               </form:form>
             </div>

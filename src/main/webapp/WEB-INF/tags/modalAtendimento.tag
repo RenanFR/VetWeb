@@ -47,7 +47,7 @@
                    
                    <div class="modal-footer">
                        <input type="reset" value="reset" class="btn btn-primary"   />
-                       <input type="submit" value="submit" class="btn btn-primary"   />
+                       <input type="submit" value="submit" class="btn btn-primary" id="btnIncluirAtendimento"  />
                    </div>
                </form:form>
              </div>

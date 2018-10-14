@@ -52,6 +52,7 @@
     
     <jsp:attribute name="script">
     	<script src="<c:url value="/resources/js/app/ajaxService.js"></c:url>" type="text/javascript"></script>
+    	<script src="<c:url value="/resources/js/app/prontuario.js"></c:url>" type="text/javascript"></script>
     </jsp:attribute>
     
     <jsp:body>
@@ -136,7 +137,9 @@
 					</tbody>
 				</table>
 			</div>
-			<div id="tipoDebito">${tipoDebito}</div>
+			<div id="possuiDebitoVacina" style="display: none;">${possuiDebitoVacina}</div>
+			<div id="possuiDebitoAtendimento" style="display: none;">${possuiDebitoAtendimento}</div>
+			<div id="possuiDebitoExame" style="display: none;">${possuiDebitoExame}</div>
 		</div>
 		
 		<vetweb:modalAtendimento prontuario="${prontuario}" tiposDeAtendimento="${tiposDeAtendimento}"></vetweb:modalAtendimento>

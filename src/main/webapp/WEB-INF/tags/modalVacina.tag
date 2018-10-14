@@ -21,7 +21,7 @@
               </button>
             </div>
             <div class="modal-body">
-            <form:form servletRelativeAction="/prontuario/adicionarVacina?prontuarioId=${prontuario.prontuarioId}" method="POST">
+            <form:form servletRelativeAction="/prontuario/adicionarVacina?prontuarioId=${prontuario.prontuarioId}" method="POST" id="frmIncluirVacina">
                   <caption><spring:message code="adcVacina" arguments="${prontuario.animal.nome}"></spring:message></caption>
                   <tbody>
                       <input type="text" name="prontuarioId" id="prontuarioId" hidden="hidden"  />
@@ -46,7 +46,7 @@
                   
                   <div class="modal-footer">
                       <input type="reset" value="reset" class="btn btn-primary"   />
-                      <input type="submit" value="submit" class="btn btn-primary"   />
+                      <input type="submit" value="submit" class="btn btn-primary" id="btnIncluirVacina"  />
                   </div>
               </form:form>
             </div>
