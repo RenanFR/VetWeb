@@ -245,6 +245,23 @@ var ajaxService = {
 		
 	},
 	
+	remarcarOcorrencia: function(id, tipoOcorrencia, dataHoraInicial, dataHoraFinal) {
+		
+		$.ajax({
+			type: 'GET',
+			url: '/vetweb/ajax/prontuario/ocorrencia/' + id,
+			contentType: 'application/json',
+			data: "tipoOcorrencia=" + tipoOcorrencia + "&dataHoraInicial=" + dataHoraInicial + "&dataHoraFinal=" + dataHoraFinal + "",
+			success: function (data, textStatus, jqXHR) {
+				console.log(data);
+			},
+			error: function (jqXHR, textStatus, errorThrown) {
+				console.log('error');
+			}
+		});
+		
+	},
+	
 	carregarEnderecoPeloCEP: function() {
 		
        var cep = $('#cep').val().replace(/\D/g, '');

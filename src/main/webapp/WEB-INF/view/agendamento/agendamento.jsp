@@ -51,10 +51,7 @@
 	   				    enderecoProntuario.attr('href', url + $('#type').text() + '/' + $('#id').text());
 					},
 					eventDragStop: function(calEvent, jsEvent, ui, view) {
-						console.log(calEvent.id);
-						console.log(calEvent.title);
-						console.log(moment(view.start._i).format('YYYY-MM-DDTHH:mm'));
-						console.log(moment(view.end._i).format('YYYY-MM-DDTHH:mm'));
+	   				 	ajaxService.remarcarOcorrencia(calEvent.id, calEvent.type, moment(view.start._i).format('YYYY-MM-DDTHH:mm'), moment(view.end._i).format('YYYY-MM-DDTHH:mm'));
 					},
 					selectable: true,
 					selectHelper: true,

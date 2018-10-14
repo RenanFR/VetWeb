@@ -28,6 +28,7 @@ import com.vetweb.model.OcorrenciaPatologia;
 import com.vetweb.model.OcorrenciaVacina;
 import com.vetweb.model.Raca;
 import com.vetweb.model.pojo.OcorrenciaProntuario;
+import com.vetweb.model.pojo.TipoOcorrenciaProntuario;
 
 @RestController
 @Transactional
@@ -114,22 +115,29 @@ public class AjaxController {
     			.buscarAnimaisDoCliente(codigoCliente);
     }
     
-    @RequestMapping(value = "/ocorrencia/{codigoOcorrencia}", method = RequestMethod.PUT)
+    @RequestMapping(value = "/ocorrencia/{codigoOcorrencia}", method = RequestMethod.GET)
     public Agendamento remarcarOcorrencia(@PathVariable("codigoOcorrencia") Long idOcorrencia, 
     		@RequestParam("tipoOcorrencia") String tipoOcorrencia,
     		@RequestParam("dataHoraInicial") LocalDateTime dataHoraInicial,
     		@RequestParam("dataHoraFinal") LocalDateTime dataHoraFinal) {
-    	OcorrenciaProntuario ocorrencia = ocorrenciaFactory.getOcorrencia(tipoOcorrencia, idOcorrencia);
-    	OcorrenciaProntuario agendaOcorrencia = agendamentoDAO.buscarPorIdOcorrencia(ocorrencia.getOcorrenciaId());
-    	Agendamento agendamento = new Agendamento();
-		if (agendaOcorrencia == null) {
-    		agendamento.setOcorrencia(ocorrencia);
+    	Agendamento ocorrenciaAgendamento = agendamentoDAO.buscarPorIdOcorrencia(idOcorrencia);
+    	if (ocorrenciaAgendamento != null) {
+    		ocorrenciaAgendamento.setTipo(TipoOcorrenciaProntuario.valueOf(tipoOcorrencia));
+    		ocorrenciaAgendamento.setDataHoraInicial(dataHoraInicial);
+    		ocorrenciaAgendamento.setDataHoraFinal(dataHoraInicial);
+    		agendamentoDAO.salvar(ocorrenciaAgendamento);
+    		return ocorrenciaAgendamento;
+    	} else {
+    		OcorrenciaProntuario ocorrenciaProntuario = ocorrenciaFactory.getOcorrencia(tipoOcorrencia, idOcorrencia);
+    		Agendamento agendamento = new Agendamento();
+    		agendamento.setOcorrencia(ocorrenciaProntuario);
     		agendamento.setDataHoraInicial(dataHoraInicial);
     		agendamento.setDataHoraFinal(dataHoraFinal);
-    	} else {
-    		agendaOcorrencia.setData(dataHoraInicial);
+    		agendamento.setTipo(TipoOcorrenciaProntuario.valueOf(tipoOcorrencia));
+    		agendamentoDAO.salvar(agendamento);
+    		return agendamento;
+    		
     	}
-    	return agendamento;
     }
     
 }

@@ -10,7 +10,6 @@ import javax.persistence.PersistenceContext;
 import org.springframework.stereotype.Repository;
 
 import com.vetweb.model.Agendamento;
-import com.vetweb.model.pojo.OcorrenciaProntuario;
 
 @Repository
 public class AgendamentoDAO implements IDAO<Agendamento>{
@@ -51,12 +50,12 @@ public class AgendamentoDAO implements IDAO<Agendamento>{
 				.find(Agendamento.class, id);
 	}
 	
-	public OcorrenciaProntuario buscarPorIdOcorrencia(long id) {
+	public Agendamento buscarPorIdOcorrencia(long id) {
 		String consulta = "SELECT agendamento FROM Agendamento agendamento "
 				+ "WHERE agendamento.ocorrencia.ocorrenciaId = :codigoOcorrencia";
 		try {
 			return entityManager
-					.createQuery(consulta, OcorrenciaProntuario.class)
+					.createQuery(consulta, Agendamento.class)
 					.setParameter("codigoOcorrencia", id)
 					.getSingleResult();
 		} catch (NoResultException noResultException) {
