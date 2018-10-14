@@ -4,11 +4,13 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 
 import org.springframework.stereotype.Repository;
 
 import com.vetweb.model.Agendamento;
+import com.vetweb.model.pojo.OcorrenciaProntuario;
 
 @Repository
 public class AgendamentoDAO implements IDAO<Agendamento>{
@@ -47,6 +49,19 @@ public class AgendamentoDAO implements IDAO<Agendamento>{
 	public Agendamento buscarPorId(long id) {
 		return entityManager
 				.find(Agendamento.class, id);
+	}
+	
+	public OcorrenciaProntuario buscarPorIdOcorrencia(long id) {
+		String consulta = "SELECT agendamento FROM Agendamento agendamento "
+				+ "WHERE agendamento.ocorrencia.ocorrenciaId = :codigoOcorrencia";
+		try {
+			return entityManager
+					.createQuery(consulta, OcorrenciaProntuario.class)
+					.setParameter("codigoOcorrencia", id)
+					.getSingleResult();
+		} catch (NoResultException noResultException) {
+			return null;
+		}
 	}
 
 	@Override

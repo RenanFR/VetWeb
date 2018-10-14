@@ -1,6 +1,7 @@
 package com.vetweb.controller.rest;
 //@author renan.rodrigues@metasix.com.br
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,19 +10,24 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.vetweb.dao.AgendamentoDAO;
 import com.vetweb.dao.AnimalDAO;
 import com.vetweb.dao.AtendimentoDAO;
 import com.vetweb.dao.ProntuarioDAO;
 import com.vetweb.dao.ProprietarioDAO;
+import com.vetweb.model.Agendamento;
 import com.vetweb.model.Animal;
 import com.vetweb.model.OcorrenciaAtendimento;
 import com.vetweb.model.OcorrenciaExame;
+import com.vetweb.model.OcorrenciaFactory;
 import com.vetweb.model.OcorrenciaPatologia;
 import com.vetweb.model.OcorrenciaVacina;
 import com.vetweb.model.Raca;
+import com.vetweb.model.pojo.OcorrenciaProntuario;
 
 @RestController
 @Transactional
@@ -39,6 +45,12 @@ public class AjaxController {
     
     @Autowired
     private ProprietarioDAO proprietarioDAO;
+    
+    @Autowired
+    private OcorrenciaFactory ocorrenciaFactory;
+    
+    @Autowired
+    private AgendamentoDAO agendamentoDAO;
     
     @RequestMapping(value = "/editarAtendimento/{atendimentoId}", method = RequestMethod.GET)
     public OcorrenciaAtendimento atendimentoParaEdicao(@PathVariable("atendimentoId") final Long atendimentoId) {
@@ -100,6 +112,24 @@ public class AjaxController {
     public @ResponseBody List<Animal> buscarAnimaisDoCliente(@PathVariable("codigoCliente") Long codigoCliente) {
     	return proprietarioDAO
     			.buscarAnimaisDoCliente(codigoCliente);
-    }    
+    }
+    
+    @RequestMapping(value = "/ocorrencia/{codigoOcorrencia}", method = RequestMethod.PUT)
+    public Agendamento remarcarOcorrencia(@PathVariable("codigoOcorrencia") Long idOcorrencia, 
+    		@RequestParam("tipoOcorrencia") String tipoOcorrencia,
+    		@RequestParam("dataHoraInicial") LocalDateTime dataHoraInicial,
+    		@RequestParam("dataHoraFinal") LocalDateTime dataHoraFinal) {
+    	OcorrenciaProntuario ocorrencia = ocorrenciaFactory.getOcorrencia(tipoOcorrencia, idOcorrencia);
+    	OcorrenciaProntuario agendaOcorrencia = agendamentoDAO.buscarPorIdOcorrencia(ocorrencia.getOcorrenciaId());
+    	Agendamento agendamento = new Agendamento();
+		if (agendaOcorrencia == null) {
+    		agendamento.setOcorrencia(ocorrencia);
+    		agendamento.setDataHoraInicial(dataHoraInicial);
+    		agendamento.setDataHoraFinal(dataHoraFinal);
+    	} else {
+    		agendaOcorrencia.setData(dataHoraInicial);
+    	}
+    	return agendamento;
+    }
     
 }
