@@ -129,6 +129,7 @@ public class AgendamentoController {
 			.stream()
 			.filter(ocorrenciaVacina -> ocorrenciaVacina.getData().isBefore(LocalDateTime.now()))
 			.filter(ocorrenciaVacina -> aplicarFiltroDeData(dataInicialFiltro, dataFinalFiltro, ocorrenciaVacina))
+			.filter(ocorrenciaVacina -> ocorrenciaVacina.getAgendamentos().size() == 0)
 			.forEach(ocorrenciaVacina -> {
 				EventFullCalendar event = new EventFullCalendar();
 				event.setId(String.valueOf(ocorrenciaVacina.getOcorrenciaId()));
@@ -143,6 +144,7 @@ public class AgendamentoController {
 			.stream()
 			.filter(atendimento -> atendimento.getData().isBefore(LocalDateTime.now()))
 			.filter(atendimento -> aplicarFiltroDeData(dataInicialFiltro, dataFinalFiltro, atendimento))
+			.filter(atendimento -> atendimento.getAgendamentos().size() == 0)
 			.forEach(atendimento -> {
 				EventFullCalendar event = new EventFullCalendar();
 				event.setId(String.valueOf(atendimento.getOcorrenciaId()));
@@ -158,6 +160,7 @@ public class AgendamentoController {
 			.stream()
 			.filter(ocorrenciaExame -> ocorrenciaExame.getData().isBefore(LocalDateTime.now()))
 			.filter(ocorrenciaExame -> aplicarFiltroDeData(dataInicialFiltro, dataFinalFiltro, ocorrenciaExame))
+			.filter(ocorrenciaExame -> ocorrenciaExame.getAgendamentos().size() == 0)
 			.forEach(ocorrenciaExame -> {
 				EventFullCalendar eventFullCalendar = new EventFullCalendar();
 				eventFullCalendar.setId(String.valueOf(ocorrenciaExame.getOcorrenciaId()));

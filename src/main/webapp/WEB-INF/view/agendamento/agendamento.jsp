@@ -50,8 +50,8 @@
 	   				    var url = '/vetweb/agendamento/ocorrencia/';
 	   				    enderecoProntuario.attr('href', url + $('#type').text() + '/' + $('#id').text());
 					},
-					eventDragStop: function(calEvent, jsEvent, ui, view) {
-	   				 	ajaxService.remarcarOcorrencia(calEvent.id, calEvent.type, moment(view.start._i).format('YYYY-MM-DDTHH:mm'), moment(view.end._i).format('YYYY-MM-DDTHH:mm'));
+					eventDrop: function(event, delta, revertFunc) {
+	   				 	ajaxService.remarcarOcorrencia(event.id, event.type, moment(event.start._i).format('YYYY-MM-DDTHH:mm'), moment(event.end._i).format('YYYY-MM-DDTHH:mm'));
 					},
 					selectable: true,
 					selectHelper: true,
