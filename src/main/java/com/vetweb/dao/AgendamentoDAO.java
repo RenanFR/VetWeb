@@ -65,5 +65,19 @@ public class AgendamentoDAO implements IDAO<Agendamento>{
 		entityManager.remove(agendamento);
 	}
 	
+	public boolean possuiAgendaPara(LocalDateTime dataHoraInicial, LocalDateTime dataHoraFinal) {
+		Agendamento agendamentoEncontradoFiltro = new Agendamento();
+		try {
+			agendamentoEncontradoFiltro = entityManager
+					.createQuery("SELECT a FROM Agendamento a WHERE a.dataHoraFinal BETWEEN :dataHoraInicial AND :dataHoraFinal", Agendamento.class)
+					.setParameter("dataHoraInicial", dataHoraInicial)
+					.setParameter("dataHoraFinal", dataHoraFinal)
+					.getSingleResult();
+		} catch (NoResultException noResultException) {
+			return false;
+		}
+		return agendamentoEncontradoFiltro != null;
+	}
+	
 	
 }

@@ -151,6 +151,9 @@ public class AjaxController {
     		agendamentoDAO.salvar(ocorrenciaAgendamento);
     		return ocorrenciaAgendamento;
     	} else {
+    		if (agendamentoDAO.possuiAgendaPara(dataHoraInicial, dataHoraFinal)) {
+    			throw new RuntimeException("AGENDA BLOQUEADA PARA A DATA/INTERVALO INFORMADO.");
+    		}
     		Agendamento agendamento = new Agendamento();
     		agendamento.setOcorrencia(ocorrenciaProntuario);
     		agendamento.setDataHoraInicial(dataHoraInicial);
