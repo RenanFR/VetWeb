@@ -130,7 +130,9 @@ public class AgendamentoController {
 			.stream()
 			.filter(ocorrenciaVacina -> ocorrenciaVacina.getData().isBefore(LocalDateTime.now()))
 			.filter(ocorrenciaVacina -> aplicarFiltroDeData(dataInicialFiltro, dataFinalFiltro, ocorrenciaVacina))
-			.filter(ocorrenciaVacina -> ocorrenciaVacina.getAgendamentos().size() == 0)
+			.filter(ocorrenciaVacina -> {
+				return possuiAgendamentoVigente(ocorrenciaVacina);
+			})
 			.forEach(ocorrenciaVacina -> {
 				EventFullCalendar event = new EventFullCalendar();
 				event.setId(String.valueOf(ocorrenciaVacina.getOcorrenciaId()));
@@ -146,7 +148,9 @@ public class AgendamentoController {
 			.stream()
 			.filter(atendimento -> atendimento.getData().isBefore(LocalDateTime.now()))
 			.filter(atendimento -> aplicarFiltroDeData(dataInicialFiltro, dataFinalFiltro, atendimento))
-			.filter(atendimento -> atendimento.getAgendamentos().size() == 0)
+			.filter(atendimento -> {
+				return possuiAgendamentoVigente(atendimento);
+			})
 			.forEach(atendimento -> {
 				EventFullCalendar event = new EventFullCalendar();
 				event.setId(String.valueOf(atendimento.getOcorrenciaId()));
@@ -162,7 +166,9 @@ public class AgendamentoController {
 			.stream()
 			.filter(ocorrenciaExame -> ocorrenciaExame.getData().isBefore(LocalDateTime.now()))
 			.filter(ocorrenciaExame -> aplicarFiltroDeData(dataInicialFiltro, dataFinalFiltro, ocorrenciaExame))
-			.filter(ocorrenciaExame -> ocorrenciaExame.getAgendamentos().size() == 0)
+			.filter(ocorrenciaExame -> {
+				return possuiAgendamentoVigente(ocorrenciaExame);
+			})
 			.forEach(ocorrenciaExame -> {
 				EventFullCalendar eventFullCalendar = new EventFullCalendar();
 				eventFullCalendar.setId(String.valueOf(ocorrenciaExame.getOcorrenciaId()));
@@ -173,6 +179,11 @@ public class AgendamentoController {
 				eventFullCalendar.setColor("#BFBFBF");
 				events.add(eventFullCalendar);
 			});
+	}
+
+	private boolean possuiAgendamentoVigente(OcorrenciaProntuario ocorrenciaProntuario) {
+		long qtdAgendamentosVigentes = ocorrenciaProntuario.getAgendamentos().stream().filter(ag -> ag.getDataHoraFinal().isAfter(LocalDateTime.now())).count();
+		return qtdAgendamentosVigentes == 0;
 	}
 
 	private boolean aplicarFiltroDeData(LocalDate dataInicialFiltro, LocalDate dataFinalFiltro,

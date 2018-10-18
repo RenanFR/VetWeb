@@ -83,6 +83,8 @@ public class Scheduler {
     public void removerAgendamentosAntigos() {
     	agendamentoDAO
     		.listarTodos(LocalDateTime.of(LocalDateTime.now().getYear(), Month.JANUARY.getValue(), 1, 0, 0), LocalDateTime.now().minusDays(1))
+    		.stream()
+    		.peek(ag -> LOGGER.info("REMOVENDO AGENDAMENTO ANTIGO DE " + ag.getOcorrencia().getTipo() + ", DATA " + ag.getDataHoraInicial()))
     		.forEach(agenda -> {
     			agendamentoDAO.remover(agenda);
     		});

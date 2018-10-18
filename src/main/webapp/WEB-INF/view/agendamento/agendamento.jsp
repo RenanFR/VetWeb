@@ -51,7 +51,11 @@
 	   				    enderecoProntuario.attr('href', url + $('#type').text() + '/' + $('#id').text());
 					},
 					eventDrop: function(event, delta, revertFunc) {
-	   				 	ajaxService.remarcarOcorrencia(event.id, event.type, moment(event.start._i).format('YYYY-MM-DDTHH:mm'), moment(event.end._i).format('YYYY-MM-DDTHH:mm'));
+					    if (!confirm("CONFIRMA A REMARCAÇÃO DA OCORRÊNCIA DE " + event.type + "?")) {
+					        revertFunc();
+				      	} else {
+		   				 	ajaxService.remarcarOcorrencia(event.id, event.type, moment(event.start._i).format('YYYY-MM-DDTHH:mm'), moment(event.end._i).format('YYYY-MM-DDTHH:mm'));
+				      	}
 					},
 					selectable: true,
 					selectHelper: true,
