@@ -120,6 +120,28 @@ public class AjaxController {
     		@RequestParam("tipoOcorrencia") String tipoOcorrencia,
     		@RequestParam("dataHoraInicial") LocalDateTime dataHoraInicial,
     		@RequestParam("dataHoraFinal") LocalDateTime dataHoraFinal) {
+    	OcorrenciaProntuario ocorrenciaProntuario = ocorrenciaFactory.getOcorrencia(tipoOcorrencia, idOcorrencia);
+    	if (dataHoraFinal.isBefore(LocalDateTime.now())) {
+    		ocorrenciaProntuario.setData(dataHoraInicial);
+    		switch (ocorrenciaProntuario.getTipo()) {
+			case ATENDIMENTO:
+				OcorrenciaAtendimento ocorrenciaAtendimento = (OcorrenciaAtendimento)ocorrenciaProntuario;
+				atendimentoDAO.salvar(ocorrenciaAtendimento);
+				break;
+			case VACINA:
+				OcorrenciaVacina ocorrenciaVacina = (OcorrenciaVacina)ocorrenciaProntuario;
+				prontuarioDAO.salvarOcorrenciaVacina(ocorrenciaVacina);
+				break;
+			case EXAME:
+				OcorrenciaExame ocorrenciaExame = (OcorrenciaExame)ocorrenciaProntuario;
+				prontuarioDAO.salvarOcorrenciaExame(ocorrenciaExame);
+			case PATOLOGIA: 
+				break;
+			default:
+				break;
+			}
+    		return null;
+    	}
     	Agendamento ocorrenciaAgendamento = agendamentoDAO.buscarPorIdOcorrencia(idOcorrencia);
     	if (ocorrenciaAgendamento != null) {
     		ocorrenciaAgendamento.setTipo(TipoOcorrenciaProntuario.valueOf(tipoOcorrencia));
@@ -128,7 +150,6 @@ public class AjaxController {
     		agendamentoDAO.salvar(ocorrenciaAgendamento);
     		return ocorrenciaAgendamento;
     	} else {
-    		OcorrenciaProntuario ocorrenciaProntuario = ocorrenciaFactory.getOcorrencia(tipoOcorrencia, idOcorrencia);
     		Agendamento agendamento = new Agendamento();
     		agendamento.setOcorrencia(ocorrenciaProntuario);
     		agendamento.setDataHoraInicial(dataHoraInicial);
