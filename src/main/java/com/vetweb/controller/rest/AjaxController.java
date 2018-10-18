@@ -121,6 +121,7 @@ public class AjaxController {
     		@RequestParam("dataHoraInicial") LocalDateTime dataHoraInicial,
     		@RequestParam("dataHoraFinal") LocalDateTime dataHoraFinal) {
     	OcorrenciaProntuario ocorrenciaProntuario = ocorrenciaFactory.getOcorrencia(tipoOcorrencia, idOcorrencia);
+    	Agendamento ocorrenciaAgendamento = agendamentoDAO.buscarPorIdOcorrencia(idOcorrencia);
     	if (dataHoraFinal.isBefore(LocalDateTime.now())) {
     		ocorrenciaProntuario.setData(dataHoraInicial);
     		switch (ocorrenciaProntuario.getTipo()) {
@@ -140,9 +141,9 @@ public class AjaxController {
 			default:
 				break;
 			}
+    		if (ocorrenciaAgendamento != null) agendamentoDAO.remover(ocorrenciaAgendamento);
     		return null;
     	}
-    	Agendamento ocorrenciaAgendamento = agendamentoDAO.buscarPorIdOcorrencia(idOcorrencia);
     	if (ocorrenciaAgendamento != null) {
     		ocorrenciaAgendamento.setTipo(TipoOcorrenciaProntuario.valueOf(tipoOcorrencia));
     		ocorrenciaAgendamento.setDataHoraInicial(dataHoraInicial);
