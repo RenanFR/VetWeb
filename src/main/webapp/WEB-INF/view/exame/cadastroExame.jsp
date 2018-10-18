@@ -40,6 +40,16 @@
                         <th><label for="preco"><spring:message code="custo"/></label></th>
                         <td><form:input path="preco" id="preco"></form:input></td>
                     </tr>
+                    <tr>
+                        <th><label for="duracao"><spring:message code="duracao"/></label></th>
+                        <td>
+	                       	<select name="duracao">
+	                        	<c:forEach items="${duracoes}" var="duracao">
+	                        		<option>${duracao}</option>
+	                        	</c:forEach>
+	                       	</select>
+                       	</td>
+                    </tr>
                 </tbody>
             </table>
             <input type="submit" value="submit"  />

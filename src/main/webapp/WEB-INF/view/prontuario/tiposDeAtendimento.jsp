@@ -56,7 +56,7 @@
                     <th><spring:message code="frequencia"></spring:message></th>
                     <th><spring:message code="modeloAtendimento"></spring:message></th>
                     <th><spring:message code="ativo"></spring:message></th>
-                    <th><spring:message code="ativo"></spring:message></th>
+                    <th><spring:message code="custo"></spring:message></th>
                 </tr>
             </thead>
             <tbody>

@@ -51,6 +51,7 @@
                     <th><spring:message code="apresentacao"></spring:message></th>
                     <th><spring:message code="encerramento"></spring:message></th>
                     <th><spring:message code="custo"></spring:message></th>
+                    <th><spring:message code="duracao"></spring:message></th>
                 </tr>
             </thead>
             <tbody>
@@ -76,6 +77,9 @@
                         </td>
                         <td>
                             ${exame.preco}
+                        </td>
+                        <td>
+                            ${exame.duracao}
                         </td>
                     </tr>
                 </c:forEach>

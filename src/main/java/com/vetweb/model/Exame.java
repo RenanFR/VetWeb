@@ -2,6 +2,7 @@ package com.vetweb.model;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.Duration;
 
 import javax.persistence.Column;
 
@@ -31,6 +32,8 @@ public class Exame implements Serializable {
     private String encerramento;
 	
 	private BigDecimal preco;
+	
+	private Duration duracao;
 
     public Exame() {
 	}
@@ -79,6 +82,14 @@ public class Exame implements Serializable {
 
 	public void setPreco(BigDecimal preco) {
 		this.preco = preco;
+	}
+
+	public Duration getDuracao() {
+		return duracao;
+	}
+
+	public void setDuracao(Duration duracao) {
+		this.duracao = duracao;
 	}
     
 }

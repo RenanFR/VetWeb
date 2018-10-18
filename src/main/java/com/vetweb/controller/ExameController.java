@@ -1,5 +1,10 @@
 package com.vetweb.controller;
 
+import java.time.Duration;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,6 +29,9 @@ public class ExameController {
 	@RequestMapping("form")
 	public ModelAndView form(@ModelAttribute("exame") Exame exame) {
 		ModelAndView modelAndView = new ModelAndView("exame/cadastroExame");
+    	Set<Duration> duracoes = Stream.of(Duration.ofMinutes(30), Duration.ofHours(1), Duration.ofHours(3), Duration.ofHours(5))
+    			.collect(Collectors.toSet());
+    	modelAndView.addObject("duracoes", duracoes);
 		return modelAndView;
 	}
 	
@@ -52,7 +60,10 @@ public class ExameController {
 	@GetMapping("atualizar/{exameId}")
 	public ModelAndView atualizarExame(@PathVariable("exameId") Long exameId) {
 		ModelAndView modelAndView = new ModelAndView("exame/cadastroExame");
+    	Set<Duration> duracoes = Stream.of(Duration.ofMinutes(30), Duration.ofHours(1), Duration.ofHours(3), Duration.ofHours(5))
+    			.collect(Collectors.toSet());
 		Exame exame = exameDAO.buscarPorId(exameId);
+		modelAndView.addObject("duracoes", duracoes);
 		modelAndView.addObject("exame", exame);
 		return modelAndView;
 	}

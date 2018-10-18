@@ -124,6 +124,7 @@ public class AgendamentoController {
 
 	private void addEvents(LocalDate dataInicialFiltro, LocalDate dataFinalFiltro,
 			List<EventFullCalendar> events) {
+		DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE_TIME;
 		prontuarioDAO
 			.buscarTodasOcorrenciasVacina()
 			.stream()
@@ -134,7 +135,8 @@ public class AgendamentoController {
 				EventFullCalendar event = new EventFullCalendar();
 				event.setId(String.valueOf(ocorrenciaVacina.getOcorrenciaId()));
 				event.setTitle(ocorrenciaVacina.getDescricao());
-				event.setStart(DateTimeFormatter.ISO_DATE_TIME.format(ocorrenciaVacina.getData()));
+				event.setStart(formatter.format(ocorrenciaVacina.getData()));
+				event.setEnd(formatter.format(ocorrenciaVacina.getData().plusMinutes(30)));
 				event.setType(ocorrenciaVacina.getTipo().name());
 				event.setColor("#fff0b3");
 				events.add(event);
@@ -149,8 +151,8 @@ public class AgendamentoController {
 				EventFullCalendar event = new EventFullCalendar();
 				event.setId(String.valueOf(atendimento.getOcorrenciaId()));
 				event.setTitle(atendimento.getTipoDeAtendimento().getNome());
-				event.setStart(DateTimeFormatter.ISO_DATE_TIME.format(atendimento.getData()));
-				event.setEnd(DateTimeFormatter.ISO_DATE_TIME.format(atendimento.getData().plus(atendimento.getTipoDeAtendimento().getDuracao())));
+				event.setStart(formatter.format(atendimento.getData()));
+				event.setEnd(formatter.format(atendimento.getData().plus(atendimento.getTipoDeAtendimento().getDuracao())));
 				event.setType(atendimento.getTipo().name());
 				event.setColor("#ccf5ff");
 				events.add(event); 
@@ -165,7 +167,8 @@ public class AgendamentoController {
 				EventFullCalendar eventFullCalendar = new EventFullCalendar();
 				eventFullCalendar.setId(String.valueOf(ocorrenciaExame.getOcorrenciaId()));
 				eventFullCalendar.setTitle(ocorrenciaExame.getExame().getDescricao());
-				eventFullCalendar.setStart(DateTimeFormatter.ISO_DATE_TIME.format(ocorrenciaExame.getData()));
+				eventFullCalendar.setStart(formatter.format(ocorrenciaExame.getData()));
+				eventFullCalendar.setEnd(formatter.format(ocorrenciaExame.getData().plus(ocorrenciaExame.getExame().getDuracao())));
 				eventFullCalendar.setType(ocorrenciaExame.getTipo().name());
 				eventFullCalendar.setColor("#BFBFBF");
 				events.add(eventFullCalendar);

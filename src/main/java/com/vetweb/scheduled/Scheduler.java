@@ -1,6 +1,8 @@
 package com.vetweb.scheduled;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.Month;
 import java.util.List;
 import java.util.Set;
 
@@ -11,6 +13,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.vetweb.dao.AgendamentoDAO;
 import com.vetweb.dao.AtendimentoDAO;
 import com.vetweb.dao.ProntuarioDAO;
 import com.vetweb.dao.ProprietarioDAO;
@@ -39,6 +42,9 @@ public class Scheduler {
 	
 	@Autowired
 	private JMSNotificacaoOcorrenciaCliente jmsNotificacaoOcorrenciaCliente;
+	
+	@Autowired
+	private AgendamentoDAO agendamentoDAO;
 	
 	private static final Logger LOGGER = Logger.getLogger(Scheduler.class);
 	
@@ -70,10 +76,20 @@ public class Scheduler {
     		.filter(ate -> 
     			LocalDate.of(ate.getData().getYear(), ate.getData().getMonthValue(), ate.getData().getDayOfMonth())
     			.isEqual(LocalDate.now()))
-    		.forEach(ate -> this.notificaRetornoAtendimento(ate));
+    		.forEach(ate -> this.notificarRetornoAtendimento(ate));
     }
     
-	private void notificaRetornoAtendimento(OcorrenciaAtendimento atendimento) {
+    @Scheduled(fixedDelay = MINUTO)
+    public void removerAgendamentosAntigos() {
+    	agendamentoDAO
+    		.listarTodos(LocalDateTime.of(LocalDateTime.now().getYear(), Month.JANUARY.getValue(), 1, 0, 0), LocalDateTime.now().minusDays(1))
+    		.forEach(agenda -> {
+    			agendamentoDAO.remover(agenda);
+    		});
+
+    }
+    
+	private void notificarRetornoAtendimento(OcorrenciaAtendimento atendimento) {
     	Pessoa pessoaDestinatario = prontuarioDAO.buscarProntuarioDoAtendimento(atendimento).getAnimal().getProprietario();
     	StringBuilder mensagemRetorno = new StringBuilder();
     	mensagemRetorno.append("O RETORNO DO ATENDIMENTO "
