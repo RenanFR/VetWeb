@@ -1,8 +1,12 @@
 package com.vetweb.controller.rest;
 //@author renan.rodrigues@metasix.com.br
 
+import java.io.IOException;
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
+
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -119,7 +123,8 @@ public class AjaxController {
     public Agendamento remarcarOcorrencia(@PathVariable("codigoOcorrencia") Long idOcorrencia, 
     		@RequestParam("tipoOcorrencia") String tipoOcorrencia,
     		@RequestParam("dataHoraInicial") LocalDateTime dataHoraInicial,
-    		@RequestParam("dataHoraFinal") LocalDateTime dataHoraFinal) {
+    		@RequestParam("dataHoraFinal") LocalDateTime dataHoraFinal,
+    		HttpServletResponse response) throws IOException {
     	OcorrenciaProntuario ocorrenciaProntuario = ocorrenciaFactory.getOcorrencia(tipoOcorrencia, idOcorrencia);
     	Agendamento ocorrenciaAgendamento = agendamentoDAO.buscarPorIdOcorrencia(idOcorrencia);
     	if (dataHoraFinal.isBefore(LocalDateTime.now())) {
@@ -144,24 +149,54 @@ public class AjaxController {
     		if (ocorrenciaAgendamento != null) agendamentoDAO.remover(ocorrenciaAgendamento);
     		return null;
     	}
-    	if (ocorrenciaAgendamento != null) {
-    		ocorrenciaAgendamento.setTipo(TipoOcorrenciaProntuario.valueOf(tipoOcorrencia));
-    		ocorrenciaAgendamento.setDataHoraInicial(dataHoraInicial);
-    		ocorrenciaAgendamento.setDataHoraFinal(dataHoraInicial);
-    		agendamentoDAO.salvar(ocorrenciaAgendamento);
-    		return ocorrenciaAgendamento;
+    	if (agendamentoDAO.possuiAgendaPara(dataHoraInicial, dataHoraFinal)) {
+    		response.sendError(400, "AGENDA BLOQUEADA PARA A DATA/INTERVALO INFORMADO.");
+    		return null;
     	} else {
-    		if (agendamentoDAO.possuiAgendaPara(dataHoraInicial, dataHoraFinal)) {
-    			throw new RuntimeException("AGENDA BLOQUEADA PARA A DATA/INTERVALO INFORMADO.");
+    		if (ocorrenciaAgendamento != null) {
+    			ocorrenciaAgendamento.setTipo(TipoOcorrenciaProntuario.valueOf(tipoOcorrencia));
+    			ocorrenciaAgendamento.setDataHoraInicial(dataHoraInicial);
+    			ocorrenciaAgendamento.setDataHoraFinal(dataHoraInicial);
+    			agendamentoDAO.salvar(ocorrenciaAgendamento);
+    			return ocorrenciaAgendamento;
+    		} else {
+    			Agendamento agendamento = new Agendamento();
+    			agendamento.setOcorrencia(ocorrenciaProntuario);
+    			agendamento.setDataHoraInicial(dataHoraInicial);
+    			agendamento.setDataHoraFinal(dataHoraFinal);
+    			agendamento.setTipo(TipoOcorrenciaProntuario.valueOf(tipoOcorrencia));
+    			agendamentoDAO.salvar(agendamento);
+    			return agendamento;
     		}
-    		Agendamento agendamento = new Agendamento();
-    		agendamento.setOcorrencia(ocorrenciaProntuario);
-    		agendamento.setDataHoraInicial(dataHoraInicial);
+    	}
+    }
+    @RequestMapping(value = "/ocorrencia/reagendamento/{codigoOcorrencia}", method = RequestMethod.GET)
+    public void remarcarOcorrenciasIntervalo(@PathVariable("codigoOcorrencia") Long idOcorrencia,
+    		@RequestParam("tipoOcorrencia") String tipoOcorrencia,
+    		@RequestParam("novaDataHora") LocalDateTime novaDataHora,
+    		@RequestParam("dataHoraInicial") LocalDateTime dataHoraInicial,
+    		@RequestParam("dataHoraFinal") LocalDateTime dataHoraFinal,
+    		HttpServletResponse response) throws IOException {
+    	Duration diferencaIntervaloAgendamento = Duration.between(dataHoraInicial, dataHoraFinal);
+    	agendamentoDAO
+    		.listarTodos(dataHoraInicial, dataHoraFinal)
+    		.forEach(ag -> {
+    			ag.setDataHoraInicial(novaDataHora);
+    			ag.setDataHoraFinal(novaDataHora.plus(diferencaIntervaloAgendamento));
+    			agendamentoDAO.salvar(ag);
+    		});
+    	Agendamento agendamento = agendamentoDAO.buscarPorIdOcorrencia(idOcorrencia);
+    	if (agendamento != null) {
+    		agendamento.setDataHoraFinal(dataHoraInicial);
     		agendamento.setDataHoraFinal(dataHoraFinal);
-    		agendamento.setTipo(TipoOcorrenciaProntuario.valueOf(tipoOcorrencia));
     		agendamentoDAO.salvar(agendamento);
-    		return agendamento;
-    		
+    	} else {
+    		Agendamento ag = new Agendamento();
+    		ag.setOcorrencia(ocorrenciaFactory.getOcorrencia(tipoOcorrencia, idOcorrencia));
+    		ag.setDataHoraInicial(dataHoraInicial);
+    		ag.setDataHoraFinal(dataHoraFinal);
+    		ag.setTipo(TipoOcorrenciaProntuario.valueOf(tipoOcorrencia));
+    		agendamentoDAO.salvar(ag);
     	}
     }
     

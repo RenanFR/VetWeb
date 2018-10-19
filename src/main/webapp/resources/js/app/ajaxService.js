@@ -247,11 +247,34 @@ var ajaxService = {
 	
 	remarcarOcorrencia: function(id, tipoOcorrencia, dataHoraInicial, dataHoraFinal) {
 		
+		var comErro = false;
+
 		$.ajax({
+			async: false,
 			type: 'GET',
 			url: '/vetweb/ajax/prontuario/ocorrencia/' + id,
 			contentType: 'application/json',
-			data: "tipoOcorrencia=" + tipoOcorrencia + "&dataHoraInicial=" + dataHoraInicial + "&dataHoraFinal=" + dataHoraFinal + ""
+			data: "tipoOcorrencia=" + tipoOcorrencia + "&dataHoraInicial=" + dataHoraInicial + "&dataHoraFinal=" + dataHoraFinal + "",
+		    error: function (jqXHR, textStatus, errorThrown) {
+		    	comErro = true;
+		    }
+		});
+		
+		if (comErro) {
+			throw new Error({'agendaOcupada':'A OCORR\u00CANCIA CONFLITA COM OUTRO AGENDAMENTO'});
+		}		
+		
+		
+	},
+	
+	remarcarOcorrenciasIntervalo: function(id, tipoOcorrencia, novaDataHora, dataHoraInicial, dataHoraFinal) {
+		
+		$.ajax({
+			async: false,
+			type: 'GET',
+			url: '/vetweb/ajax/prontuario/ocorrencia/reagendamento/' + id,
+			contentType: 'application/json',
+			data: "tipoOcorrencia=" + tipoOcorrencia + "&novaDataHora=" + novaDataHora + "&dataHoraInicial=" + dataHoraInicial + "&dataHoraFinal=" + dataHoraFinal + "",
 		});
 		
 	},

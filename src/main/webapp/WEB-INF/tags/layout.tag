@@ -38,6 +38,8 @@
         
         <link href="<c:url value="/resources/css/bootstrap/bootstrap.css"></c:url>" rel="stylesheet" type="text/css"/>
         
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.css" rel="stylesheet" type="text/css"/>
+        
         <link href="<c:url value="/resources/css/fullcalendar/fullcalendar.css"></c:url>" rel="stylesheet" type="text/css"/>
         
         <link href="<c:url value="/resources/css/font-awesome/font-awesome.min.css"></c:url>" rel="stylesheet" type="text/css"/>
