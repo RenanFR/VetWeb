@@ -52,6 +52,7 @@
             <thead>
                 <tr>
                     <th><spring:message code="pelagem"></spring:message></th>
+                    <th><spring:message code="color"></spring:message></th>
                 </tr>
             </thead>
             <tbody>
@@ -65,6 +66,8 @@
                             <a href="<c:url value="/animais/removerPelagem/${pelagem.pelagemId}"></c:url>">
                                 <i class="fa fa-trash-o fa-2x"></i>
                             </a>                      
+                        </td>
+                        <td style="background-color: ${pelagem.color}">
                         </td>
                     </tr>
                 </c:forEach>

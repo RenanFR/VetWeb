@@ -20,6 +20,10 @@
                     <th><label for="descricao"><spring:message code="pelagem"></spring:message></label></th>
                     <td><form:input path="descricao" id="descricao"></form:input></td>
                 </tr>
+                <tr>
+                    <th><label for="color"><spring:message code="color"></spring:message></label></th>
+                    <td><form:input type="color" path="color" id="color"></form:input></td>
+                </tr>
             </tbody>
         </table>
         <input type="submit" value="submit"  />

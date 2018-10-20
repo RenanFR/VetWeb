@@ -21,6 +21,8 @@ public class Pelagem implements Serializable {
     
 	@Column(columnDefinition = "TEXT")
     private String descricao;
+	
+	private String color;
 
     public Pelagem() {
     }
@@ -45,4 +47,12 @@ public class Pelagem implements Serializable {
     public void setDescricao(String descricao) {
         this.descricao = descricao;
     }
+
+	public String getColor() {
+		return color;
+	}
+
+	public void setColor(String color) {
+		this.color = color;
+	}
 }
