@@ -26,7 +26,7 @@
         
         <script src="<c:url value="/resources/js/fullcalendar/pt-br.js"></c:url>" type="text/javascript"></script>
         
-    	<script src="<c:url value="/resources/js/app/ajaxService.js"></c:url>" type="text/javascript"></script>
+    	<script src="<c:url value="/resources/js/app/ajax-service.js"></c:url>" type="text/javascript"></script>
         
         <script>
         

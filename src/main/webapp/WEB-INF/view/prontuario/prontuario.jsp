@@ -51,7 +51,7 @@
     </jsp:attribute>
     
     <jsp:attribute name="script">
-    	<script src="<c:url value="/resources/js/app/ajaxService.js"></c:url>" type="text/javascript"></script>
+    	<script src="<c:url value="/resources/js/app/ajax-service.js"></c:url>" type="text/javascript"></script>
     	<script src="<c:url value="/resources/js/app/prontuario.js"></c:url>" type="text/javascript"></script>
     </jsp:attribute>
     

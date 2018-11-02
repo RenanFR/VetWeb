@@ -14,7 +14,7 @@
 <vetweb:layout title="Balanço Financeiro ${proprietario.nome}">
 
     <jsp:attribute name="js">
-		<script src="<c:url value="/resources/js/app/ajaxService.js"></c:url>" type="text/javascript"></script>
+		<script src="<c:url value="/resources/js/app/ajax-service.js"></c:url>" type="text/javascript"></script>
         <script>
             $(document).ready(function(){
                $('#balancoFinanceiro').dataTable();
