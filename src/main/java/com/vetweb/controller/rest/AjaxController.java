@@ -156,7 +156,7 @@ public class AjaxController {
     		if (ocorrenciaAgendamento != null) {
     			ocorrenciaAgendamento.setTipo(TipoOcorrenciaProntuario.valueOf(tipoOcorrencia));
     			ocorrenciaAgendamento.setDataHoraInicial(dataHoraInicial);
-    			ocorrenciaAgendamento.setDataHoraFinal(dataHoraInicial);
+    			ocorrenciaAgendamento.setDataHoraFinal(dataHoraFinal);
     			agendamentoDAO.salvar(ocorrenciaAgendamento);
     			return ocorrenciaAgendamento;
     		} else {

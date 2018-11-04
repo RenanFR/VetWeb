@@ -26,6 +26,11 @@
         <table class="table table-striped table-bordered table-hover" id="balancoFinanceiro">
         <caption>
        		<spring:message code="totalPendente"/> ${totalPendente}
+			<div class="${contemDebito ? "alert alert-danger alert-dismissable":"alert alert-success alert-dismissable"}">
+                  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                  <h4><i class="${contemDebito ? "icon fa fa-ban":"icon fa fa-check"}"></i> ${contemDebito ? "CLIENTE POSSUI DÉBITOS, CASO TENHAM SIDO QUITADOS FAVOR ATUALIZAR OS REGISTROS":
+                  "CLIENTE NÃO POSSUI NENHUM DÉBITO JUNTO A CLÍNICA"}!</h4>
+            </div>
         </caption>
             <thead>
                 <tr>

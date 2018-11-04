@@ -9,6 +9,7 @@ import com.vetweb.dao.AnimalDAO;
 import com.vetweb.dao.AtendimentoDAO;
 import com.vetweb.dao.ExameDAO;
 import com.vetweb.dao.ProntuarioDAO;
+import com.vetweb.model.error.DebitoOcorrenciaException;
 import com.vetweb.model.pojo.OcorrenciaProntuario;
 import com.vetweb.model.pojo.TipoOcorrenciaProntuario;
 
@@ -62,50 +63,52 @@ public class OcorrenciaFactory {
 
 	public OcorrenciaProntuario criarOcorrencia(String opcaoDescritivo, LocalDateTime dataHoraInicio, TipoOcorrenciaProntuario tipoOcorrencia, Prontuario prontuario) {
 		OcorrenciaProntuario ocorrenciaProntuario = null;
-		switch (tipoOcorrencia) {
-			case ATENDIMENTO: {
-				TipoDeAtendimento tipoDeAtendimento = daoAtendimento.buscarTipoDeAtendimentoPorId(Long.parseLong(opcaoDescritivo));
-				ocorrenciaProntuario = new OcorrenciaAtendimento(tipoDeAtendimento, tipoDeAtendimento.getModeloAtendimento());
-				OcorrenciaAtendimento ocorrenciaAtendimento = (OcorrenciaAtendimento)ocorrenciaProntuario;
-				ocorrenciaAtendimento.setProntuario(prontuario);
-				daoProntuario.salvarAtendimento(ocorrenciaAtendimento);
-				prontuario.getAtendimentos().add(ocorrenciaAtendimento);
-				break;
+		Proprietario proprietario = prontuario.getAnimal().getProprietario();
+		if (!ocorrenciaUtils.contemDebitoTipoOcorrencia(tipoOcorrencia, proprietario)) {
+			switch (tipoOcorrencia) {
+				case ATENDIMENTO: {
+					TipoDeAtendimento tipoDeAtendimento = daoAtendimento.buscarTipoDeAtendimentoPorId(Long.parseLong(opcaoDescritivo));
+					ocorrenciaProntuario = new OcorrenciaAtendimento(tipoDeAtendimento, tipoDeAtendimento.getModeloAtendimento());
+					OcorrenciaAtendimento ocorrenciaAtendimento = (OcorrenciaAtendimento)ocorrenciaProntuario;
+					ocorrenciaAtendimento.setProntuario(prontuario);
+					daoProntuario.salvarAtendimento(ocorrenciaAtendimento);
+					prontuario.getAtendimentos().add(ocorrenciaAtendimento);
+					break;
+				}
+				case PATOLOGIA: {
+					Patologia patologia = daoAnimal.buscarPatologiaPorDescricao(opcaoDescritivo);
+					ocorrenciaProntuario = new OcorrenciaPatologia(patologia);
+					OcorrenciaPatologia ocorrenciaPatologia = (OcorrenciaPatologia) ocorrenciaProntuario;
+					ocorrenciaPatologia.setProntuario(prontuario);
+					daoProntuario.salvarOcorrenciaPatologia(ocorrenciaPatologia);
+					prontuario.getPatologias().add(ocorrenciaPatologia);
+					break;
+				}
+				case VACINA: {
+					Vacina vacina = daoProntuario.buscarVacinaPorId(Long.parseLong(opcaoDescritivo));
+					ocorrenciaProntuario = new OcorrenciaVacina(vacina);
+					OcorrenciaVacina ocorrenciaVacina = (OcorrenciaVacina)ocorrenciaProntuario;
+					ocorrenciaVacina.setProntuario(prontuario);
+					daoProntuario.salvarOcorrenciaVacina(ocorrenciaVacina);
+					prontuario.getVacinas().add(ocorrenciaVacina);
+					break;
+				}
+				case EXAME: {
+					Exame exame = daoExame.buscarPorDescricao(opcaoDescritivo);
+					ocorrenciaProntuario = new OcorrenciaExame(exame);
+					OcorrenciaExame ocorrenciaExame = (OcorrenciaExame)ocorrenciaProntuario;
+					ocorrenciaExame.setProntuario(prontuario);
+					daoProntuario.salvarOcorrenciaExame(ocorrenciaExame);
+					prontuario.getExames().add(ocorrenciaExame);
+					break;
+				}
 			}
-			case PATOLOGIA: {
-				Patologia patologia = daoAnimal.buscarPatologiaPorDescricao(opcaoDescritivo);
-				ocorrenciaProntuario = new OcorrenciaPatologia(patologia);
-				OcorrenciaPatologia ocorrenciaPatologia = (OcorrenciaPatologia) ocorrenciaProntuario;
-				ocorrenciaPatologia.setProntuario(prontuario);
-				daoProntuario.salvarOcorrenciaPatologia(ocorrenciaPatologia);
-				prontuario.getPatologias().add(ocorrenciaPatologia);
-				break;
-			}
-			case VACINA: {
-				Vacina vacina = daoProntuario.buscarVacinaPorId(Long.parseLong(opcaoDescritivo));
-				ocorrenciaProntuario = new OcorrenciaVacina(vacina);
-				OcorrenciaVacina ocorrenciaVacina = (OcorrenciaVacina)ocorrenciaProntuario;
-				ocorrenciaVacina.setProntuario(prontuario);
-				daoProntuario.salvarOcorrenciaVacina(ocorrenciaVacina);
-				prontuario.getVacinas().add(ocorrenciaVacina);
-				break;
-			}
-			case EXAME: {
-				Exame exame = daoExame.buscarPorDescricao(opcaoDescritivo);
-				ocorrenciaProntuario = new OcorrenciaExame(exame);
-				OcorrenciaExame ocorrenciaExame = (OcorrenciaExame)ocorrenciaProntuario;
-				ocorrenciaExame.setProntuario(prontuario);
-				daoProntuario.salvarOcorrenciaExame(ocorrenciaExame);
-				prontuario.getExames().add(ocorrenciaExame);
-				break;
-			}
+			ocorrenciaProntuario.setData(dataHoraInicio);
+			ocorrenciaProntuario.setTipo(tipoOcorrencia);
+			daoProntuario.salvar(prontuario);
+			return ocorrenciaProntuario;
 		}
-		ocorrenciaProntuario.setData(dataHoraInicio);
-		ocorrenciaProntuario.setTipo(tipoOcorrencia);
-		Proprietario proprietario = ocorrenciaProntuario.getProntuario().getAnimal().getProprietario();
-		ocorrenciaUtils.autorizaOcorrenciaPorDebito(ocorrenciaProntuario.getTipo(), proprietario);
-		daoProntuario.salvar(prontuario);
-		return ocorrenciaProntuario;
+		throw new DebitoOcorrenciaException(tipoOcorrencia);
 	}
 
 }

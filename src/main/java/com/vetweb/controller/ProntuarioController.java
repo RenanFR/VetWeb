@@ -324,6 +324,7 @@ public class ProntuarioController {
     	Prontuario prontuario = prontuarioDAO.buscarPorId(prontuarioId);
     	ModelAndView modelAndView = new ModelAndView("redirect:/prontuario/prontuarioDoAnimal/" + prontuario.getAnimal().getAnimalId());
 		modelAndView.addObject("prontuario", prontuario);
+		removeScheduled(atendimentoId);
     	prontuarioDAO.removerAtendimento(atendimentoDAO.buscarPorId(atendimentoId));
     	adicionarListasAoProntuario(modelAndView);
     	return modelAndView;
@@ -338,10 +339,17 @@ public class ProntuarioController {
     	Prontuario prontuario = prontuarioDAO.buscarPorId(prontuarioId);
     	ModelAndView modelAndView = new ModelAndView("redirect:/prontuario/prontuarioDoAnimal/" + prontuario.getAnimal().getAnimalId());
 		modelAndView.addObject("prontuario", prontuario);
+		removeScheduled(vacinaId);
     	prontuarioDAO.removerOcorrenciaVacina(prontuarioDAO.buscarOcorrenciaVacina(vacinaId));
     	adicionarListasAoProntuario(modelAndView);
     	return modelAndView;
     }
+
+	private void removeScheduled(Long vacinaId) {
+		Agendamento agendamentoOcorrencia = agendamentoDAO.buscarPorIdOcorrencia(vacinaId);
+		if (agendamentoOcorrencia != null)
+			agendamentoDAO.remover(agendamentoOcorrencia);
+	}
     
     @RequestMapping(value = "/removerPatologiaDoProntuario/{prontuarioId}/{patologiaId}", method = RequestMethod.GET)
     public ModelAndView removerPatologiaDoProntuario(@PathVariable("prontuarioId")Long prontuarioId, @PathVariable("patologiaId")Long patologiaId,
@@ -364,6 +372,7 @@ public class ProntuarioController {
     	Prontuario prontuario = prontuarioDAO.buscarPorId(prontuarioId);
     	ModelAndView modelAndView = new ModelAndView("redirect:/prontuario/prontuarioDoAnimal/" + prontuario.getAnimal().getAnimalId());
     	modelAndView.addObject("prontuario", prontuario);
+    	removeScheduled(exameId);
     	prontuarioDAO.removerOcorrenciaExame(prontuarioDAO.buscarOcorrenciaExame(exameId));
     	adicionarListasAoProntuario(modelAndView);
     	return modelAndView;

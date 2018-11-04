@@ -31,6 +31,11 @@ public class OcorrenciaUtils {
 				}
 			}
 		}
-	}	
+	}
+	
+	public boolean contemDebitoTipoOcorrencia(TipoOcorrenciaProntuario tipoOcorrenciaProntuario, Proprietario proprietario) {
+		boolean contains = proprietarioDAO.buscarClientesEmDebito(tipoOcorrenciaProntuario).contains(proprietario);
+		return contains;
+	}
 	
 }
