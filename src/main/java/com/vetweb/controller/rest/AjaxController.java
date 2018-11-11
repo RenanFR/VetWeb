@@ -33,6 +33,7 @@ import com.vetweb.model.OcorrenciaVacina;
 import com.vetweb.model.Raca;
 import com.vetweb.model.pojo.OcorrenciaProntuario;
 import com.vetweb.model.pojo.TipoOcorrenciaProntuario;
+import com.vetweb.service.EmailService;
 
 @RestController
 @Transactional
@@ -56,6 +57,9 @@ public class AjaxController {
     
     @Autowired
     private AgendamentoDAO agendamentoDAO;
+    
+    @Autowired
+    private EmailService emailService;
     
     @RequestMapping(value = "/editarAtendimento/{atendimentoId}", method = RequestMethod.GET)
     public OcorrenciaAtendimento atendimentoParaEdicao(@PathVariable("atendimentoId") final Long atendimentoId) {
@@ -184,10 +188,11 @@ public class AjaxController {
     			ag.setDataHoraInicial(novaDataHora);
     			ag.setDataHoraFinal(novaDataHora.plus(diferencaIntervaloAgendamento));
     			agendamentoDAO.salvar(ag);
+    			notificarRemarcacao(ag.getAgendamentoId());
     		});
     	Agendamento agendamento = agendamentoDAO.buscarPorIdOcorrencia(idOcorrencia);
     	if (agendamento != null) {
-    		agendamento.setDataHoraFinal(dataHoraInicial);
+    		agendamento.setDataHoraInicial(dataHoraInicial);
     		agendamento.setDataHoraFinal(dataHoraFinal);
     		agendamentoDAO.salvar(agendamento);
     	} else {
@@ -198,6 +203,15 @@ public class AjaxController {
     		ag.setTipo(TipoOcorrenciaProntuario.valueOf(tipoOcorrencia));
     		agendamentoDAO.salvar(ag);
     	}
+    }
+    
+    private void notificarRemarcacao(Long agendamentoId) {
+    	Agendamento agendamento = agendamentoDAO.buscarPorId(agendamentoId);
+    	emailService.enviar(agendamento.getOcorrencia().getProntuario().getAnimal().getProprietario(), 
+    			"SEU HORÁRIO DE AGENDAMENTO DE " + agendamento.getTipo() + " TEVE DE SER OCUPADO POR UMA OCORRÊNCIA MAIS PRIORITÁRIA, "
+    					+ "REMARCAMOS SEU ATENDIMENTO PARA " + agendamento.getDataHoraInicial() + ", "
+    							+ "CASO NÃO POSSA COMPARECER FAVOR ENTRAR EM CONTATO PARA REAGENDAR OU CANCELAR, PEDIMOS PERDÃO PELO INCONVENIENTE.	", 
+    			"REMARCAÇÃO DE OCORRÊNCIA");
     }
     
 }
