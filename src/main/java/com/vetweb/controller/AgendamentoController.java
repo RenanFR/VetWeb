@@ -123,7 +123,8 @@ public class AgendamentoController {
 	}
 	
 	private boolean isScheduled(Long ocorrenciaId) {
-		return agendamentoDAO.buscarPorIdOcorrencia(ocorrenciaId) != null;
+		Agendamento agendamento = agendamentoDAO.buscarPorIdOcorrencia(ocorrenciaId);
+		return agendamento != null;
 	}
 
 	private void addEvents(LocalDate dataInicialFiltro, LocalDate dataFinalFiltro,
@@ -228,11 +229,13 @@ public class AgendamentoController {
 				atendimentoSelecionado : tipoOcorrencia == EXAME? exameSelecionado : null;
 		try {
 			OcorrenciaProntuario ocorrenciaProntuario = ocorrenciaFactory.criarOcorrencia(opcaoDescritivo, dataHoraInicio, tipoOcorrencia, prontuario);
-			agendamento.setOcorrencia(ocorrenciaProntuario);
-			agendamento.setDataHoraInicial(dataHoraInicio);
-			agendamento.setDataHoraFinal(dataHoraFim);
-			agendamento.setTipo(tipoOcorrencia);
-			agendamentoDAO.salvar(agendamento);
+			if (dataHoraFim.isAfter(LocalDateTime.now())) {
+				agendamento.setOcorrencia(ocorrenciaProntuario);
+				agendamento.setDataHoraInicial(dataHoraInicio);
+				agendamento.setDataHoraFinal(dataHoraFim);
+				agendamento.setTipo(tipoOcorrencia);
+				agendamentoDAO.salvar(agendamento);
+			}
 		} catch (Exception exception) {
 			modelAndView = new ModelAndView("redirect:/clientes/financeiro/" + animal.getProprietario().getPessoaId());
 		}

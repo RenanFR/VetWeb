@@ -2,7 +2,6 @@ package com.vetweb.scheduled;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.Month;
 import java.util.List;
 import java.util.Set;
 
@@ -79,11 +78,12 @@ public class Scheduler {
     		.forEach(ate -> this.notificarRetornoAtendimento(ate));
     }
     
-    @Scheduled(fixedDelay = MINUTO)
+    @Scheduled(fixedDelay = MINUTO/6)
     public void removerAgendamentosAntigos() {
     	agendamentoDAO
-    		.listarTodos(LocalDateTime.of(LocalDateTime.now().getYear(), Month.JANUARY.getValue(), 1, 0, 0), LocalDateTime.now().minusDays(1))
+    		.listarTodos()
     		.stream()
+    		.filter(ag -> ag.getDataHoraFinal().isBefore(LocalDateTime.now()))
     		.peek(ag -> LOGGER.info("REMOVENDO AGENDAMENTO ANTIGO DE " + ag.getOcorrencia().getTipo() + ", DATA " + ag.getDataHoraInicial()))
     		.forEach(agenda -> {
     			agendamentoDAO.remover(agenda);
