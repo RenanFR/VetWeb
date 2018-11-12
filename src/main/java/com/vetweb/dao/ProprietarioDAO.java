@@ -3,8 +3,10 @@ package com.vetweb.dao;
 //@author renan.rodrigues@metasix.com.br
 
 import java.math.BigDecimal;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -148,29 +150,19 @@ public class ProprietarioDAO implements IDAO<Proprietario> {
     }
     
     public BigDecimal buscarValorPendenteDoCliente(Proprietario proprietario) {
-    	String consultaValorPendenteEmVacinas = "SELECT SUM (vacina.preco) FROM Vacina vacina "
-		    	+ "JOIN vacina.ocorrenciasVacina ocorrenciaVacina "
-		    	+ "JOIN ocorrenciaVacina.prontuario prontuario "
-		    	+ "JOIN prontuario.animal animal "
-		    	+ "JOIN animal.proprietario cliente "
-		    	+ "WHERE cliente.pessoaId = :codigoCliente "
-		    	+ "AND ocorrenciaVacina.pago = false";
-    	String consultaValorPendenteEmAtendimentos = "SELECT SUM (tipo.custo) FROM TipoDeAtendimento tipo "
-    			+ "JOIN tipo.atendimentos atendimento "
-    			+ "JOIN atendimento.prontuario prontuario "
-    			+ "JOIN prontuario.animal animal "
-    			+ "JOIN animal.proprietario cliente "
-    			+ "WHERE cliente.pessoaId = :codigoCliente "
-    			+ "AND atendimento.pago = false";
     	TypedQuery<BigDecimal> queryValorPendenteEmVacinas = entityManager
-    			.createQuery(consultaValorPendenteEmVacinas, BigDecimal.class)
+    			.createNamedQuery("consultaValorPendenteEmVacinas", BigDecimal.class)
     			.setParameter("codigoCliente", proprietario.getPessoaId());
     	TypedQuery<BigDecimal> queryValorPendenteEmAtendimentos = entityManager
-    			.createQuery(consultaValorPendenteEmAtendimentos, BigDecimal.class)
-    			.setParameter("codigoCliente", proprietario.getPessoaId());;
+    			.createNamedQuery("consultaValorPendenteEmAtendimentos", BigDecimal.class)
+    			.setParameter("codigoCliente", proprietario.getPessoaId());
+    	TypedQuery<BigDecimal> queryValorPendenteEmExames = entityManager
+    			.createNamedQuery("consultaValorPendenteEmExames", BigDecimal.class)
+    			.setParameter("codigoCliente", proprietario.getPessoaId());
     	BigDecimal totalPendenteEmAtendimentos = Optional.ofNullable(queryValorPendenteEmAtendimentos.getSingleResult()).orElse(new BigDecimal(0));
     	BigDecimal totalPendenteEmVacinas = Optional.ofNullable(queryValorPendenteEmVacinas.getSingleResult()).orElse(new BigDecimal(0));
-    	return totalPendenteEmAtendimentos.add(totalPendenteEmVacinas);
+    	BigDecimal totalPendenteEmExames = Optional.ofNullable(queryValorPendenteEmExames.getSingleResult()).orElse(new BigDecimal(0));
+    	return totalPendenteEmAtendimentos.add(totalPendenteEmVacinas).add(totalPendenteEmExames);
     	
     }
 
@@ -252,6 +244,29 @@ public class ProprietarioDAO implements IDAO<Proprietario> {
 			return clientesInativosAdimplentes;
 		}
 		return clientesInativosAdimplentes;
+	}
+	
+	public Map<String, BigDecimal> buscarDebitosPorTipoOcorrenciaECliente(Proprietario proprietario) {
+		Map<String, BigDecimal> valoresPorTipoOcorrencia = new HashMap<>();
+		BigDecimal custoAtendimentos = new BigDecimal(0);
+		BigDecimal custoExames = new BigDecimal(0);
+		BigDecimal custoVacinas = new BigDecimal(0);
+		custoAtendimentos = Optional.ofNullable(entityManager
+				.createNamedQuery("consultaValorPendenteEmAtendimentos", BigDecimal.class)
+				.setParameter("codigoCliente", proprietario.getPessoaId())
+				.getSingleResult()).orElse(new BigDecimal(0));
+		custoExames =  Optional.ofNullable(entityManager
+				.createNamedQuery("consultaValorPendenteEmExames", BigDecimal.class)
+				.setParameter("codigoCliente", proprietario.getPessoaId())
+				.getSingleResult()).orElse(new BigDecimal(0));	
+		custoVacinas = Optional.ofNullable(entityManager
+    			.createNamedQuery("consultaValorPendenteEmVacinas", BigDecimal.class)
+    			.setParameter("codigoCliente", proprietario.getPessoaId())
+    			.getSingleResult()).orElse(new BigDecimal(0));
+    	valoresPorTipoOcorrencia.put(TipoOcorrenciaProntuario.ATENDIMENTO.name(), custoAtendimentos);
+    	valoresPorTipoOcorrencia.put(TipoOcorrenciaProntuario.EXAME.name(), custoExames);
+    	valoresPorTipoOcorrencia.put(TipoOcorrenciaProntuario.VACINA.name(), custoVacinas);
+		return valoresPorTipoOcorrencia;
 	}
 	
 }

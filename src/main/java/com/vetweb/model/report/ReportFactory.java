@@ -52,6 +52,9 @@ public class ReportFactory {
 		if (type == ReportType.Clientes_por_ano) {
 			report = new ReportClientesPorAno();
 		}
+		if (type == ReportType.Inadimplentes) {
+			report = new ReportInadimplentes();
+		}
 		return report;
 	}
 

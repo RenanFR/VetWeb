@@ -30,6 +30,7 @@
                       	<select name="tipoRelatorio" id="tipoRelatorio">
                            	<option value="Ocorrencia"><spring:message code="ocorrenciasPorTipo"	/></option>
                            	<option value="Clientes_por_ano"><spring:message code="clientesPorAno"	/></option>
+                           	<option value="Inadimplentes"><spring:message code="inadimplentes"	/></option>
 						</select>
                       </td>
                   </tr>

@@ -25,7 +25,14 @@ import com.vetweb.dao.converter.FrequenciaConverter;
 @Entity
 @Table(name = "tbl_tipo_atendimento")
 @NamedQueries({@NamedQuery(name = "tiposDeAtendimentoQuery", query = "SELECT tipo FROM TipoDeAtendimento tipo"),
-                @NamedQuery(name = "tipoDeAtendimentoPorNomeQuery", query = "SELECT tipo FROM TipoDeAtendimento tipo WHERE tipo.nome = :tipoDeAtendimento")})
+                @NamedQuery(name = "tipoDeAtendimentoPorNomeQuery", query = "SELECT tipo FROM TipoDeAtendimento tipo WHERE tipo.nome = :tipoDeAtendimento"),
+                @NamedQuery(name = "consultaValorPendenteEmAtendimentos", query = "SELECT SUM (tipo.custo) FROM TipoDeAtendimento tipo "
+            			+ "JOIN tipo.atendimentos atendimento "
+            			+ "JOIN atendimento.prontuario prontuario "
+            			+ "JOIN prontuario.animal animal "
+            			+ "JOIN animal.proprietario cliente "
+            			+ "WHERE cliente.pessoaId = :codigoCliente "
+            			+ "AND atendimento.pago = false")})
 public class TipoDeAtendimento implements Serializable {
 	
 	private static final long serialVersionUID = -686226545519235798L;

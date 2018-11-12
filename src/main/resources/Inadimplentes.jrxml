@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Inadimplentes" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="541cffc8-9670-4de9-a601-d88b8da9e689">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<field name="nome" class="java.lang.String"/>
+	<field name="debitoTotal" class="java.lang.String"/>
+	<field name="valoresPorTipoOcorrencia" class="java.lang.String"/>
+	<title>
+		<band height="71">
+			<frame>
+				<reportElement mode="Opaque" x="0" y="0" width="555" height="71" backcolor="#006699" uuid="6a64f651-e99b-405a-bf57-afa51b221af5"/>
+				<staticText>
+					<reportElement x="20" y="11" width="234" height="43" forecolor="#FFFFFF" uuid="027cd587-8c5c-48ba-b076-f60b8b587069"/>
+					<textElement>
+						<font size="34" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Inadimplentes]]></text>
+				</staticText>
+			</frame>
+		</band>
+	</title>
+	<detail>
+		<band height="71">
+			<textField>
+				<reportElement x="0" y="0" width="100" height="71" uuid="ae5cd930-81bb-47cd-a81d-9b3d3a3bbcfa"/>
+				<textFieldExpression><![CDATA[$F{nome}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="100" y="0" width="100" height="71" uuid="0b31921c-7f0d-4f89-bbd1-0d72fd6e76bd"/>
+				<textFieldExpression><![CDATA[$F{debitoTotal}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="200" y="0" width="355" height="71" uuid="3db45851-fc02-4dfd-a2fa-87b43dd5ea28"/>
+				<textFieldExpression><![CDATA[$F{valoresPorTipoOcorrencia}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band/>
+	</columnFooter>
+	<pageFooter>
+		<band height="122">
+			<pieChart>
+				<chart>
+					<reportElement x="0" y="0" width="555" height="122" uuid="bd9373e7-d4a4-44b9-b72e-62a5c610ad99"/>
+					<chartTitle/>
+					<chartSubtitle/>
+					<chartLegend/>
+				</chart>
+				<pieDataset>
+					<keyExpression><![CDATA[$F{nome}]]></keyExpression>
+					<valueExpression><![CDATA[Double.valueOf($F{debitoTotal})]]></valueExpression>
+				</pieDataset>
+				<piePlot>
+					<plot/>
+					<itemLabel/>
+				</piePlot>
+			</pieChart>
+		</band>
+	</pageFooter>
+	<summary>
+		<band/>
+	</summary>
+</jasperReport>
